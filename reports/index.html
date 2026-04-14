@@ -116,7 +116,6 @@
       border: 1px solid var(--border-color);
       border-radius: 24px;
       padding: 2rem;
-      box-shadow: 0 4px 24px var(--shadow-color);
       position: relative;
       z-index: 2;
     }
@@ -197,17 +196,15 @@
       justify-content: center;
       gap: 0.6rem;
       cursor: pointer;
-      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-      box-shadow: 0 4px 14px rgba(22, 76, 120, 0.3);
+      transition: background 0.2s, transform 0.15s;
     }
 
     .submit-btn:hover:not(:disabled) {
       background: var(--primary-hover);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(22, 76, 120, 0.35);
     }
 
-    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
     .submit-btn span, .submit-btn svg { color: white !important; }
 
