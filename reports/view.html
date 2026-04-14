@@ -91,20 +91,26 @@
 
     /* ---- Header & Nav ---- */
     .dashboard-header {
+      text-align: center;
+      margin-bottom: 4rem;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-      gap: 2rem;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+    
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .header-left h1 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 800;
-      line-height: 0.95;
-      letter-spacing: -2px;
-      margin: 0 0 1.2rem 0;
+      font-size: clamp(3rem, 10vw, 4.5rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -2.5px;
+      margin: 0 0 1.5rem 0;
       color: var(--text-color);
     }
     .header-left h1 .highlight { color: var(--primary) !important; }
@@ -112,7 +118,8 @@
     .meta-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      justify-content: center;
+      gap: 1.5rem;
     }
     .meta-pill {
       background: transparent;
@@ -443,9 +450,7 @@
             </div>
           </div>
         </div>
-        <div class="header-right">
-          <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.5;">ID: <span id="nav-report-id">...</span></div>
-        </div>
+        <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.5; margin-top: 1rem;">REPORT ID: <span id="nav-report-id">...</span></div>
       </header>
 
       <section class="stats-grid">
