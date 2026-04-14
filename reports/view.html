@@ -14,14 +14,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Mapbox -->
-  <link href='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css' rel='stylesheet'>
+  <!-- Google Maps -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvCpo4343CIpr-H_LP-JM1GAEvE2D7Qlk&libraries=geometry&v=weekly"></script>
   
   <style>
     :root {
       --primary: #164c78;
       --primary-rgb: 22, 76, 120;
-      /* Theme colors handled by techy.css variables */
     }
 
     body {
@@ -30,7 +29,6 @@
       padding: 0;
       min-height: 100vh;
       color: var(--text-color);
-      /* techy.css handles the grid background automatically */
     }
 
     /* ---- Layout ---- */
@@ -131,22 +129,6 @@
       flex-direction: column;
       align-items: flex-end;
       gap: 1rem;
-    }
-
-    /* ---- Top Badge ---- */
-    .secure-badge {
-      background: rgba(var(--primary-rgb), 0.05);
-      border: 1px solid var(--border-color);
-      padding: 0.6rem 1.2rem;
-      border-radius: 50px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--primary);
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
     /* ---- Stats Grid ---- */
@@ -333,24 +315,11 @@
     }
     .play-trigger:hover { transform: scale(1.05); }
 
-    .track-info {
-      flex: 1;
-    }
-    .track-name {
-      font-size: 0.85rem;
-      font-weight: 700;
-      opacity: 0.6;
-    }
-    .track-time {
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-top: 0.2rem;
-    }
+    .track-info { flex: 1; }
+    .track-name { font-size: 0.85rem; font-weight: 700; opacity: 0.6; }
+    .track-time { font-size: 0.8rem; font-weight: 600; margin-top: 0.2rem; }
 
-    .waveform-surface {
-      height: 60px;
-      cursor: pointer;
-    }
+    .waveform-surface { height: 60px; cursor: pointer; }
 
     .log-notes {
       margin-top: 1.5rem;
@@ -377,12 +346,22 @@
       .dashboard-header { flex-direction: column; align-items: flex-start; }
     }
 
-    /* Print styles */
     @media print {
       .portal-wrap { padding: 0; max-width: 100%; }
-      .play-trigger, .btn-pill, .secure-badge { display: none !important; }
+      .play-trigger, .btn-pill { display: none !important; }
       .log-card, .stat-card, .panel { border: 1px solid #ddd !important; border-radius: 10px !important; }
     }
+
+    /* Google Maps InfoWindow Stylings */
+    .gm-style-iw {
+      background: var(--card-bg) !important;
+      border-radius: 12px !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      padding: 0 !important;
+    }
+    .gm-style-iw-d { overflow: hidden !important; }
+    .gm-style-iw-t::after { background: var(--card-bg) !important; }
+    .gm-ui-hover-text { display: none; }
   </style>
 </head>
 <body class="tech-grid">
@@ -415,10 +394,6 @@
       
       <header class="dashboard-header">
         <div class="header-left">
-          <div class="secure-badge" style="margin-bottom: 1.5rem;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Verified Evidence Access
-          </div>
           <h1>Evidence<br><span class="highlight">Dashboard</span></h1>
           <div class="meta-pills">
             <div class="meta-pill" id="chip-address">
@@ -504,18 +479,37 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js'></script>
   <script src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
   
   <script>
     const SUPABASE_URL = 'https://fkludrjnyihdxlzhyofx.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_5x1PVu3hkUTOOitRzs3Bmg_qbUU2ioj';
-    const MAPBOX_TOKEN = ['pk.eyJ1Ijoibm9pc2VtYXRlIiwiYSI6ImNtbGZ3ejJn', 'bDA1eGozZHM4Z3RjMzVuZWwifQ.sq7v4Oa3mVEDBG7NLewJnw'].join('');
-
     const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const params = new URLSearchParams(window.location.search);
     const reportId = params.get('id') || '';
     const pin = params.get('pin') || '';
+
+    // Dark Map Style for Google Maps
+    const DARK_MAP_STYLE = [
+      { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+      { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+      { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+      { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+      { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+      { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#263c3f" }] },
+      { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#6b9a76" }] },
+      { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
+      { featureType: "road", elementType: "geometry.stroke", stylers: [{ color: "#212a37" }] },
+      { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#9ca5b3" }] },
+      { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#746855" }] },
+      { featureType: "road.highway", elementType: "geometry.stroke", stylers: [{ color: "#1f2835" }] },
+      { featureType: "road.highway", elementType: "labels.text.fill", stylers: [{ color: "#f3d19c" }] },
+      { featureType: "transit", elementType: "geometry", stylers: [{ color: "#2f3948" }] },
+      { featureType: "transit.station", elementType: "labels.text.fill", stylers: [{ color: "#d59563" }] },
+      { featureType: "water", elementType: "geometry", stylers: [{ color: "#17263c" }] },
+      { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#515c6d" }] },
+      { featureType: "water", elementType: "labels.text.stroke", stylers: [{ color: "#17263c" }] }
+    ];
 
     function show(id) {
       ['loading-screen', 'error-screen', 'dashboard'].forEach(s => {
@@ -541,66 +535,71 @@
       return new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
     }
 
-    // ---- Map ----
-    function initMap(logs) {
-      mapboxgl.accessToken = MAPBOX_TOKEN;
+    // ---- Google Maps ----
+    function initGoogleMap(logs) {
       const validLogs = logs.filter(l => l.latitude && l.longitude);
-
-      const map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/light-v11', // Better for tech look
-        center: validLogs.length ? [validLogs[0].longitude, validLogs[0].latitude] : [-0.12, 51.5],
-        zoom: validLogs.length ? 14 : 10
+      const center = validLogs.length ? { lat: validLogs[0].latitude, lng: validLogs[0].longitude } : { lat: 51.5074, lng: -0.1278 };
+      
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: validLogs.length ? 14 : 11,
+        center: center,
+        styles: DARK_MAP_STYLE,
+        disableDefaultUI: true,
+        zoomControl: true,
       });
+
+      const bounds = new google.maps.LatLngBounds();
+      const infoWindow = new google.maps.InfoWindow();
 
       validLogs.forEach((log, i) => {
-        const el = document.createElement('div');
-        el.style.cssText = `width:30px;height:30px;border-radius:10px;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;cursor:pointer;`;
-        el.textContent = i + 1;
+        const markerPos = { lat: log.latitude, lng: log.longitude };
+        const marker = new google.maps.Marker({
+          position: markerPos,
+          map: map,
+          label: { text: (i + 1).toString(), color: "white", fontWeight: "800" },
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            fillColor: "#164c78",
+            fillOpacity: 1,
+            strokeWeight: 2,
+            strokeColor: "#ffffff",
+            scale: 15
+          }
+        });
 
-        new mapboxgl.Marker(el)
-          .setLngLat([log.longitude, log.latitude])
-          .setPopup(new mapboxgl.Popup({ offset: 15, closeButton: false })
-            .setHTML(`
-              <div style="font-family:'Plus Jakarta Sans',sans-serif;padding:8px;">
-                <div style="font-weight:800;color:var(--primary);margin-bottom:4px">LOG #${i+1}</div>
-                <div style="font-size:12px;font-weight:600;opacity:0.6">${fmtDateTime(log.timestamp)}</div>
-                <div style="font-size:14px;font-weight:700;margin-top:4px">${(log.average_decibel || 0).toFixed(1)} dB AVG</div>
-              </div>
-            `))
-          .addTo(map);
+        bounds.extend(markerPos);
+
+        marker.addListener("click", () => {
+          infoWindow.setContent(`
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;padding:12px;color:#164c78">
+              <div style="font-weight:800;margin-bottom:4px">LOG #${i+1}</div>
+              <div style="font-size:11px;font-weight:600;opacity:0.6">${fmtDateTime(log.timestamp)}</div>
+              <div style="font-size:14px;font-weight:700;margin-top:4px">${(log.average_decibel || 0).toFixed(1)} dB AVG</div>
+            </div>
+          `);
+          infoWindow.open(map, marker);
+        });
       });
 
-      if (validLogs.length > 1) {
-        const bounds = new mapboxgl.LngLatBounds();
-        validLogs.forEach(l => bounds.extend([l.longitude, l.latitude]));
-        map.fitBounds(bounds, { padding: 50 });
-      }
+      if (validLogs.length > 1) map.fitBounds(bounds);
     }
 
-    // ---- Component Factory ----
+    // ---- Audio Timeline ----
     function renderLog(log, index, container) {
       const ts = fmtDateTime(log.timestamp);
       const card = document.createElement('div');
       card.className = 'log-card';
-      
       card.innerHTML = `
         <div class="log-header">
-          <div class="log-ident">
-            <div class="log-index">${index + 1}</div>
-            <div class="log-time">${ts}</div>
-          </div>
+          <div class="log-ident"><div class="log-index">${index + 1}</div><div class="log-time">${ts}</div></div>
           <div class="log-stats">
             <div class="db-badge avg">${(log.average_decibel || 0).toFixed(1)} dB AVG</div>
             <div class="db-badge peak">${(log.peak_decibel || 0).toFixed(1)} dB PEAK</div>
           </div>
         </div>
-
         <div class="audio-player-ui">
           <div class="controls-row">
-            <button class="play-trigger" id="play-${index}" title="Playback">
-              <svg id="icon-${index}" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </button>
+            <button class="play-trigger" id="play-${index}"><svg id="icon-${index}" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
             <div class="track-info">
               <div class="track-name">INCIDENT_REC_${String(index+1).padStart(2,'0')}</div>
               <div class="track-time" id="time-${index}">0:00 / 0:00</div>
@@ -609,10 +608,8 @@
           </div>
           <div class="waveform-surface" id="wv-${index}"></div>
         </div>
-
         ${log.notes ? `<div class="log-notes"><strong>Notes:</strong> ${log.notes}</div>` : ''}
       `;
-
       container.appendChild(card);
 
       if (log.recording_url) {
@@ -627,56 +624,36 @@
           barRadius: 2,
           url: log.recording_url
         });
-
         const btn = document.getElementById(`play-${index}`);
         const icon = document.getElementById(`icon-${index}`);
         const time = document.getElementById(`time-${index}`);
-
         btn.onclick = () => ws.playPause();
-
         ws.on('play', () => icon.innerHTML = `<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>`);
         ws.on('pause', () => icon.innerHTML = `<polygon points="5 3 19 12 5 21 5 3"/>`);
-        
-        const fmt = (s) => {
-          const m = Math.floor(s / 60);
-          const sec = Math.floor(s % 60);
-          return `${m}:${sec.toString().padStart(2, '0')}`;
-        };
-
+        const fmt = (s) => { const m = Math.floor(s / 60); const sec = Math.floor(s % 60); return `${m}:${sec.toString().padStart(2, '0')}`; };
         ws.on('timeupdate', (cur) => time.textContent = `${fmt(cur)} / ${fmt(ws.getDuration())}`);
       }
     }
 
     async function init() {
       if (!reportId || !pin) return showError('System entry failed. Access requires Direct Report Link.');
-
-      const { data: report, error: rErr } = await _sb
-        .from('complaints')
-        .select('*')
-        .eq('id', reportId)
-        .single();
-
+      const { data: report, error: rErr } = await _sb.from('complaints').select('*').eq('id', reportId).single();
       if (rErr || !report) return showError('Database miss. Record archived or deleted.');
       if (String(report.report_pin) !== String(pin)) return showError('PIN validation failed.');
 
-      // Header
       setText('nav-report-id', reportId.substring(0, 8));
       setText('chip-address', report.source_address || 'Unspecified Location');
       setText('chip-date', fmtDate(report.created_at));
-      
-      // Patterns
       setText('pat-type', report.noise_type || 'General Disturbance');
       setText('pat-hours', report.worst_hours_pattern || 'Varied Profile');
       setText('pat-freq', report.frequency_pattern || 'Sporadic Activity');
 
-      // Logs
       let logs = [];
       if (report.noise_log_ids?.length > 0) {
         const { data } = await _sb.from('noise_logs').select('*').in('id', report.noise_log_ids).order('timestamp', { ascending: true });
         logs = data || [];
       }
 
-      // Stats
       const total = logs.length;
       const avg = total ? logs.reduce((a, l) => a + (l.average_decibel || 0), 0) / total : 0;
       const peak = total ? Math.max(...logs.map(l => l.peak_decibel || 0)) : 0;
@@ -686,7 +663,7 @@
       setText('stat-peak', peak.toFixed(1) + ' dB');
 
       show('dashboard');
-      initMap(logs);
+      initGoogleMap(logs);
 
       const list = document.getElementById('incidents-list');
       if (total === 0) {
