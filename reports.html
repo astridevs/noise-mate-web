@@ -7,342 +7,315 @@
   <meta name="description" content="Access your secure noise evidence records using the credentials from your PDF report.">
   <link rel="icon" href="/assets/logo.png">
 
-  <!-- Site-wide CSS (grid background + tokens) -->
-  <link href="/css/techy.css" rel="stylesheet">
-
-  <!-- Google Fonts (matches main site) -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg: #070B14;
+      --card-bg: #0F1622;
+      --primary: #3B82F6;
+      --primary-hover: #2563EB;
+      --text: #FFFFFF;
+      --text-muted: #94A3B8;
+      --border: rgba(255, 255, 255, 0.08);
+      --input-bg: rgba(0, 0, 0, 0.2);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 2rem 1.5rem;
+      background-image: 
+        radial-gradient(circle at 50% -20%, rgba(59, 130, 246, 0.1), transparent 50%),
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
     }
 
-    /* ---- Layout ---- */
-    .portal-wrap {
+    .portal-container {
       width: 100%;
-      max-width: 480px;
-      position: relative;
-      z-index: 2;
+      max-width: 420px;
+      text-align: center;
     }
 
-    /* ---- Header ---- */
-    .portal-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 3.5rem;
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      text-decoration: none;
-    }
-
-    .nav-logo img {
-      width: 30px;
-      height: 30px;
-      border-radius: 6px;
-    }
-
-    .nav-logo span {
-      font-weight: 800;
-      font-size: 1.1rem;
-      color: var(--primary);
-      letter-spacing: -0.01em;
-    }
-
-    .secure-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.65rem;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--primary);
-      background: rgba(22, 76, 120, 0.08);
-      border: 1px solid rgba(22, 76, 120, 0.15);
-      padding: 0.4rem 0.8rem;
-      border-radius: 100px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .secure-badge {
-        background: rgba(22, 76, 120, 0.2);
-        border-color: rgba(22, 76, 120, 0.3);
-        color: #7eb8f7;
-      }
-    }
-
-    /* ---- Hero Text ---- */
-    .portal-hero {
+    .logo-area {
       margin-bottom: 2.5rem;
     }
 
-    .portal-hero h1 {
-      font-size: clamp(2.8rem, 8vw, 4rem);
-      font-weight: 900;
-      line-height: 1.0;
-      letter-spacing: -2px;
-      color: var(--text-color);
-      margin-bottom: 1rem;
+    .logo-area img {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 1.5rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
     }
 
-    .portal-hero h1 .highlight {
-      color: var(--primary) !important;
+    .logo-area h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
     }
 
-    .portal-hero p {
-      font-size: 1rem;
+    .logo-area p {
       color: var(--text-muted);
-      line-height: 1.65;
-      max-width: 400px;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
-    /* ---- Card ---- */
-    .portal-card {
+    .card {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 2rem;
+      padding: 2.5rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
       position: relative;
-      z-index: 2;
     }
 
-    /* ---- Form ---- */
-    form { display: flex; flex-direction: column; gap: 1rem; }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      text-align: left;
+    }
 
-    .field { display: flex; flex-direction: column; gap: 0.4rem; }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
     label {
-      font-size: 0.72rem;
-      font-weight: 700;
+      font-size: 0.8rem;
+      font-weight: 600;
       color: var(--text-muted);
-      margin-left: 0.15rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+      margin-left: 0.25rem;
     }
 
-    .input-wrap { position: relative; }
+    .input-container {
+      position: relative;
+    }
 
-    .input-wrap svg {
+    .input-container svg {
       position: absolute;
       left: 1rem;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-muted);
-      opacity: 0.6;
-      pointer-events: none;
+      opacity: 0.5;
     }
 
     input {
       width: 100%;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 0.875rem 1rem 0.875rem 3rem;
-      color: var(--text-color);
-      font-size: 0.95rem;
-      font-weight: 500;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.9rem 1rem 0.9rem 3rem;
+      color: var(--text);
+      font-size: 1rem;
       font-family: inherit;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
+      transition: all 0.2s;
     }
 
     input:focus {
+      outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(22, 76, 120, 0.1);
+      background: rgba(59, 130, 246, 0.05);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
     }
 
-    input::placeholder { color: var(--text-muted); opacity: 0.6; }
-
-    .error-msg {
+    .error-box {
       display: none;
-      color: #EF4444;
-      font-size: 0.8rem;
-      font-weight: 600;
-      background: rgba(239, 68, 68, 0.08);
+      background: rgba(239, 68, 68, 0.1);
       border: 1px solid rgba(239, 68, 68, 0.2);
-      padding: 0.65rem 1rem;
-      border-radius: 10px;
+      color: #FCA5A5;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
       text-align: center;
     }
 
-    .error-msg.visible { display: block; }
+    .error-box.visible {
+      display: block;
+    }
 
-    .submit-btn {
-      margin-top: 0.25rem;
+    .btn-submit {
       background: var(--primary);
       color: white;
-      border: none;
-      padding: 1rem 1.5rem;
-      border-radius: 50px;
+      text-decoration: none;
       font-weight: 700;
       font-size: 1rem;
-      font-family: inherit;
+      padding: 1rem;
+      border-radius: 16px;
+      border: none;
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.6rem;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
+      gap: 0.75rem;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
     }
 
-    .submit-btn:hover:not(:disabled) {
+    .btn-submit:hover:not(:disabled) {
       background: var(--primary-hover);
       transform: translateY(-1px);
     }
 
-    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .submit-btn span, .submit-btn svg { color: white !important; }
-
-    /* ---- Footer ---- */
-    .portal-footer {
-      margin-top: 1.5rem;
-      text-align: center;
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      line-height: 1.5;
+    .btn-submit:active {
+      transform: translateY(0);
     }
 
-    .portal-footer a {
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .footer a {
       color: var(--primary);
       text-decoration: none;
       font-weight: 600;
     }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .btn-submit.loading .spinner { display: block; }
+    .btn-submit.loading span { display: none; }
+    .btn-submit.loading svg { display: none; }
+
   </style>
 </head>
 <body>
-  <div class="portal-wrap">
 
-    <!-- Hero -->
-    <div class="portal-hero">
-      <h1>Evidence<br><span class="highlight">Portal</span></h1>
-      <p>Enter the Report ID and PIN from your PDF report to access your secure noise evidence records.</p>
+  <div class="portal-container">
+    <div class="logo-area">
+      <img src="/assets/logo.png" alt="Noise Mate">
+      <h1>Evidence Portal</h1>
+      <p>Secure access to your noise evidence records and audio logs.</p>
     </div>
 
-    <!-- Card with Form -->
-    <div class="portal-card">
-      <form id="access-form" novalidate>
-        <div class="field">
-          <label for="report-id">Report ID</label>
-          <div class="input-wrap">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-            </svg>
-            <input id="report-id" type="text" placeholder="e.g. XYZ123" autocomplete="off" required>
+    <div class="card">
+      <form id="accessForm">
+        <div class="field-group">
+          <label for="reportId">Report ID</label>
+          <div class="input-container">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <input type="text" id="reportId" placeholder="Found on your report" required spellcheck="false">
           </div>
         </div>
 
-        <div class="field">
+        <div class="field-group">
           <label for="pin">Security PIN</label>
-          <div class="input-wrap">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-            </svg>
-            <input id="pin" type="password" maxlength="6" placeholder="6-digit PIN" required>
+          <div class="input-container">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <input type="password" id="pin" placeholder="6-digit security code" required maxlength="6">
           </div>
         </div>
 
-        <div class="error-msg" id="error-msg"></div>
+        <div id="errorBox" class="error-box"></div>
 
-        <button type="submit" class="submit-btn" id="submit-btn">
-          <span id="btn-label">Access Report</span>
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="5" y1="12" x2="19" y2="12"/>
-            <polyline points="12 5 19 12 12 19"/>
-          </svg>
+        <button type="submit" id="submitBtn" class="btn-submit">
+          <div class="spinner"></div>
+          <span>Access Evidence</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
         </button>
       </form>
     </div>
 
-    <p class="portal-footer">
-      Authorised access only. All sessions are monitored for security.<br>
-      <a href="/">← Back to Noise Mate</a>
-    </p>
+    <div class="footer">
+      Private access only. Licensed by Noise Mate.<br>
+      <a href="/">← Return to Website</a>
+    </div>
   </div>
 
-  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script>
     const SUPABASE_URL = 'https://fkludrjnyihdxlzhyofx.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_5x1PVu3hkUTOOitRzs3Bmg_qbUU2ioj';
-    const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const form = document.getElementById('access-form');
-    const errorMsg = document.getElementById('error-msg');
-    const submitBtn = document.getElementById('submit-btn');
-    const btnLabel = document.getElementById('btn-label');
+    const form = document.getElementById('accessForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorBox = document.getElementById('errorBox');
 
-    function showError(msg) {
-      errorMsg.textContent = msg;
-      errorMsg.classList.add('visible');
-    }
-
-    function hideError() {
-      errorMsg.classList.remove('visible');
-    }
-
-    async function handleAccess(e) {
+    form.onsubmit = async (e) => {
       e.preventDefault();
-      hideError();
+      errorBox.classList.remove('visible');
+      
+      const idInput = document.getElementById('reportId').value.trim();
+      const pinInput = document.getElementById('pin').value.trim();
 
-      const reportId = document.getElementById('report-id').value.trim().toUpperCase();
-      const pin = document.getElementById('pin').value.trim();
-
-      if (!reportId || !pin) {
-        showError('Please enter both Report ID and PIN.');
-        return;
-      }
+      if (!idInput || !pinInput) return;
 
       submitBtn.disabled = true;
-      btnLabel.textContent = 'Verifying...';
+      submitBtn.classList.add('loading');
 
       try {
-        const { data, error } = await _supabase
+        // Query by id (UUID) or report_pin
+        // Note: we standardized to current production columns
+        const { data, error } = await _sb
           .from('complaints')
-          .select('id, report_id, security_pin')
-          .or(`report_id.eq.${reportId},id.eq.${reportId}`)
+          .select('id, report_pin')
+          .eq('id', idInput)
           .single();
 
         if (error || !data) {
-          showError('Report not found. Please check your Report ID.');
+          errorBox.textContent = "Report not found. Check your ID.";
+          errorBox.classList.add('visible');
           return;
         }
 
-        if (String(data.security_pin) !== String(pin)) {
-          showError('Incorrect PIN. Please try again.');
+        if (String(data.report_pin) !== String(pinInput)) {
+          errorBox.textContent = "Incorrect PIN. Please try again.";
+          errorBox.classList.add('visible');
           return;
         }
 
-        // Success — navigate to full evidence dashboard
-        const portalId = data.report_id || data.id;
-        window.location.href = '/reports/view.html?id=' + encodeURIComponent(portalId) + '&pin=' + encodeURIComponent(pin);
+        // Success — redirect to new professional dashboard
+        window.location.href = `/reports/view.html?id=${data.id}&pin=${data.report_pin}`;
 
       } catch (err) {
-        showError('An unexpected error occurred. Please try again.');
-        console.error(err);
+        errorBox.textContent = "A connection error occurred.";
+        errorBox.classList.add('visible');
       } finally {
         submitBtn.disabled = false;
-        btnLabel.textContent = 'Access Report';
+        submitBtn.classList.remove('loading');
       }
-    }
-
-    form.addEventListener('submit', handleAccess);
+    };
   </script>
 </body>
 </html>

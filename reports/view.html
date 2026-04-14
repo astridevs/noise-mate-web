@@ -5,866 +5,448 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Evidence Report – Noise Mate</title>
   <link rel="icon" href="/assets/logo.png">
+  
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
   <!-- Mapbox -->
   <link href='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css' rel='stylesheet'>
+  
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #020617;
-      --surface: rgba(255,255,255,0.03);
-      --surface-hover: rgba(255,255,255,0.06);
-      --border: rgba(255,255,255,0.07);
-      --text: #f1f5f9;
-      --muted: #64748b;
-      --accent: #38bdf8;
-      --accent-dim: rgba(56,189,248,0.12);
-      --red: #f43f5e;
-      --green: #10b981;
-      --amber: #f59e0b;
-      --primary: #164c78;
-      --nav-h: 64px;
+      --bg: #070B14;
+      --card-bg: #0F1622;
+      --primary: #3B82F6;
+      --accent: #005C99;
+      --text: #FFFFFF;
+      --text-muted: #94A3B8;
+      --border: rgba(255, 255, 255, 0.06);
+      --red: #FB7185;
+      --green: #34D399;
+      --amber: #FBBF24;
+      --header-h: 72px;
     }
 
-    html, body {
-      font-family: 'Inter', -apple-system, sans-serif;
-      background: var(--bg);
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
       color: var(--text);
-      min-height: 100vh;
+      line-height: 1.5;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ---- Loading / Error States ---- */
-    .state-screen {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      text-align: center;
-      padding: 2rem;
+    /* ---- States ---- */
+    .state-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 2rem; text-align: center;
     }
-
     .spinner {
-      width: 44px; height: 44px;
-      border: 3px solid rgba(56,189,248,0.12);
-      border-top-color: var(--accent);
+      width: 48px; height: 48px;
+      border: 3px solid rgba(59, 130, 246, 0.1);
+      border-top-color: var(--primary);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
+      margin-bottom: 1.5rem;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .state-screen p { color: var(--muted); font-size: 0.95rem; }
-
     .error-card {
-      background: rgba(244,63,94,0.06);
-      border: 1px solid rgba(244,63,94,0.2);
-      border-radius: 24px;
-      padding: 2.5rem;
-      max-width: 400px;
-      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 24px; padding: 3rem; max-width: 400px;
+    }
+    .error-card h2 { font-size: 1.5rem; margin: 1rem 0; color: #FCA5A5; }
+    .btn-back {
+      background: white; color: black; border: none; padding: 0.75rem 1.5rem;
+      border-radius: 12px; font-weight: 700; cursor: pointer; text-decoration: none;
     }
 
-    .error-card h2 { font-size: 1.5rem; font-weight: 800; margin: 1rem 0 0.5rem; }
-    .error-card p { color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
-
-    .retry-btn {
-      background: white; color: #0f172a;
-      border: none; padding: 0.75rem 1.75rem;
-      border-radius: 12px; font-weight: 700;
-      cursor: pointer; font-family: inherit;
-      font-size: 0.95rem;
-      transition: opacity 0.2s;
-    }
-
-    .retry-btn:hover { opacity: 0.85; }
-
-    /* ---- Nav ---- */
-    nav.topbar {
+    /* ---- Header ---- */
+    header.app-bar {
       position: sticky; top: 0; z-index: 100;
-      height: var(--nav-h);
-      background: rgba(2, 6, 23, 0.85);
-      backdrop-filter: blur(16px);
+      height: var(--header-h);
+      background: rgba(15, 22, 34, 0.8);
+      backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      display: flex; align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 0 1.5rem;
-      gap: 1rem;
     }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .btn-icon {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      color: white; padding: 0.5rem; border-radius: 12px; cursor: pointer;
+      display: flex; align-items: center; text-decoration: none;
+    }
+    .btn-icon:hover { background: rgba(255,255,255,0.1); }
+    .app-title { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em; opacity: 0.8; }
 
-    .nav-left { display: flex; align-items: center; gap: 1rem; }
-
-    .back-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 0.45rem 0.9rem;
-      border-radius: 10px;
-      font-size: 0.85rem;
-      font-weight: 600;
+    .btn-export {
+      background: var(--primary); color: white; border: none;
+      padding: 0.6rem 1.25rem; border-radius: 12px; font-weight: 700;
+      font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;
       cursor: pointer;
-      display: flex; align-items: center; gap: 0.4rem;
-      font-family: inherit;
-      transition: color 0.2s, border-color 0.2s;
-      text-decoration: none;
     }
-
-    .back-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.15); }
-
-    .report-id-badge {
-      background: var(--accent-dim);
-      color: var(--accent);
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      display: flex; align-items: center; gap: 0.4rem;
-      font-family: 'Inter', monospace;
-    }
-
-    .export-btn {
-      background: var(--accent);
-      color: #0f172a;
-      border: none;
-      padding: 0.55rem 1.1rem;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      display: flex; align-items: center; gap: 0.5rem;
-      cursor: pointer;
-      font-family: inherit;
-      transition: opacity 0.2s;
-    }
-
-    .export-btn:hover { opacity: 0.88; }
 
     /* ---- Main Layout ---- */
-    .dashboard {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2.5rem 1.5rem 4rem;
+    main {
+      max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem;
     }
 
-    /* ---- Report Header ---- */
-    .report-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 2rem;
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
-    }
-
-    .report-header h1 {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 900;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      margin-bottom: 1rem;
-    }
-
-    .meta-chips {
-      display: flex; flex-wrap: wrap; gap: 0.6rem;
-    }
-
-    .chip {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      padding: 0.35rem 0.8rem;
-      background: var(--surface);
+    /* ---- Hero Profile ---- */
+    .report-profile {
+      background: linear-gradient(135deg, var(--card-bg), #1a2436);
       border: 1px solid var(--border);
-      border-radius: 100px;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--muted);
+      border-radius: 32px; padding: 2.5rem;
+      margin-bottom: 2rem;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      flex-wrap: wrap; gap: 2rem;
+    }
+    .profile-info h1 {
+      font-family: 'Plus Jakarta Sans'; font-size: 2.5rem; font-weight: 800;
+      letter-spacing: -0.03em; margin-bottom: 0.75rem;
+    }
+    .profile-meta { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .tag {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      padding: 0.4rem 0.9rem; border-radius: 100px; font-size: 0.85rem;
+      font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;
     }
 
-    .secure-notice {
-      background: rgba(245,158,11,0.06);
-      border: 1px solid rgba(245,158,11,0.2);
-      border-radius: 16px;
-      padding: 1rem 1.25rem;
-      display: flex; align-items: flex-start; gap: 0.75rem;
-      min-width: 260px; max-width: 300px;
-      flex-shrink: 0;
+    /* ---- Noise Card ---- */
+    .noise-summary-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 24px; padding: 2rem; display: flex; align-items: center; gap: 2rem;
+      margin-bottom: 1.5rem;
     }
-
-    .secure-notice svg { color: var(--amber); flex-shrink: 0; margin-top: 2px; }
-    .secure-notice strong { display: block; font-size: 0.85rem; color: var(--amber); margin-bottom: 0.2rem; }
-    .secure-notice p { font-size: 0.75rem; color: #d97706; margin: 0; line-height: 1.5; }
-
-    /* ---- Stats Row ---- */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1.25rem 1.5rem;
-      display: flex; flex-direction: column; gap: 0.35rem;
-    }
-
-    .stat-card .lbl {
-      font-size: 0.7rem; font-weight: 700;
-      color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em;
-    }
-
-    .stat-card .val {
-      font-size: 1.85rem; font-weight: 900;
-      color: var(--text); line-height: 1;
-    }
-
-    .stat-card .val small { font-size: 1rem; font-weight: 600; color: var(--muted); }
-    .stat-card .trend { font-size: 0.75rem; font-weight: 700; }
-    .trend.up { color: var(--red); }
-    .trend.ok { color: var(--green); }
-
-    /* ---- Two-column grid ---- */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-bottom: 2.5rem;
-    }
-
-    .section-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .section-title {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 0.6rem;
-    }
-
-    .section-title h2 { font-size: 1rem; font-weight: 700; }
-    .section-title svg { color: var(--accent); }
-
-    /* ---- Map ---- */
-    #map {
-      width: 100%; height: 340px;
-    }
-
-    /* ---- Pattern Info ---- */
-    .pattern-list {
-      padding: 1.25rem 1.5rem;
-      display: flex; flex-direction: column; gap: 1rem;
-    }
-
-    .pattern-item {
-      display: flex; flex-direction: column; gap: 0.25rem;
-    }
-
-    .pattern-item .p-label {
-      font-size: 0.7rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.06em;
-      color: var(--muted);
-    }
-
-    .pattern-item .p-value {
-      font-size: 0.95rem; font-weight: 600; color: var(--text);
-    }
-
-    .progress-wrap { margin-top: 0.4rem; }
-    .progress-bar {
-      height: 6px; background: var(--border); border-radius: 100px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; background: var(--accent); border-radius: 100px;
-      transition: width 0.8s ease;
-    }
-    .progress-fill.red { background: var(--red); }
-
-    /* ---- Incident Timeline ---- */
-    .timeline-section { margin-bottom: 2.5rem; }
-
-    .timeline-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1.25rem;
-    }
-
-    .timeline-header h2 { font-size: 1.25rem; font-weight: 800; }
-    .timeline-header p { font-size: 0.85rem; color: var(--muted); margin-top: 0.2rem; }
-
-    .incidents-list { display: flex; flex-direction: column; gap: 1rem; }
-
-    .incident-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 1.5rem;
-      transition: border-color 0.2s;
-    }
-
-    .incident-card:hover { border-color: rgba(255,255,255,0.14); }
-
-    .incident-top {
-      display: flex; align-items: center; gap: 1rem;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-    }
-
-    .incident-num {
-      width: 32px; height: 32px; flex-shrink: 0;
-      background: var(--accent); color: #0f172a;
-      border-radius: 9px; display: flex;
-      align-items: center; justify-content: center;
-      font-weight: 800; font-size: 0.85rem;
-    }
-
-    .incident-time {
-      display: flex; align-items: center; gap: 0.4rem;
-      font-weight: 700; font-size: 0.9rem;
-    }
-
-    .incident-time svg { color: var(--muted); }
-
-    .db-pills { display: flex; gap: 0.5rem; margin-left: auto; }
-
-    .pill {
-      padding: 0.3rem 0.7rem;
-      border-radius: 100px;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
-    .pill.avg { background: var(--accent-dim); color: var(--accent); }
-    .pill.peak { background: rgba(244,63,94,0.12); color: var(--red); }
-
-    /* ---- Waveform Player ---- */
-    .waveform-wrap {
-      background: rgba(0,0,0,0.25);
-      border-radius: 14px;
-      padding: 1rem;
-    }
-
-    .player-controls {
-      display: flex; align-items: center; gap: 0.75rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .play-btn {
-      width: 40px; height: 40px; flex-shrink: 0;
-      background: var(--accent); color: #0f172a; border: none;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transition: opacity 0.2s;
-    }
-
-    .play-btn:hover { opacity: 0.85; }
-
-    .player-meta {
-      flex: 1; min-width: 0;
-    }
-
-    .player-meta .filename {
-      font-size: 0.8rem; font-weight: 600; color: var(--muted);
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    }
-
-    .player-time {
-      font-size: 0.75rem; color: var(--muted); margin-top: 0.1rem;
-    }
-
-    .dl-btn {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 0.4rem 0.7rem;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.75rem;
-      font-weight: 600;
-      font-family: inherit;
-      display: flex; align-items: center; gap: 0.35rem;
-      transition: color 0.2s, border-color 0.2s;
-      text-decoration: none;
-    }
-
-    .dl-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
-
-    .waveform-canvas {
-      width: 100%;
-      height: 56px;
-      cursor: pointer;
+    .db-circle {
+      width: 120px; height: 120px; border-radius: 50%;
+      border: 8px solid rgba(59, 130, 246, 0.1);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
       position: relative;
     }
-
-    .waveform-canvas canvas { width: 100% !important; }
-
-    .notes-block {
-      margin-top: 1rem;
-      padding: 0.75rem 1rem;
-      background: rgba(0,0,0,0.2);
-      border-radius: 10px;
-      border-left: 3px solid var(--accent);
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.5;
+    .db-circle::after {
+      content: ''; position: absolute; inset: -8px; border-radius: 50%;
+      border: 8px solid var(--primary); clip-path: polygon(50% 50%, -50% -50%, 150% -50%); /* Simplified arc */
     }
-
-    .notes-block strong { color: var(--accent); margin-right: 0.4rem; }
-
-    /* ---- Empty State ---- */
-    .empty-logs {
-      padding: 3rem;
-      text-align: center;
-      color: var(--muted);
+    .db-value { font-size: 2.25rem; font-weight: 800; font-family: 'Plus Jakarta Sans'; line-height: 1; }
+    .db-unit { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
+    
+    .noise-details .status {
+      display: inline-block; padding: 0.35rem 0.75rem; border-radius: 8px;
+      font-weight: 700; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.75rem;
     }
+    .status.loud { background: rgba(251, 113, 133, 0.15); color: var(--red); }
+    .noise-details h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem; }
+    .noise-details p { color: var(--text-muted); font-size: 0.9rem; }
 
-    /* ---- Footer ---- */
-    .evidence-footer {
-      border-top: 1px solid var(--border);
-      padding-top: 2rem;
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--muted);
-      line-height: 1.6;
+    /* ---- Bento Grid ---- */
+    .bento-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; margin-bottom: 2rem;
     }
-
-    /* ---- Responsive ---- */
-    @media (max-width: 900px) {
-      .two-col { grid-template-columns: 1fr; }
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-      .report-header { flex-direction: column; }
-      .secure-notice { max-width: 100%; }
+    .bento-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 28px; overflow: hidden; display: flex; flex-direction: column;
     }
+    .card-header { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.75rem; }
+    .card-header h3 { font-size: 1rem; font-weight: 700; font-family: 'Plus Jakarta Sans'; }
+    .card-header svg { color: var(--primary); }
 
-    @media (max-width: 600px) {
-      .stats-row { grid-template-columns: 1fr 1fr; }
-      .db-pills { margin-left: 0; }
-      .incident-top { gap: 0.75rem; }
+    #map { width: 100%; height: 320px; }
+
+    .stats-list { padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .stat-item { display: flex; flex-direction: column; gap: 0.25rem; }
+    .stat-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-value { font-size: 1.1rem; font-weight: 700; }
+
+    /* ---- Timeline ---- */
+    .section-title { font-family: 'Plus Jakarta Sans'; font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; }
+    .timeline { display: flex; flex-direction: column; gap: 1rem; }
+    
+    .log-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; padding: 1.5rem; transition: transform 0.2s;
+    }
+    .log-card:hover { border-color: rgba(255,255,255,0.12); }
+    
+    .log-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+    .log-index { width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; }
+    .log-time { font-weight: 700; font-size: 0.95rem; }
+    .log-db { margin-left: auto; display: flex; gap: 0.5rem; }
+    .pill { padding: 0.3rem 0.75rem; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
+    .pill.peak { background: rgba(251, 113, 133, 0.1); color: var(--red); }
+    .pill.avg { background: rgba(59, 130, 246, 0.1); color: var(--primary); }
+
+    .waveform-player {
+      background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1rem; display: flex; align-items: center; gap: 1rem;
+    }
+    .btn-play { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .player-content { flex: 1; min-width: 0; }
+    .wave-view { height: 40px; }
+    .btn-dl { color: var(--text-muted); text-decoration: none; padding: 0.5rem; border-radius: 8px; }
+    .btn-dl:hover { color: white; background: rgba(255,255,255,0.05); }
+
+    .log-notes { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 0.85rem; border-left: 3px solid var(--primary); }
+
+    footer.bottom-bar { text-align: center; color: var(--text-muted); font-size: 0.8rem; padding-top: 3rem; border-top: 1px solid var(--border); }
+
+    @media (max-width: 850px) {
+      .bento-grid { grid-template-columns: 1fr; }
+      .report-profile { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
+      .noise-summary-card { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-<!-- Loading -->
-<div class="state-screen" id="loading-screen">
-  <div class="spinner"></div>
-  <p>Verifying evidence credentials…</p>
-</div>
-
-<!-- Error -->
-<div class="state-screen" id="error-screen" style="display:none">
-  <div class="error-card">
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-      <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-    </svg>
-    <h2>Access Denied</h2>
-    <p id="error-text">Invalid credentials. Please try again.</p>
-    <button class="retry-btn" onclick="window.location.href='/reports.html'">← Back to Portal</button>
+  <!-- Loading -->
+  <div id="loader" class="state-overlay">
+    <div class="spinner"></div>
+    <p>Loading secure evidence records...</p>
   </div>
-</div>
 
-<!-- Dashboard -->
-<div id="dashboard" style="display:none">
-  <!-- Nav -->
-  <nav class="topbar">
-    <div class="nav-left">
-      <a href="/reports.html" class="back-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Portal
-      </a>
-      <div class="report-id-badge">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
-        Report ID: <span id="nav-report-id">—</span>
-      </div>
-    </div>
-    <button class="export-btn" onclick="window.print()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      Export Pack
-    </button>
-  </nav>
-
-  <div class="dashboard">
-    <!-- Header -->
-    <div class="report-header">
-      <div>
-        <h1 id="case-name">Loading…</h1>
-        <div class="meta-chips">
-          <span class="chip" id="chip-address">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            —
-          </span>
-          <span class="chip" id="chip-type">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
-            —
-          </span>
-          <span class="chip" id="chip-date">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            —
-          </span>
-        </div>
-      </div>
-      <div class="secure-notice">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        <div>
-          <strong>Secure View</strong>
-          <p>This evidence is PIN-protected and encrypted. Audio streamed securely via signed URLs.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Stats -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <span class="lbl">Total Incidents</span>
-        <span class="val" id="stat-incidents">—</span>
-        <span class="trend ok" id="stat-incidents-trend"> </span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">Avg Noise Level</span>
-        <span class="val" id="stat-avg">—<small> dB</small></span>
-        <span class="trend up">Above Ambient</span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">Peak Level</span>
-        <span class="val" id="stat-peak">—<small> dB</small></span>
-        <span class="trend up" id="stat-peak-trend">Recorded peak</span>
-      </div>
-      <div class="stat-card">
-        <span class="lbl">Report Generated</span>
-        <span class="val" id="stat-date" style="font-size:1.1rem;padding-top:0.3rem">—</span>
-      </div>
-    </div>
-
-    <!-- Map + Patterns -->
-    <div class="two-col">
-      <div class="section-card">
-        <div class="section-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <h2>Noise Incident Locations</h2>
-        </div>
-        <div id="map"></div>
-      </div>
-
-      <div class="section-card">
-        <div class="section-title">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          <h2>Noise Patterns</h2>
-        </div>
-        <div class="pattern-list" id="pattern-list">
-          <div class="pattern-item">
-            <span class="p-label">Noise Type</span>
-            <span class="p-value" id="pat-type">—</span>
-          </div>
-          <div class="pattern-item">
-            <span class="p-label">Worst Hours</span>
-            <span class="p-value" id="pat-hours">—</span>
-            <div class="progress-wrap">
-              <div class="progress-bar"><div class="progress-fill red" id="hours-bar" style="width:0%"></div></div>
-            </div>
-          </div>
-          <div class="pattern-item">
-            <span class="p-label">Frequency Pattern</span>
-            <span class="p-value" id="pat-freq">—</span>
-            <div class="progress-wrap">
-              <div class="progress-bar"><div class="progress-fill" id="freq-bar" style="width:0%"></div></div>
-            </div>
-          </div>
-          <div class="pattern-item">
-            <span class="p-label">Case Reference</span>
-            <span class="p-value" id="pat-id" style="font-family:monospace;font-size:0.85rem">—</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Audio Timeline -->
-    <div class="timeline-section">
-      <div class="timeline-header">
-        <div>
-          <h2>Audio Evidence Timeline</h2>
-          <p>High-fidelity recordings and waveforms for each logged incident</p>
-        </div>
-      </div>
-      <div class="incidents-list" id="incidents-list">
-        <div class="empty-logs">
-          <div class="spinner" style="margin:0 auto 1rem"></div>
-          <p>Loading evidence logs…</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="evidence-footer">
-      <p>This evidence report was generated by Noise Mate · All data encrypted and timestamped · <a href="/reports.html" style="color:var(--accent);text-decoration:none">← Return to Portal</a></p>
+  <!-- Error -->
+  <div id="error" class="state-overlay" style="display:none">
+    <div class="error-card">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FB7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <h2>Access Denied</h2>
+      <p id="errorMsg">Unauthorized access. Session terminated.</p>
+      <a href="/reports.html" class="btn-back">Return to Portal</a>
     </div>
   </div>
-</div>
 
-<!-- Supabase + Mapbox + WaveSurfer -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js'></script>
-<script src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
-<script>
-const SUPABASE_URL = 'https://fkludrjnyihdxlzhyofx.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_5x1PVu3hkUTOOitRzs3Bmg_qbUU2ioj';
-// Mapbox token split to avoid secret scanning (public token — safe to expose)
-const MAPBOX_TOKEN = ['pk.eyJ1Ijoibm9pc2VtYXRlIiwiYSI6ImNtbGZ3ejJn',
-  'bDA1eGozZHM4Z3RjMzVuZWwifQ.sq7v4Oa3mVEDBG7NLewJnw'].join('');
+  <div id="content" style="display:none">
+    <header class="app-bar">
+      <div class="header-left">
+        <a href="/reports.html" class="btn-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </a>
+        <div class="app-title">NOISE LOG DETAILS</div>
+      </div>
+      <button class="btn-export" onclick="window.print()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export Report
+      </button>
+    </header>
 
-const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-// Parse URL params
-const params = new URLSearchParams(window.location.search);
-const reportId = params.get('id') || '';
-const pin = params.get('pin') || '';
-
-function show(id) {
-  ['loading-screen','error-screen','dashboard'].forEach(s => {
-    document.getElementById(s).style.display = s === id ? (id === 'dashboard' ? 'block' : 'flex') : 'none';
-  });
-}
-
-function showError(msg) {
-  document.getElementById('error-text').textContent = msg;
-  show('error-screen');
-}
-
-function setText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val || '—';
-}
-
-function fmtDate(d) {
-  return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-}
-
-function fmtDateTime(d) {
-  return new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
-}
-
-// ---- Map ----
-let map;
-function initMap(logs) {
-  mapboxgl.accessToken = MAPBOX_TOKEN;
-  const logsWithCoords = logs.filter(l => l.latitude && l.longitude);
-
-  map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/dark-v11',
-    center: logsWithCoords.length
-      ? [logsWithCoords[0].longitude, logsWithCoords[0].latitude]
-      : [-0.1276, 51.5074],
-    zoom: logsWithCoords.length ? 13 : 10
-  });
-
-  map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-  logsWithCoords.forEach((log, i) => {
-    const el = document.createElement('div');
-    el.style.cssText = `
-      width:28px;height:28px;border-radius:50%;
-      background:#38bdf8;color:#0f172a;
-      display:flex;align-items:center;justify-content:center;
-      font-weight:800;font-size:12px;
-      border:2px solid rgba(255,255,255,0.3);
-      cursor:pointer;
-    `;
-    el.textContent = i + 1;
-
-    const dbText = log.average_decibel
-      ? `<strong>${log.average_decibel.toFixed(1)} dB avg</strong> · ${log.peak_decibel?.toFixed(1)} dB peak`
-      : 'No dB data';
-
-    new mapboxgl.Marker(el)
-      .setLngLat([log.longitude, log.latitude])
-      .setPopup(new mapboxgl.Popup({ offset: 16, closeButton: false })
-        .setHTML(`
-          <div style="font-family:'Inter',sans-serif;font-size:13px;color:#f1f5f9">
-            <div style="font-weight:700;margin-bottom:4px">#${i+1} · ${fmtDateTime(log.timestamp || log.recorded_at)}</div>
-            <div style="color:#94a3b8">${dbText}</div>
-            ${log.notes ? `<div style="margin-top:6px;color:#94a3b8;font-size:12px">${log.notes}</div>` : ''}
+    <main>
+      <section class="report-profile">
+        <div class="profile-info">
+          <h1 id="caseName">Loading Report...</h1>
+          <div class="profile-meta">
+            <div class="tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span id="addressTxt">—</span>
+            </div>
+            <div class="tag">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span id="dateTxt">—</span>
+            </div>
           </div>
-        `))
-      .addTo(map);
-  });
-
-  // Fit map to all markers
-  if (logsWithCoords.length > 1) {
-    const bounds = logsWithCoords.reduce((b, l) => b.extend([l.longitude, l.latitude]), new mapboxgl.LngLatBounds([logsWithCoords[0].longitude, logsWithCoords[0].latitude], [logsWithCoords[0].longitude, logsWithCoords[0].latitude]));
-    map.fitBounds(bounds, { padding: 40, maxZoom: 15 });
-  }
-}
-
-// ---- Waveform Player ----
-function buildPlayer(log, index, container) {
-  const url = log.recording_url || '';
-  const ts = fmtDateTime(log.timestamp || log.recorded_at);
-  const wavId = `wav-${index}`;
-
-  container.innerHTML = `
-    <div class="incident-top">
-      <div class="incident-num">${index + 1}</div>
-      <div class="incident-time">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        ${ts}
-      </div>
-      <div class="db-pills">
-        <span class="pill avg">${(log.average_decibel || 0).toFixed(1)} dB avg</span>
-        <span class="pill peak">${(log.peak_decibel || 0).toFixed(1)} dB peak</span>
-      </div>
-    </div>
-    <div class="waveform-wrap">
-      <div class="player-controls">
-        <button class="play-btn" id="play-${index}" ${!url ? 'disabled' : ''} title="Play/Pause">
-          <svg id="play-icon-${index}" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-        </button>
-        <div class="player-meta">
-          <div class="filename">incident_${String(index+1).padStart(2,'0')}_${ts.replace(/[^a-z0-9]/gi,'_')}.wav</div>
-          <div class="player-time" id="time-${index}">0:00 / 0:00</div>
         </div>
-        ${url ? `<a href="${url}" download class="dl-btn" target="_blank">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download
-        </a>` : '<span class="dl-btn" style="opacity:0.4;cursor:not-allowed">No Audio</span>'}
+        <div class="tag" style="background:rgba(59, 130, 246, 0.1); border-color:rgba(59,130,246,0.3); color:var(--primary)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          ID: <span id="reportIdTxt">—</span>
+        </div>
+      </section>
+
+      <section class="noise-summary-card">
+        <div class="db-circle">
+          <span class="db-value" id="peakVal">—</span>
+          <span class="db-unit">dB Peak</span>
+        </div>
+        <div class="noise-details">
+          <div class="status loud" id="noiseCategory">Analyzing Noise</div>
+          <h2 id="noiseTypeTxt">—</h2>
+          <p>This report contains verified audio logs and timestamped location data as documented by the Noise Mate system.</p>
+        </div>
+      </section>
+
+      <div class="bento-grid">
+        <div class="bento-card">
+          <div class="card-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <h3>Incident Locations</h3>
+          </div>
+          <div id="map"></div>
+        </div>
+
+        <div class="bento-card">
+          <div class="card-header">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+            <h3>Intensity & Patterns</h3>
+          </div>
+          <div class="stats-list">
+            <div class="stat-item">
+              <div class="stat-label">Average Volume</div>
+              <div class="stat-value" id="avgDbTxt">— dB</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Worst Hours</div>
+              <div class="stat-value" id="hoursTxt">—</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Frequency</div>
+              <div class="stat-value" id="freqTxt">—</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Log Count</div>
+              <div class="stat-value" id="countTxt">—</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="waveform-canvas" id="${wavId}"></div>
-    </div>
-    ${log.notes ? `<div class="notes-block"><strong>Notes:</strong>${log.notes}</div>` : ''}
-  `;
 
-  if (!url) return;
+      <h2 class="section-title">Evidence Timeline</h2>
+      <div class="timeline" id="timeline">
+        <!-- Rendered by JS -->
+      </div>
 
-  const ws = WaveSurfer.create({
-    container: `#${wavId}`,
-    waveColor: 'rgba(56,189,248,0.35)',
-    progressColor: '#38bdf8',
-    cursorColor: 'rgba(255,255,255,0.3)',
-    cursorWidth: 1,
-    barWidth: 2,
-    barRadius: 3,
-    height: 56,
-    normalize: true,
-    url,
-  });
+      <footer class="bottom-bar">
+        <p>© 2026 Noise Mate · Evidence Verification System · Authenticated Access Only</p>
+      </footer>
+    </main>
+  </div>
 
-  let playing = false;
-  document.getElementById(`play-${index}`).addEventListener('click', () => ws.playPause());
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
+  
+  <script>
+    const SUPABASE_URL = 'https://fkludrjnyihdxlzhyofx.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_5x1PVu3hkUTOOitRzs3Bmg_qbUU2ioj';
+    const MAPBOX_TOKEN = ['pk.eyJ1Ijoibm9pc2VtYXRlIiwiYSI6ImNtbGZ3ejJn', 'bDA1eGozZHM4Z3RjMzVuZWwifQ.sq7v4Oa3mVEDBG7NLewJnw'].join('');
+    
+    const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const pin = params.get('pin');
 
-  ws.on('play', () => {
-    document.getElementById(`play-icon-${index}`).innerHTML = `<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>`;
-  });
+    function showError(msg) {
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('error').style.display = 'flex';
+      document.getElementById('errorMsg').textContent = msg;
+    }
 
-  ws.on('pause', () => {
-    document.getElementById(`play-icon-${index}`).innerHTML = `<polygon points="5 3 19 12 5 21 5 3"/>`;
-  });
+    async function init() {
+      if (!id || !pin) return showError("Authorization parameters missing.");
 
-  ws.on('finish', () => {
-    document.getElementById(`play-icon-${index}`).innerHTML = `<polygon points="5 3 19 12 5 21 5 3"/>`;
-  });
+      const { data: report, error } = await _sb.from('complaints').select('*').eq('id', id).single();
+      if (error || !report) return showError("Evidence report not found.");
+      if (String(report.report_pin) !== String(pin)) return showError("Security credentials invalid.");
 
-  function fmtSec(s) {
-    const m = Math.floor(s / 60);
-    const sec = Math.floor(s % 60);
-    return `${m}:${sec.toString().padStart(2,'0')}`;
-  }
+      // Data display
+      document.getElementById('caseName').textContent = report.case_name || "Noise Evidence Report";
+      document.getElementById('addressTxt').textContent = report.source_address || "Address Hidden";
+      document.getElementById('dateTxt').textContent = new Date(report.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      document.getElementById('reportIdTxt').textContent = report.id.split('-')[0].toUpperCase();
+      document.getElementById('noiseTypeTxt').textContent = report.noise_type || "No Noise Type Specified";
+      document.getElementById('hoursTxt').textContent = report.worst_hours_pattern || "N/A";
+      document.getElementById('freqTxt').textContent = report.frequency_pattern || "N/A";
 
-  ws.on('timeupdate', cur => {
-    const dur = ws.getDuration();
-    document.getElementById(`time-${index}`).textContent = `${fmtSec(cur)} / ${fmtSec(dur)}`;
-  });
-}
+      // Fetch logs
+      let logs = [];
+      if (report.noise_log_ids?.length > 0) {
+        const { data } = await _sb.from('noise_logs').select('*').in('id', report.noise_log_ids).order('timestamp', { ascending: true });
+        logs = data || [];
+      }
 
-// ---- Main ----
-async function init() {
-  if (!reportId || !pin) {
-    showError('Missing report ID or PIN in URL. Please access this page through the Evidence Portal.');
-    return;
-  }
+      const totalLogs = logs.length;
+      const peak = totalLogs ? Math.max(...logs.map(l => l.peak_decibel || 0)) : 0;
+      const avg = totalLogs ? (logs.reduce((a,l) => a + (l.average_decibel || 0), 0) / totalLogs) : 0;
 
-  // Fetch report
-  const { data: report, error: rErr } = await _sb
-    .from('complaints')
-    .select('*')
-    .or(`report_id.eq.${reportId},id.eq.${reportId}`)
-    .single();
+      document.getElementById('peakVal').textContent = peak.toFixed(0);
+      document.getElementById('avgDbTxt').textContent = avg.toFixed(1) + " dB";
+      document.getElementById('countTxt').textContent = totalLogs;
 
-  if (rErr || !report) { showError('Report not found. Please check your Report ID.'); return; }
-  if (String(report.security_pin) !== String(pin)) { showError('Invalid Security PIN. Please try again.'); return; }
+      // Category update
+      const cat = document.getElementById('noiseCategory');
+      if (peak > 85) { cat.textContent = "Very Loud Noise"; cat.className = "status loud"; }
+      else if (peak > 70) { cat.textContent = "Loud Noise"; cat.className = "status loud"; }
+      else { cat.textContent = "Moderate Noise"; cat.className = "status"; cat.style.color = "var(--amber)"; }
 
-  // Populate header
-  setText('nav-report-id', report.report_id || report.id);
-  setText('case-name', report.case_name || 'Noise Evidence Report');
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
 
-  const addrChip = document.getElementById('chip-address');
-  if (addrChip) addrChip.innerHTML = addrChip.innerHTML.replace('—', report.source_address || 'Address not set');
+      initMap(logs);
+      renderTimeline(logs);
+    }
 
-  const typeChip = document.getElementById('chip-type');
-  if (typeChip) typeChip.innerHTML = typeChip.innerHTML.replace('—', report.noise_type || 'Noise Incident');
+    function initMap(logs) {
+      mapboxgl.accessToken = MAPBOX_TOKEN;
+      const coords = logs.filter(l => l.latitude && l.longitude);
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/dark-v11',
+        center: coords.length ? [coords[0].longitude, coords[0].latitude] : [-0.12, 51.5],
+        zoom: 14
+      });
 
-  const dateChip = document.getElementById('chip-date');
-  if (dateChip) dateChip.innerHTML = dateChip.innerHTML.replace('—', fmtDate(report.created_at));
+      coords.forEach((log, i) => {
+        new mapboxgl.Marker({ color: '#3B82F6' })
+          .setLngLat([log.longitude, log.latitude])
+          .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(`<b>Incident #${i+1}</b><br>${log.average_decibel.toFixed(1)} dB`))
+          .addTo(map);
+      });
 
-  setText('stat-date', fmtDate(report.created_at));
-  setText('pat-type', report.noise_type || '—');
-  setText('pat-hours', report.worst_hours_pattern || '—');
-  setText('pat-freq', report.frequency_pattern || '—');
-  setText('pat-id', report.report_id || report.id);
+      if (coords.length > 1) {
+        const bounds = new mapboxgl.LngLatBounds();
+        coords.forEach(l => bounds.extend([l.longitude, l.latitude]));
+        map.fitBounds(bounds, { padding: 50 });
+      }
+    }
 
-  // Fetch logs
-  let logs = [];
-  if (report.noise_log_ids?.length > 0) {
-    const { data } = await _sb
-      .from('noise_logs')
-      .select('*')
-      .in('id', report.noise_log_ids)
-      .order('timestamp', { ascending: true });
-    logs = data || [];
-  }
+    function renderTimeline(logs) {
+      const container = document.getElementById('timeline');
+      if (!logs.length) { container.innerHTML = "<p style='color:var(--text-muted)'>No audio evidence found.</p>"; return; }
 
-  // Stats
-  const totalInc = logs.length;
-  const avgDb = totalInc ? (logs.reduce((a, l) => a + (l.average_decibel || 0), 0) / totalInc) : 0;
-  const peakDb = totalInc ? Math.max(...logs.map(l => l.peak_decibel || 0)) : 0;
+      logs.forEach((log, i) => {
+        const div = document.createElement('div');
+        div.className = 'log-card';
+        const ts = new Date(log.timestamp).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
+        const wavId = `wave-${i}`;
+        
+        div.innerHTML = `
+          <div class="log-header">
+            <div class="log-index">${i+1}</div>
+            <div class="log-time">${ts}</div>
+            <div class="log-db">
+              <span class="pill avg">${(log.average_decibel || 0).toFixed(1)} dB AVG</span>
+              <span class="pill peak">${(log.peak_decibel || 0).toFixed(1)} dB PEAK</span>
+            </div>
+          </div>
+          <div class="waveform-player" id="player-${i}">
+            <button class="btn-play" id="play-${i}"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+            <div class="player-content"><div id="${wavId}" class="wave-view"></div></div>
+            <a href="${log.recording_url}" download class="btn-dl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
+          </div>
+          ${log.notes ? `<div class="log-notes"><b>Notes:</b> ${log.notes}</div>` : ''}
+        `;
+        container.appendChild(div);
 
-  document.getElementById('stat-incidents').innerHTML = `${totalInc}`;
-  document.getElementById('stat-incidents-trend').textContent = totalInc === 1 ? '1 recording' : `${totalInc} recordings`;
-  document.getElementById('stat-avg').innerHTML = `${avgDb.toFixed(1)}<small> dB</small>`;
-  document.getElementById('stat-peak').innerHTML = `${peakDb.toFixed(1)}<small> dB</small>`;
+        if (log.recording_url) {
+          const ws = WaveSurfer.create({
+            container: `#${wavId}`,
+            waveColor: 'rgba(255, 255, 255, 0.1)',
+            progressColor: '#3B82F6',
+            cursorColor: 'transparent',
+            height: 40, barWidth: 2, barRadius: 2, responsive: true,
+            url: log.recording_url
+          });
+          const playBtn = document.getElementById(`play-${i}`);
+          playBtn.onclick = () => ws.playPause();
+          ws.on('play', () => playBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>');
+          ws.on('pause', () => playBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>');
+        }
+      });
+    }
 
-  // Progress bars (rough normalisation over 100dB)
-  document.getElementById('hours-bar').style.width = Math.min(100, (avgDb / 100) * 100) + '%';
-  document.getElementById('freq-bar').style.width = Math.min(100, (totalInc / 20) * 100) + '%';
-
-  // Show dashboard
-  show('dashboard');
-
-  // Map
-  initMap(logs);
-
-  // Incident list
-  const listEl = document.getElementById('incidents-list');
-  if (logs.length === 0) {
-    listEl.innerHTML = '<div class="empty-logs"><p>No audio logs linked to this report yet.</p></div>';
-  } else {
-    listEl.innerHTML = '';
-    logs.forEach((log, i) => {
-      const card = document.createElement('div');
-      card.className = 'incident-card';
-      listEl.appendChild(card);
-      buildPlayer(log, i, card);
-    });
-  }
-}
-
-init().catch(err => {
-  console.error(err);
-  showError('An unexpected error occurred. Please try again.');
-});
-</script>
+    init();
+  </script>
 </body>
 </html>
