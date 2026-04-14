@@ -19,6 +19,7 @@
   
   <style>
     :root {
+      /* Matching homepage blue and navy tones */
       --primary: #164c78;
       --primary-rgb: 22, 76, 120;
     }
@@ -28,6 +29,7 @@
       margin: 0;
       padding: 0;
       min-height: 100vh;
+      color: var(--text-color);
     }
 
     /* ---- Layout ---- */
@@ -99,13 +101,13 @@
 
     .header-left h1 {
       font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 950;
-      line-height: 0.9;
+      font-weight: 800;
+      line-height: 0.95;
       letter-spacing: -2px;
-      margin: 0 0 1.5rem 0;
-      color: var(--primary);
+      margin: 0 0 1.2rem 0;
+      color: var(--text-color);
     }
-    .header-left .highlight { color: var(--text-color); }
+    .header-left h1 .highlight { color: var(--primary) !important; }
 
     .meta-pills {
       display: flex;
@@ -140,8 +142,13 @@
     }
 
     .stat-card {
-      padding: 2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 1.75rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
+    .stat-card:hover { border-color: var(--primary); transform: translateY(-2px); }
     .stat-card .label {
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -173,6 +180,9 @@
     }
 
     .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 32px;
       overflow: hidden;
     }
 
@@ -218,10 +228,11 @@
       margin-top: 4rem;
     }
     .timeline-wrap h2 {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 800;
+      letter-spacing: -1.5px;
       margin-bottom: 2rem;
-      color: var(--primary);
+      color: var(--text-color);
     }
 
     .logs-list {
@@ -231,7 +242,10 @@
     }
 
     .log-card {
-      padding: 2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 1.75rem;
     }
 
     .log-header {
@@ -274,7 +288,7 @@
       font-size: 0.8rem;
       font-weight: 700;
     }
-    .db-badge.avg { background: rgba(var(--primary-rgb), 0.1); color: var(--primary); }
+    .db-badge.avg { background: rgba(var(--primary-rgb), 0.15); color: #7eb8f7; }
     .db-badge.peak { background: rgba(244, 63, 94, 0.1); color: #f43f5e; }
 
     /* ---- Audio Player ---- */
@@ -367,7 +381,7 @@
     .gm-ui-hover-text { display: none; }
   </style>
 </head>
-<body class="dark-mode">
+<body class="tech-grid">
 
   <div class="portal-wrap">
 
@@ -379,7 +393,7 @@
 
     <!-- Error -->
     <div class="state-screen" id="error-screen" style="display:none">
-      <div class="error-card bento-card">
+      <div class="error-card">
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
@@ -410,27 +424,27 @@
           </div>
         </div>
         <div class="header-right">
-          <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-color);">Report ID: <span id="nav-report-id" style="color: var(--primary);">...</span></div>
+          <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.5;">ID: <span id="nav-report-id">...</span></div>
         </div>
       </header>
 
       <section class="stats-grid">
-        <div class="stat-card bento-card">
+        <div class="stat-card">
           <span class="label">Incident Count</span>
           <span class="value" id="stat-incidents">0</span>
         </div>
-        <div class="stat-card bento-card">
+        <div class="stat-card">
           <span class="label">Average Level</span>
           <span class="value" id="stat-avg">0.0<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
         </div>
-        <div class="stat-card bento-card">
+        <div class="stat-card">
           <span class="label">Peak Severity</span>
           <span class="value" id="stat-peak">0.0<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
         </div>
       </section>
 
       <div class="dashboard-grid">
-        <div class="panel bento-card" style="padding:0">
+        <div class="panel">
           <div class="panel-header">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <h2>Geospatial Evidence</h2>
@@ -438,7 +452,7 @@
           <div id="map" class="map-container"></div>
         </div>
 
-        <div class="panel bento-card" style="padding:0">
+        <div class="panel">
           <div class="panel-header">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             <h2>Noise Profiling</h2>
@@ -640,7 +654,7 @@
     function renderLog(log, index, container) {
       const ts = fmtDateTime(log.timestamp);
       const card = document.createElement('div');
-      card.className = 'log-card bento-card';
+      card.className = 'log-card';
       card.innerHTML = `
         <div class="log-header">
           <div class="log-ident"><div class="log-index">${index + 1}</div><div class="log-time">${ts}</div></div>
@@ -667,7 +681,7 @@
       if (log.recording_url) {
         const ws = WaveSurfer.create({
           container: `#wv-${index}`,
-          waveColor: 'rgba(37, 99, 235, 0.1)',
+          waveColor: 'rgba(22, 76, 120, 0.1)',
           progressColor: 'var(--primary)',
           cursorColor: 'var(--primary)',
           height: 60,
@@ -713,8 +727,7 @@
       if (String(report.report_pin) !== String(pin)) return showError('PIN validation failed.');
 
       const displayId = report.report_id || report.id;
-      // Show full 6-character ID, or truncated UUID as fallback
-      setText('nav-report-id', displayId.length <= 8 ? displayId.toUpperCase() : displayId.substring(0, 8) + '...');
+      setText('nav-report-id', displayId.length > 8 ? displayId.substring(0, 8) + '...' : displayId);
       setText('chip-address', report.source_address || 'Unspecified Location');
       setText('chip-date', fmtDate(report.created_at));
       setText('pat-type', report.noise_type || 'General Disturbance');
