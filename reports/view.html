@@ -340,6 +340,18 @@
       font-weight: 600;
     }
 
+    /* Minimalist Map: Hide Google Branding and Controls */
+    .gm-style-cc { display: none !important; }
+    .gmnoprint { display: none !important; }
+    .gm-style-iw-t::after { background: var(--card-bg) !important; }
+    a[href^="http://maps.google.com/maps"], 
+    a[href^="https://maps.google.com/maps"], 
+    a[href^="https://www.google.com/maps"] {
+        display: none !important;
+    }
+    .gm-bundled-control .gmnoprint { display: none !important; }
+    div[tabindex="0"][role="menubar"] { display: none !important; }
+
     @media (max-width: 900px) {
       .dashboard-grid { grid-template-columns: 1fr; }
       .header-right { align-items: flex-start; }
@@ -553,8 +565,13 @@
         zoom: validLogs.length ? 14 : 11,
         center: center,
         styles: DARK_MAP_STYLE,
-        disableDefaultUI: true,
-        zoomControl: true,
+        disableDefaultUI: true, // This handles most controls
+        zoomControl: false,      // Explicitly disable zoom
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: false
       });
 
       const bounds = new google.maps.LatLngBounds();
@@ -684,6 +701,6 @@
 
     init();
   </script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvCpo4343CIpr-H_LP-JM1GAEvE2D7Qlk&libraries=geometry&callback=initGoogleMap" async defer></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDL3rIODR9PKyL9NEBjl0UnYvBTSy4qlOo&libraries=geometry&callback=initGoogleMap" async defer></script>
 </body>
 </html>
