@@ -329,9 +329,9 @@
           return;
         }
 
-        // Success — navigate to full evidence view
+        // Success — navigate to full evidence dashboard
         const portalId = data.report_id || data.id;
-        window.location.href = '/portal/reports/' + portalId + '?pin=' + encodeURIComponent(pin);
+        window.location.href = '/reports/view.html?id=' + encodeURIComponent(portalId) + '&pin=' + encodeURIComponent(pin);
 
       } catch (err) {
         showError('An unexpected error occurred. Please try again.');
