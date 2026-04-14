@@ -9,6 +9,3 @@
 /signup /signup.html 200
 /dashboard /dashboard.html 200
 
-# Evidence Portal
-/reports /reports.html 200
-/reports/ /reports.html 200
