@@ -22,7 +22,7 @@
     }
 
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
@@ -731,6 +731,39 @@
     async function init() {
       if (!reportId || !pin) return showError('System entry failed. Access requires Direct Report Link.');
       
+      // -- MOCK DATA BYPASS --
+      if (reportId === 'MOCKDATA') {
+        const report = {
+           report_id: 'MOCK-1',
+           source_address: '10 Downing St, London, UK',
+           created_at: new Date().toISOString(),
+           noise_type: 'Construction/Drilling',
+           worst_hours_pattern: '08:00 - 11:30 AM',
+           frequency_pattern: 'Continuous'
+        };
+        const logs = [
+           { timestamp: new Date().toISOString(), average_decibel: 85.4, peak_decibel: 92.1, latitude: 51.5033, longitude: -0.1276, notes: 'Heavy drilling heard from ground floor', recording_url: 'https://cdn.freesound.org/previews/16/16474_28774-lq.mp3' },
+           { timestamp: new Date(Date.now() - 3600000).toISOString(), average_decibel: 72.3, peak_decibel: 78.5, latitude: 51.5032, longitude: -0.1275, notes: 'Intermittent hammering', recording_url: 'https://cdn.freesound.org/previews/16/16474_28774-lq.mp3' }
+        ];
+
+        setText('nav-report-id', report.report_id);
+        setText('chip-address', report.source_address);
+        setText('chip-date', fmtDate(report.created_at));
+        setText('pat-type', report.noise_type);
+        setText('pat-hours', report.worst_hours_pattern);
+        setText('pat-freq', report.frequency_pattern);
+        setText('stat-incidents', logs.length);
+        setText('stat-avg', (logs.reduce((a, l) => a + l.average_decibel, 0) / logs.length).toFixed(1) + ' dB');
+        setText('stat-peak', Math.max(...logs.map(l => l.peak_decibel)).toFixed(1) + ' dB');
+
+        show('dashboard');
+        renderMarkers(logs);
+        const list = document.getElementById('incidents-list');
+        logs.forEach((l, i) => renderLog(l, i, list));
+        return;
+      }
+      // -- END MOCK DATA --
+
       // First attempt: lookup by 6-letter short ID (report_id)
       let { data: report, error: rErr } = await _sb
         .from('complaints')
