@@ -1,1 +1,2 @@
-/reports/*  /reports/view.html?id=:id  200
+/reports/*  /reports/view.html?id=:splat  200
+/report/*   /reports/view.html?id=:splat  200
