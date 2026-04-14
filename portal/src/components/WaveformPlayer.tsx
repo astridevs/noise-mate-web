@@ -28,10 +28,8 @@ export default function WaveformPlayer({ url, onDownload, fileName }: WaveformPl
       cursorColor: '#38bdf8',
       barWidth: 2,
       barRadius: 3,
-      responsive: true,
       height: 60,
       normalize: true,
-      partialRender: true,
     });
 
     wavesurfer.load(url);
