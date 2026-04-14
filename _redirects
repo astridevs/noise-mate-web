@@ -9,6 +9,6 @@
 /signup /signup.html 200
 /dashboard /dashboard.html 200
 
-# Next.js App Routes
-/reports/* /portal/reports/:splat 200
-/reports /portal/reports 200
+# Evidence Portal
+/reports /reports.html 200
+/reports/ /reports.html 200
