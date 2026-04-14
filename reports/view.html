@@ -151,15 +151,19 @@
     }
 
     .stat-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2px solid var(--glass-border);
       border-radius: 32px;
       padding: 2rem;
       transition: all 0.3s ease;
+      box-shadow: var(--glass-shadow);
     }
     .stat-card:hover { 
       transform: translateY(-4px); 
       border-color: var(--primary);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     }
     .stat-card .label {
       font-size: 0.75rem;
@@ -193,11 +197,14 @@
     }
 
     .panel {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2px solid var(--glass-border);
       border-radius: 32px;
       overflow: hidden;
-      transition: transform 0.3s ease;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      box-shadow: var(--glass-shadow);
     }
     .panel:hover {
       transform: translateY(-4px);
@@ -259,11 +266,14 @@
     }
 
     .log-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
+      background: var(--glass-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 2px solid var(--glass-border);
       border-radius: 32px;
       padding: 2rem;
-      transition: transform 0.2s ease;
+      transition: all 0.2s ease;
+      box-shadow: var(--glass-shadow);
     }
     .log-card:hover {
       transform: translateY(-2px);
@@ -313,40 +323,61 @@
     .db-badge.avg { background: rgba(var(--primary-rgb), 0.15); color: #7eb8f7; }
     .db-badge.peak { background: rgba(244, 63, 94, 0.1); color: #f43f5e; }
 
-    /* ---- Audio Player ---- */
-    .audio-player-ui {
-      background: rgba(var(--primary-rgb), 0.02);
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      padding: 1.5rem;
-    }
-
-    .controls-row {
+    /* ---- App-Parity Incident Card / Audio Player ---- */
+    .app-log-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 1rem;
       margin-bottom: 1rem;
     }
-    .play-trigger {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
+    
+    .app-db-figure {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+    .app-db-value {
+      font-size: 4rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .app-db-unit {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .app-play-button {
+      background: none;
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform 0.2s;
+      padding: 0;
+      color: var(--text-color);
     }
-    .play-trigger:hover { transform: scale(1.05); }
+    .app-play-button:hover { transform: scale(1.05); }
+    
+    .app-log-meta {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-    .track-info { flex: 1; }
-    .track-name { font-size: 0.85rem; font-weight: 700; opacity: 0.6; }
-    .track-time { font-size: 0.8rem; font-weight: 600; margin-top: 0.2rem; }
-
-    .waveform-surface { height: 60px; cursor: pointer; }
+    .app-waveform-box {
+      background: var(--bg-primary); /* Native dark/light background based on theme */
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 1.5rem 1rem;
+      height: 140px;
+      overflow: hidden;
+    }
+    .waveform-surface { height: 100%; cursor: pointer; }
 
     .log-notes {
       margin-top: 1.5rem;
@@ -671,53 +702,90 @@
     }
 
     // ---- Audio Timeline ----
+    // Utility to get peak dB color mapping (matches App exactly)
+    function getCategoryColor(db) {
+      if (db < 50) return '#10B981'; // Green
+      if (db < 70) return '#3B82F6'; // Blue
+      if (db < 85) return '#F59E0B'; // Orange
+      if (db < 100) return '#EF4444'; // Red
+      return '#B91C1C'; // Dark Red
+    }
+
     function renderLog(log, index, container) {
       const ts = fmtDateTime(log.timestamp);
       const card = document.createElement('div');
       card.className = 'log-card';
+      const peakDb = (log.peak_decibel || 0).toFixed(0);
+      const noiseColor = getCategoryColor(log.peak_decibel || 0);
+
       card.innerHTML = `
-        <div class="log-header">
-          <div class="log-ident"><div class="log-index">${index + 1}</div><div class="log-time">${ts}</div></div>
-          <div class="log-stats">
-            <div class="db-badge avg">${(log.average_decibel || 0).toFixed(1)} dB AVG</div>
-            <div class="db-badge peak">${(log.peak_decibel || 0).toFixed(1)} dB PEAK</div>
+        <div class="app-log-header">
+          <div class="app-db-figure" style="color: ${noiseColor};">
+            <span class="app-db-value">${peakDb}</span>
+            <span class="app-db-unit">dB</span>
           </div>
-        </div>
-        <div class="audio-player-ui">
-          <div class="controls-row">
-            <button class="play-trigger" id="play-${index}"><svg id="icon-${index}" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
-            <div class="track-info">
-              <div class="track-name">INCIDENT_REC_${String(index+1).padStart(2,'0')}</div>
-              <div class="track-time" id="time-${index}">0:00 / 0:00</div>
+          ${log.recording_url ? `
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <a href="${log.recording_url}" download class="btn-pill" style="padding:0.6rem 1.5rem; background: var(--text-color); color: var(--card-bg) !important;">Export</a>
+              <button class="app-play-button" id="play-${index}">
+                <svg id="icon-${index}" width="54" height="54" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+                </svg>
+              </button>
             </div>
-            ${log.recording_url ? `<a href="${log.recording_url}" download class="btn-pill" style="padding:0.5rem 1rem; font-size: 0.75rem;">Download</a>` : ''}
-          </div>
-          <div class="waveform-surface" id="wv-${index}"></div>
+          ` : ''}
         </div>
-        ${log.notes ? `<div class="log-notes"><strong>Notes:</strong> ${log.notes}</div>` : ''}
+        
+        <div class="app-log-meta">
+          <span>${ts}</span>
+          <span>•</span>
+          <span id="time-${index}">0:00 / 0:00 recording</span>
+        </div>
+
+        ${log.recording_url ? `
+          <div class="app-waveform-box">
+            <div class="waveform-surface" id="wv-${index}"></div>
+          </div>
+        ` : '<div style="opacity: 0.5; font-size: 0.9rem; font-weight: 600;">No audio recording attached.</div>'}
+
+        ${log.notes ? `<div class="log-notes" style="margin-top: 1rem;"><strong>Notes:</strong> ${log.notes}</div>` : ''}
       `;
       container.appendChild(card);
 
       if (log.recording_url) {
+        // App Parity: Solid thick continuous wave, `#2CB1FF` color, peak cursor
         const ws = WaveSurfer.create({
           container: `#wv-${index}`,
-          waveColor: 'rgba(22, 76, 120, 0.1)',
-          progressColor: 'var(--primary)',
-          cursorColor: 'var(--primary)',
-          height: 60,
-          barWidth: 2,
-          barGap: 3,
-          barRadius: 2,
+          waveColor: 'rgba(44, 177, 255, 0.3)',
+          progressColor: '#2CB1FF', // App chart color
+          cursorColor: noiseColor,  // Dynamic noise severity color
+          cursorWidth: 3,
+          height: 90,              // Fits inside the 140px box
           url: log.recording_url
         });
+        
         const btn = document.getElementById(`play-${index}`);
         const icon = document.getElementById(`icon-${index}`);
         const time = document.getElementById(`time-${index}`);
+        
         btn.onclick = () => ws.playPause();
-        ws.on('play', () => icon.innerHTML = `<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>`);
-        ws.on('pause', () => icon.innerHTML = `<polygon points="5 3 19 12 5 21 5 3"/>`);
+        
+        ws.on('play', () => {
+           icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>`;
+        });
+        ws.on('pause', () => {
+           icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>`;
+        });
+        
         const fmt = (s) => { const m = Math.floor(s / 60); const sec = Math.floor(s % 60); return `${m}:${sec.toString().padStart(2, '0')}`; };
-        ws.on('timeupdate', (cur) => time.textContent = `${fmt(cur)} / ${fmt(ws.getDuration())}`);
+        ws.on('timeupdate', (cur) => {
+           const dur = ws.getDuration() || 0;
+           time.innerHTML = `${fmt(cur)} / ${fmt(dur)} <span style="opacity:0.6;">recording</span>`;
+        });
+        ws.on('ready', () => {
+           const dur = ws.getDuration() || 0;
+           time.innerHTML = `0:00 / ${fmt(dur)} <span style="opacity:0.6;">recording</span>`;
+        });
       }
     }
 
