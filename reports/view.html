@@ -491,8 +491,17 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_5x1PVu3hkUTOOitRzs3Bmg_qbUU2ioj';
     const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const params = new URLSearchParams(window.location.search);
-    const reportId = params.get('id') || '';
+    
+    // Extract ID from path if present (e.g., /reports/ABCDEF)
+    // Cloudflare _redirects will actually pass this as ?id=...
+    let reportId = params.get('id') || '';
     const pin = params.get('pin') || '';
+
+    // If for some reason the path isn't mapped to ?id, try manual path extraction
+    if (!reportId && window.location.pathname.startsWith('/reports/')) {
+        const pathParts = window.location.pathname.split('/');
+        reportId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
+    }
 
     // Light Map Style (Clean, minimalist)
     const LIGHT_MAP_STYLE = [
@@ -689,11 +698,31 @@
 
     async function init() {
       if (!reportId || !pin) return showError('System entry failed. Access requires Direct Report Link.');
-      const { data: report, error: rErr } = await _sb.from('complaints').select('*').eq('id', reportId).single();
+      
+      // First attempt: lookup by 6-letter short ID (report_id)
+      let { data: report, error: rErr } = await _sb
+        .from('complaints')
+        .select('*')
+        .eq('report_id', reportId)
+        .single();
+        
+      // Fallback: lookup by original UUID (id) for older reports
+      if (rErr || !report) {
+         const { data: fallbackData, error: fallbackError } = await _sb
+          .from('complaints')
+          .select('*')
+          .eq('id', reportId.toLowerCase())
+          .single();
+          
+          report = fallbackData;
+          rErr = fallbackError;
+      }
+
       if (rErr || !report) return showError('Database miss. Record archived or deleted.');
       if (String(report.report_pin) !== String(pin)) return showError('PIN validation failed.');
 
-      setText('nav-report-id', reportId.substring(0, 8));
+      const displayId = report.report_id || report.id;
+      setText('nav-report-id', displayId.length > 8 ? displayId.substring(0, 8) + '...' : displayId);
       setText('chip-address', report.source_address || 'Unspecified Location');
       setText('chip-date', fmtDate(report.created_at));
       setText('pat-type', report.noise_type || 'General Disturbance');
