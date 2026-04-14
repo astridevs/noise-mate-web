@@ -15,7 +15,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Google Maps -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvCpo4343CIpr-H_LP-JM1GAEvE2D7Qlk&libraries=geometry&v=weekly"></script>
+  <!-- Google Maps script is now loaded at the bottom with a callback -->
   
   <style>
     :root {
@@ -407,10 +407,6 @@
           </div>
         </div>
         <div class="header-right">
-          <button class="btn-pill" onclick="window.print()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Export Pack
-          </button>
           <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.5;">ID: <span id="nav-report-id">...</span></div>
         </div>
       </header>
@@ -535,8 +531,21 @@
       return new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
     }
 
+    let _cachedLogs = null;
+    let _mapInitialized = false;
+
     // ---- Google Maps ----
-    function initGoogleMap(logs) {
+    function initGoogleMap() {
+      _mapInitialized = true;
+      if (_cachedLogs) renderMarkers(_cachedLogs);
+    }
+
+    function renderMarkers(logs) {
+      if (!_mapInitialized) {
+        _cachedLogs = logs;
+        return;
+      }
+
       const validLogs = logs.filter(l => l.latitude && l.longitude);
       const center = validLogs.length ? { lat: validLogs[0].latitude, lng: validLogs[0].longitude } : { lat: 51.5074, lng: -0.1278 };
       
@@ -663,7 +672,7 @@
       setText('stat-peak', peak.toFixed(1) + ' dB');
 
       show('dashboard');
-      initGoogleMap(logs);
+      renderMarkers(logs);
 
       const list = document.getElementById('incidents-list');
       if (total === 0) {
@@ -675,5 +684,6 @@
 
     init();
   </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCvCpo4343CIpr-H_LP-JM1GAEvE2D7Qlk&libraries=geometry&callback=initGoogleMap" async defer></script>
 </body>
 </html>
