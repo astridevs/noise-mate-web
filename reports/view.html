@@ -4,313 +4,503 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Evidence Report – Noise Mate</title>
-  <link rel="icon" href="/logo.png">
+  <link rel="icon" href="/assets/logo.png">
   
-  <!-- Fonts -->
+  <!-- Site-wide CSS (grid background + tokens) -->
+  <link href="/css/techy.css" rel="stylesheet">
+  
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Mapbox -->
   <link href='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css' rel='stylesheet'>
   
   <style>
     :root {
-      --bg: #070B14;
-      --card-bg: #0F1622;
-      --primary: #3B82F6;
-      --accent: #005C99;
-      --text: #FFFFFF;
-      --text-muted: #94A3B8;
-      --border: rgba(255, 255, 255, 0.06);
-      --red: #FB7185;
-      --green: #34D399;
-      --amber: #FBBF24;
-      --header-h: 72px;
+      --primary: #164c78;
+      --primary-rgb: 22, 76, 120;
+      /* Theme colors handled by techy.css variables */
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
     body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      color: var(--text-color);
+      /* techy.css handles the grid background automatically */
     }
 
-    /* ---- States ---- */
-    .state-overlay {
-      position: fixed; inset: 0; z-index: 1000;
-      background: var(--bg);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 2rem; text-align: center;
+    /* ---- Layout ---- */
+    .portal-wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      position: relative;
+      z-index: 2;
     }
+
+    /* ---- State Screens ---- */
+    .state-screen {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
     .spinner {
-      width: 48px; height: 48px;
-      border: 3px solid rgba(59, 130, 246, 0.1);
+      width: 44px; height: 44px;
+      border: 3px solid rgba(var(--primary-rgb), 0.1);
       border-top-color: var(--primary);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     .error-card {
       background: var(--card-bg);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      border-radius: 24px; padding: 3rem; max-width: 400px;
+      border: 1px solid var(--border-color);
+      border-radius: 32px;
+      padding: 3rem;
+      max-width: 440px;
+      width: 100%;
     }
-    .error-card h2 { font-size: 1.5rem; margin: 1rem 0; color: #FCA5A5; }
-    .btn-back {
-      background: white; color: black; border: none; padding: 0.75rem 1.5rem;
-      border-radius: 12px; font-weight: 700; cursor: pointer; text-decoration: none;
+    .error-card h2 { font-weight: 800; color: var(--primary); margin: 1rem 0; }
+    .error-card p { color: var(--text-color); opacity: 0.7; line-height: 1.6; }
+
+    .btn-pill {
+      background: var(--primary);
+      color: white !important;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: transform 0.2s;
+    }
+    .btn-pill:hover { transform: translateY(-2px); }
+
+    /* ---- Header & Nav ---- */
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 2rem;
     }
 
-    /* ---- Header ---- */
-    header.app-bar {
-      position: sticky; top: 0; z-index: 100;
-      height: var(--header-h);
-      background: rgba(15, 22, 34, 0.8);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 1.5rem;
+    .header-left h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1;
+      margin: 0 0 1rem 0;
+      color: var(--primary);
     }
-    .header-left { display: flex; align-items: center; gap: 1rem; }
-    .btn-icon {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-      color: white; padding: 0.5rem; border-radius: 12px; cursor: pointer;
-      display: flex; align-items: center; text-decoration: none;
-    }
-    .btn-icon:hover { background: rgba(255,255,255,0.1); }
-    .app-title { font-family: 'Plus Jakarta Sans'; font-weight: 800; font-size: 0.9rem; letter-spacing: 0.05em; opacity: 0.8; }
+    .header-left .highlight { color: var(--text-color); }
 
-    .btn-export {
-      background: var(--primary); color: white; border: none;
-      padding: 0.6rem 1.25rem; border-radius: 12px; font-weight: 700;
-      font-size: 0.85rem; display: flex; align-items: center; gap: 0.5rem;
+    .meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .meta-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 1rem;
+    }
+
+    /* ---- Top Badge ---- */
+    .secure-badge {
+      background: rgba(var(--primary-rgb), 0.05);
+      border: 1px solid var(--border-color);
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ---- Stats Grid ---- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 32px;
+      padding: 2rem;
+    }
+    .stat-card .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      color: var(--primary);
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .stat-card .value {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .stat-card .sub {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    /* ---- Content Panels ---- */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 40px;
+      overflow: hidden;
+    }
+
+    .panel-header {
+      padding: 2rem 2.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .panel-header h2 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .map-container {
+      height: 450px;
+      width: 100%;
+    }
+
+    .pattern-list {
+      padding: 2rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .pattern-item .p-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+    .pattern-item .p-value {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* ---- Timeline ---- */
+    .timeline-wrap {
+      margin-top: 4rem;
+    }
+    .timeline-wrap h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+      color: var(--primary);
+    }
+
+    .logs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .log-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 32px;
+      padding: 2rem;
+    }
+
+    .log-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .log-ident {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .log-index {
+      background: var(--primary);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+    .log-time {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .log-stats {
+      display: flex;
+      gap: 1rem;
+    }
+    .db-badge {
+      padding: 0.4rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .db-badge.avg { background: rgba(var(--primary-rgb), 0.1); color: var(--primary); }
+    .db-badge.peak { background: rgba(244, 63, 94, 0.1); color: #f43f5e; }
+
+    /* ---- Audio Player ---- */
+    .audio-player-ui {
+      background: rgba(var(--primary-rgb), 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      padding: 1.5rem;
+    }
+
+    .controls-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .play-trigger {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    .play-trigger:hover { transform: scale(1.05); }
+
+    .track-info {
+      flex: 1;
+    }
+    .track-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      opacity: 0.6;
+    }
+    .track-time {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+
+    .waveform-surface {
+      height: 60px;
       cursor: pointer;
     }
 
-    /* ---- Main Layout ---- */
-    main {
-      max-width: 1100px; margin: 0 auto; padding: 2.5rem 1.5rem 5rem;
+    .log-notes {
+      margin-top: 1.5rem;
+      padding: 1rem 1.5rem;
+      background: rgba(var(--primary-rgb), 0.05);
+      border-radius: 20px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      border-left: 4px solid var(--primary);
     }
 
-    /* ---- Hero Profile ---- */
-    .report-profile {
-      background: linear-gradient(135deg, var(--card-bg), #1a2436);
-      border: 1px solid var(--border);
-      border-radius: 32px; padding: 2.5rem;
-      margin-bottom: 2rem;
-      display: flex; justify-content: space-between; align-items: flex-end;
-      flex-wrap: wrap; gap: 2rem;
-    }
-    .profile-info h1 {
-      font-family: 'Plus Jakarta Sans'; font-size: 2.5rem; font-weight: 800;
-      letter-spacing: -0.03em; margin-bottom: 0.75rem;
-    }
-    .profile-meta { display: flex; flex-wrap: wrap; gap: 1rem; }
-    .tag {
-      background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-      padding: 0.4rem 0.9rem; border-radius: 100px; font-size: 0.85rem;
-      font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem;
+    /* ---- Footer ---- */
+    .portal-footer {
+      text-align: center;
+      padding-top: 4rem;
+      opacity: 0.5;
+      font-size: 0.85rem;
+      font-weight: 600;
     }
 
-    /* ---- Noise Card ---- */
-    .noise-summary-card {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 24px; padding: 2rem; display: flex; align-items: center; gap: 2rem;
-      margin-bottom: 1.5rem;
+    @media (max-width: 900px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .header-right { align-items: flex-start; }
+      .dashboard-header { flex-direction: column; align-items: flex-start; }
     }
-    .db-circle {
-      width: 120px; height: 120px; border-radius: 50%;
-      border: 8px solid rgba(59, 130, 246, 0.1);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      position: relative;
-    }
-    .db-circle::after {
-      content: ''; position: absolute; inset: -8px; border-radius: 50%;
-      border: 8px solid var(--primary); clip-path: polygon(50% 50%, -50% -50%, 150% -50%); /* Simplified arc */
-    }
-    .db-value { font-size: 2.25rem; font-weight: 800; font-family: 'Plus Jakarta Sans'; line-height: 1; }
-    .db-unit { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    
-    .noise-details .status {
-      display: inline-block; padding: 0.35rem 0.75rem; border-radius: 8px;
-      font-weight: 700; font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.75rem;
-    }
-    .status.loud { background: rgba(251, 113, 133, 0.15); color: var(--red); }
-    .noise-details h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem; }
-    .noise-details p { color: var(--text-muted); font-size: 0.9rem; }
 
-    /* ---- Bento Grid ---- */
-    .bento-grid {
-      display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; margin-bottom: 2rem;
-    }
-    .bento-card {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 28px; overflow: hidden; display: flex; flex-direction: column;
-    }
-    .card-header { padding: 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 0.75rem; }
-    .card-header h3 { font-size: 1rem; font-weight: 700; font-family: 'Plus Jakarta Sans'; }
-    .card-header svg { color: var(--primary); }
-
-    #map { width: 100%; height: 320px; }
-
-    .stats-list { padding: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-    .stat-item { display: flex; flex-direction: column; gap: 0.25rem; }
-    .stat-label { font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-    .stat-value { font-size: 1.1rem; font-weight: 700; }
-
-    /* ---- Timeline ---- */
-    .section-title { font-family: 'Plus Jakarta Sans'; font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; }
-    .timeline { display: flex; flex-direction: column; gap: 1rem; }
-    
-    .log-card {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 20px; padding: 1.5rem; transition: transform 0.2s;
-    }
-    .log-card:hover { border-color: rgba(255,255,255,0.12); }
-    
-    .log-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
-    .log-index { width: 32px; height: 32px; background: var(--primary); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; }
-    .log-time { font-weight: 700; font-size: 0.95rem; }
-    .log-db { margin-left: auto; display: flex; gap: 0.5rem; }
-    .pill { padding: 0.3rem 0.75rem; border-radius: 100px; font-size: 0.75rem; font-weight: 700; }
-    .pill.peak { background: rgba(251, 113, 133, 0.1); color: var(--red); }
-    .pill.avg { background: rgba(59, 130, 246, 0.1); color: var(--primary); }
-
-    .waveform-player {
-      background: rgba(0,0,0,0.2); border-radius: 16px; padding: 1rem; display: flex; align-items: center; gap: 1rem;
-    }
-    .btn-play { width: 44px; height: 44px; border-radius: 50%; background: var(--primary); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .player-content { flex: 1; min-width: 0; }
-    .wave-view { height: 40px; }
-    .btn-dl { color: var(--text-muted); text-decoration: none; padding: 0.5rem; border-radius: 8px; }
-    .btn-dl:hover { color: white; background: rgba(255,255,255,0.05); }
-
-    .log-notes { margin-top: 1rem; padding: 0.75rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.02); color: var(--text-muted); font-size: 0.85rem; border-left: 3px solid var(--primary); }
-
-    footer.bottom-bar { text-align: center; color: var(--text-muted); font-size: 0.8rem; padding-top: 3rem; border-top: 1px solid var(--border); }
-
-    @media (max-width: 850px) {
-      .bento-grid { grid-template-columns: 1fr; }
-      .report-profile { padding: 1.5rem; flex-direction: column; align-items: flex-start; }
-      .noise-summary-card { flex-direction: column; text-align: center; }
+    /* Print styles */
+    @media print {
+      .portal-wrap { padding: 0; max-width: 100%; }
+      .play-trigger, .btn-pill, .secure-badge { display: none !important; }
+      .log-card, .stat-card, .panel { border: 1px solid #ddd !important; border-radius: 10px !important; }
     }
   </style>
 </head>
-<body>
+<body class="tech-grid">
 
-  <!-- Loading -->
-  <div id="loader" class="state-overlay">
-    <div class="spinner"></div>
-    <p>Loading secure evidence records...</p>
-  </div>
+  <div class="portal-wrap">
 
-  <!-- Error -->
-  <div id="error" class="state-overlay" style="display:none">
-    <div class="error-card">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#FB7185" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <h2>Access Denied</h2>
-      <p id="errorMsg">Unauthorized access. Session terminated.</p>
-      <a href="/reports.html" class="btn-back">Return to Portal</a>
+    <!-- Loading -->
+    <div class="state-screen" id="loading-screen">
+      <div class="spinner"></div>
+      <p style="font-weight: 700; opacity: 0.7;">Decrypting secure evidence data...</p>
     </div>
-  </div>
 
-  <div id="content" style="display:none">
-    <header class="app-bar">
-      <div class="header-left">
-        <a href="/reports.html" class="btn-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </a>
-        <div class="app-title">NOISE LOG DETAILS</div>
+    <!-- Error -->
+    <div class="state-screen" id="error-screen" style="display:none">
+      <div class="error-card">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <h2>Access Restricted</h2>
+        <p id="error-text">Credential mismatch detected. Please verify your Report ID and Security PIN.</p>
+        <div style="margin-top: 2rem;">
+          <a href="/reports.html" class="btn-pill">← Portal Home</a>
+        </div>
       </div>
-      <button class="btn-export" onclick="window.print()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export Report
-      </button>
-    </header>
+    </div>
 
-    <main>
-      <section class="report-profile">
-        <div class="profile-info">
-          <h1 id="caseName">Loading Report...</h1>
-          <div class="profile-meta">
-            <div class="tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span id="addressTxt">—</span>
+    <!-- Dashboard -->
+    <div id="dashboard" style="display:none">
+      
+      <header class="dashboard-header">
+        <div class="header-left">
+          <div class="secure-badge" style="margin-bottom: 1.5rem;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Verified Evidence Access
+          </div>
+          <h1>Evidence<br><span class="highlight">Dashboard</span></h1>
+          <div class="meta-pills">
+            <div class="meta-pill" id="chip-address">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>Address Loading...</span>
             </div>
-            <div class="tag">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              <span id="dateTxt">—</span>
+            <div class="meta-pill" id="chip-date">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span>Date Loading...</span>
             </div>
           </div>
         </div>
-        <div class="tag" style="background:rgba(59, 130, 246, 0.1); border-color:rgba(59,130,246,0.3); color:var(--primary)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          ID: <span id="reportIdTxt">—</span>
+        <div class="header-right">
+          <button class="btn-pill" onclick="window.print()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export Pack
+          </button>
+          <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.5;">ID: <span id="nav-report-id">...</span></div>
+        </div>
+      </header>
+
+      <section class="stats-grid">
+        <div class="stat-card">
+          <span class="label">Incident Count</span>
+          <span class="value" id="stat-incidents">0</span>
+          <span class="sub" id="stat-incidents-trend">Verified recordings</span>
+        </div>
+        <div class="stat-card">
+          <span class="label">Average Level</span>
+          <span class="value" id="stat-avg">0.0<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
+          <span class="sub" style="color: #f43f5e; font-weight: 700;">Above Ambient</span>
+        </div>
+        <div class="stat-card">
+          <span class="label">Peak Severity</span>
+          <span class="value" id="stat-peak">0.0<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
+          <span class="sub" style="color: #f43f5e; font-weight: 700;">Critical Recording</span>
         </div>
       </section>
 
-      <section class="noise-summary-card">
-        <div class="db-circle">
-          <span class="db-value" id="peakVal">—</span>
-          <span class="db-unit">dB Peak</span>
+      <div class="dashboard-grid">
+        <div class="panel">
+          <div class="panel-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <h2>Geospatial Evidence</h2>
+          </div>
+          <div id="map" class="map-container"></div>
         </div>
-        <div class="noise-details">
-          <div class="status loud" id="noiseCategory">Analyzing Noise</div>
-          <h2 id="noiseTypeTxt">—</h2>
-          <p>This report contains verified audio logs and timestamped location data as documented by the Noise Mate system.</p>
+
+        <div class="panel">
+          <div class="panel-header">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <h2>Noise Profiling</h2>
+          </div>
+          <div class="pattern-list">
+            <div class="pattern-item">
+              <span class="p-label">Acoustic Classification</span>
+              <span class="p-value" id="pat-type">...</span>
+            </div>
+            <div class="pattern-item">
+              <span class="p-label">Active Window</span>
+              <span class="p-value" id="pat-hours">...</span>
+            </div>
+            <div class="pattern-item">
+              <span class="p-label">Temporal Frequency</span>
+              <span class="p-value" id="pat-freq">...</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <section class="timeline-wrap">
+        <h2>Evidence Timeline</h2>
+        <div class="logs-list" id="incidents-list">
+          <!-- Logs injected here -->
         </div>
       </section>
 
-      <div class="bento-grid">
-        <div class="bento-card">
-          <div class="card-header">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <h3>Incident Locations</h3>
-          </div>
-          <div id="map"></div>
-        </div>
-
-        <div class="bento-card">
-          <div class="card-header">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            <h3>Intensity & Patterns</h3>
-          </div>
-          <div class="stats-list">
-            <div class="stat-item">
-              <div class="stat-label">Average Volume</div>
-              <div class="stat-value" id="avgDbTxt">— dB</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Worst Hours</div>
-              <div class="stat-value" id="hoursTxt">—</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Frequency</div>
-              <div class="stat-value" id="freqTxt">—</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Log Count</div>
-              <div class="stat-value" id="countTxt">—</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <h2 class="section-title">Evidence Timeline</h2>
-      <div class="timeline" id="timeline">
-        <!-- Rendered by JS -->
-      </div>
-
-      <footer class="bottom-bar">
-        <p>© 2026 Noise Mate · Evidence Verification System · Authenticated Access Only</p>
+      <footer class="portal-footer">
+        Generated by Noise Mate · Encrypted & Timestamped Evidence Portal · <a href="/reports.html" style="color: var(--primary); text-decoration: none;">Exit Admin View</a>
       </footer>
-    </main>
+
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -321,129 +511,189 @@
     const SUPABASE_URL = 'https://fkludrjnyihdxlzhyofx.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_5x1PVu3hkUTOOitRzs3Bmg_qbUU2ioj';
     const MAPBOX_TOKEN = ['pk.eyJ1Ijoibm9pc2VtYXRlIiwiYSI6ImNtbGZ3ejJn', 'bDA1eGozZHM4Z3RjMzVuZWwifQ.sq7v4Oa3mVEDBG7NLewJnw'].join('');
-    
+
     const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const pin = params.get('pin');
+    const reportId = params.get('id') || '';
+    const pin = params.get('pin') || '';
+
+    function show(id) {
+      ['loading-screen', 'error-screen', 'dashboard'].forEach(s => {
+        document.getElementById(s).style.display = s === id ? (id === 'dashboard' ? 'block' : 'flex') : 'none';
+      });
+    }
 
     function showError(msg) {
-      document.getElementById('loader').style.display = 'none';
-      document.getElementById('error').style.display = 'flex';
-      document.getElementById('errorMsg').textContent = msg;
+      document.getElementById('error-text').textContent = msg;
+      show('error-screen');
+    }
+
+    function setText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val || '—';
+    }
+
+    function fmtDate(d) {
+      return new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function fmtDateTime(d) {
+      return new Date(d).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    }
+
+    // ---- Map ----
+    function initMap(logs) {
+      mapboxgl.accessToken = MAPBOX_TOKEN;
+      const validLogs = logs.filter(l => l.latitude && l.longitude);
+
+      const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v11', // Better for tech look
+        center: validLogs.length ? [validLogs[0].longitude, validLogs[0].latitude] : [-0.12, 51.5],
+        zoom: validLogs.length ? 14 : 10
+      });
+
+      validLogs.forEach((log, i) => {
+        const el = document.createElement('div');
+        el.style.cssText = `width:30px;height:30px;border-radius:10px;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;cursor:pointer;`;
+        el.textContent = i + 1;
+
+        new mapboxgl.Marker(el)
+          .setLngLat([log.longitude, log.latitude])
+          .setPopup(new mapboxgl.Popup({ offset: 15, closeButton: false })
+            .setHTML(`
+              <div style="font-family:'Plus Jakarta Sans',sans-serif;padding:8px;">
+                <div style="font-weight:800;color:var(--primary);margin-bottom:4px">LOG #${i+1}</div>
+                <div style="font-size:12px;font-weight:600;opacity:0.6">${fmtDateTime(log.timestamp)}</div>
+                <div style="font-size:14px;font-weight:700;margin-top:4px">${(log.average_decibel || 0).toFixed(1)} dB AVG</div>
+              </div>
+            `))
+          .addTo(map);
+      });
+
+      if (validLogs.length > 1) {
+        const bounds = new mapboxgl.LngLatBounds();
+        validLogs.forEach(l => bounds.extend([l.longitude, l.latitude]));
+        map.fitBounds(bounds, { padding: 50 });
+      }
+    }
+
+    // ---- Component Factory ----
+    function renderLog(log, index, container) {
+      const ts = fmtDateTime(log.timestamp);
+      const card = document.createElement('div');
+      card.className = 'log-card';
+      
+      card.innerHTML = `
+        <div class="log-header">
+          <div class="log-ident">
+            <div class="log-index">${index + 1}</div>
+            <div class="log-time">${ts}</div>
+          </div>
+          <div class="log-stats">
+            <div class="db-badge avg">${(log.average_decibel || 0).toFixed(1)} dB AVG</div>
+            <div class="db-badge peak">${(log.peak_decibel || 0).toFixed(1)} dB PEAK</div>
+          </div>
+        </div>
+
+        <div class="audio-player-ui">
+          <div class="controls-row">
+            <button class="play-trigger" id="play-${index}" title="Playback">
+              <svg id="icon-${index}" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            </button>
+            <div class="track-info">
+              <div class="track-name">INCIDENT_REC_${String(index+1).padStart(2,'0')}</div>
+              <div class="track-time" id="time-${index}">0:00 / 0:00</div>
+            </div>
+            ${log.recording_url ? `<a href="${log.recording_url}" download class="btn-pill" style="padding:0.5rem 1rem; font-size: 0.75rem;">Download</a>` : ''}
+          </div>
+          <div class="waveform-surface" id="wv-${index}"></div>
+        </div>
+
+        ${log.notes ? `<div class="log-notes"><strong>Notes:</strong> ${log.notes}</div>` : ''}
+      `;
+
+      container.appendChild(card);
+
+      if (log.recording_url) {
+        const ws = WaveSurfer.create({
+          container: `#wv-${index}`,
+          waveColor: 'rgba(22, 76, 120, 0.1)',
+          progressColor: 'var(--primary)',
+          cursorColor: 'var(--primary)',
+          height: 60,
+          barWidth: 2,
+          barGap: 3,
+          barRadius: 2,
+          url: log.recording_url
+        });
+
+        const btn = document.getElementById(`play-${index}`);
+        const icon = document.getElementById(`icon-${index}`);
+        const time = document.getElementById(`time-${index}`);
+
+        btn.onclick = () => ws.playPause();
+
+        ws.on('play', () => icon.innerHTML = `<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>`);
+        ws.on('pause', () => icon.innerHTML = `<polygon points="5 3 19 12 5 21 5 3"/>`);
+        
+        const fmt = (s) => {
+          const m = Math.floor(s / 60);
+          const sec = Math.floor(s % 60);
+          return `${m}:${sec.toString().padStart(2, '0')}`;
+        };
+
+        ws.on('timeupdate', (cur) => time.textContent = `${fmt(cur)} / ${fmt(ws.getDuration())}`);
+      }
     }
 
     async function init() {
-      if (!id || !pin) return showError("Authorization parameters missing.");
+      if (!reportId || !pin) return showError('System entry failed. Access requires Direct Report Link.');
 
-      const { data: report, error } = await _sb.from('complaints').select('*').eq('id', id).single();
-      if (error || !report) return showError("Evidence report not found.");
-      if (String(report.report_pin) !== String(pin)) return showError("Security credentials invalid.");
+      const { data: report, error: rErr } = await _sb
+        .from('complaints')
+        .select('*')
+        .eq('id', reportId)
+        .single();
 
-      // Data display
-      document.getElementById('caseName').textContent = report.case_name || "Noise Evidence Report";
-      document.getElementById('addressTxt').textContent = report.source_address || "Address Hidden";
-      document.getElementById('dateTxt').textContent = new Date(report.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-      document.getElementById('reportIdTxt').textContent = report.id.split('-')[0].toUpperCase();
-      document.getElementById('noiseTypeTxt').textContent = report.noise_type || "No Noise Type Specified";
-      document.getElementById('hoursTxt').textContent = report.worst_hours_pattern || "N/A";
-      document.getElementById('freqTxt').textContent = report.frequency_pattern || "N/A";
+      if (rErr || !report) return showError('Database miss. Record archived or deleted.');
+      if (String(report.report_pin) !== String(pin)) return showError('PIN validation failed.');
 
-      // Fetch logs
+      // Header
+      setText('nav-report-id', reportId.substring(0, 8));
+      setText('chip-address', report.source_address || 'Unspecified Location');
+      setText('chip-date', fmtDate(report.created_at));
+      
+      // Patterns
+      setText('pat-type', report.noise_type || 'General Disturbance');
+      setText('pat-hours', report.worst_hours_pattern || 'Varied Profile');
+      setText('pat-freq', report.frequency_pattern || 'Sporadic Activity');
+
+      // Logs
       let logs = [];
       if (report.noise_log_ids?.length > 0) {
         const { data } = await _sb.from('noise_logs').select('*').in('id', report.noise_log_ids).order('timestamp', { ascending: true });
         logs = data || [];
       }
 
-      const totalLogs = logs.length;
-      const peak = totalLogs ? Math.max(...logs.map(l => l.peak_decibel || 0)) : 0;
-      const avg = totalLogs ? (logs.reduce((a,l) => a + (l.average_decibel || 0), 0) / totalLogs) : 0;
+      // Stats
+      const total = logs.length;
+      const avg = total ? logs.reduce((a, l) => a + (l.average_decibel || 0), 0) / total : 0;
+      const peak = total ? Math.max(...logs.map(l => l.peak_decibel || 0)) : 0;
 
-      document.getElementById('peakVal').textContent = peak.toFixed(0);
-      document.getElementById('avgDbTxt').textContent = avg.toFixed(1) + " dB";
-      document.getElementById('countTxt').textContent = totalLogs;
+      setText('stat-incidents', total);
+      setText('stat-avg', avg.toFixed(1) + ' dB');
+      setText('stat-peak', peak.toFixed(1) + ' dB');
 
-      // Category update
-      const cat = document.getElementById('noiseCategory');
-      if (peak > 85) { cat.textContent = "Very Loud Noise"; cat.className = "status loud"; }
-      else if (peak > 70) { cat.textContent = "Loud Noise"; cat.className = "status loud"; }
-      else { cat.textContent = "Moderate Noise"; cat.className = "status"; cat.style.color = "var(--amber)"; }
-
-      document.getElementById('loader').style.display = 'none';
-      document.getElementById('content').style.display = 'block';
-
+      show('dashboard');
       initMap(logs);
-      renderTimeline(logs);
-    }
 
-    function initMap(logs) {
-      mapboxgl.accessToken = MAPBOX_TOKEN;
-      const coords = logs.filter(l => l.latitude && l.longitude);
-      const map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/mapbox/dark-v11',
-        center: coords.length ? [coords[0].longitude, coords[0].latitude] : [-0.12, 51.5],
-        zoom: 14
-      });
-
-      coords.forEach((log, i) => {
-        new mapboxgl.Marker({ color: '#3B82F6' })
-          .setLngLat([log.longitude, log.latitude])
-          .setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(`<b>Incident #${i+1}</b><br>${log.average_decibel.toFixed(1)} dB`))
-          .addTo(map);
-      });
-
-      if (coords.length > 1) {
-        const bounds = new mapboxgl.LngLatBounds();
-        coords.forEach(l => bounds.extend([l.longitude, l.latitude]));
-        map.fitBounds(bounds, { padding: 50 });
+      const list = document.getElementById('incidents-list');
+      if (total === 0) {
+        list.innerHTML = '<div style="padding: 4rem; text-align: center; opacity: 0.5; font-weight: 700;">No logged recording data present for this report.</div>';
+      } else {
+        logs.forEach((l, i) => renderLog(l, i, list));
       }
-    }
-
-    function renderTimeline(logs) {
-      const container = document.getElementById('timeline');
-      if (!logs.length) { container.innerHTML = "<p style='color:var(--text-muted)'>No audio evidence found.</p>"; return; }
-
-      logs.forEach((log, i) => {
-        const div = document.createElement('div');
-        div.className = 'log-card';
-        const ts = new Date(log.timestamp).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute:'2-digit' });
-        const wavId = `wave-${i}`;
-        
-        div.innerHTML = `
-          <div class="log-header">
-            <div class="log-index">${i+1}</div>
-            <div class="log-time">${ts}</div>
-            <div class="log-db">
-              <span class="pill avg">${(log.average_decibel || 0).toFixed(1)} dB AVG</span>
-              <span class="pill peak">${(log.peak_decibel || 0).toFixed(1)} dB PEAK</span>
-            </div>
-          </div>
-          <div class="waveform-player" id="player-${i}">
-            <button class="btn-play" id="play-${i}"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
-            <div class="player-content"><div id="${wavId}" class="wave-view"></div></div>
-            <a href="${log.recording_url}" download class="btn-dl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a>
-          </div>
-          ${log.notes ? `<div class="log-notes"><b>Notes:</b> ${log.notes}</div>` : ''}
-        `;
-        container.appendChild(div);
-
-        if (log.recording_url) {
-          const ws = WaveSurfer.create({
-            container: `#${wavId}`,
-            waveColor: 'rgba(255, 255, 255, 0.1)',
-            progressColor: '#3B82F6',
-            cursorColor: 'transparent',
-            height: 40, barWidth: 2, barRadius: 2, responsive: true,
-            url: log.recording_url
-          });
-          const playBtn = document.getElementById(`play-${i}`);
-          playBtn.onclick = () => ws.playPause();
-          ws.on('play', () => playBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>');
-          ws.on('pause', () => playBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>');
-        }
-      });
     }
 
     init();
