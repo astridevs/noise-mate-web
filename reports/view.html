@@ -411,7 +411,7 @@
           </div>
         </div>
         <div class="header-right">
-          <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.5;">ID: <span id="nav-report-id">...</span></div>
+          <div style="font-size: 0.95rem; font-weight: 700; color: var(--text-color);">Report ID: <span id="nav-report-id" style="color: var(--primary);">...</span></div>
         </div>
       </header>
 
@@ -714,7 +714,8 @@
       if (String(report.report_pin) !== String(pin)) return showError('PIN validation failed.');
 
       const displayId = report.report_id || report.id;
-      setText('nav-report-id', displayId.length > 8 ? displayId.substring(0, 8) + '...' : displayId);
+      // Show full 6-character ID, or truncated UUID as fallback
+      setText('nav-report-id', displayId.length <= 8 ? displayId.toUpperCase() : displayId.substring(0, 8) + '...');
       setText('chip-address', report.source_address || 'Unspecified Location');
       setText('chip-date', fmtDate(report.created_at));
       setText('pat-type', report.noise_type || 'General Disturbance');
