@@ -9,10 +9,7 @@
   <!-- Site-wide CSS (grid background + tokens) -->
   <link href="/css/techy.css" rel="stylesheet">
   
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Fonts (matches main site by falling back to system defaults like SF Pro) -->
   
   <!-- Google Maps -->
   <!-- Google Maps script is now loaded at the bottom with a callback -->
@@ -106,14 +103,17 @@
     }
 
     .header-left h1 {
-      font-size: clamp(3rem, 10vw, 4.5rem);
-      font-weight: 900;
-      line-height: 0.9;
-      letter-spacing: -2.5px;
-      margin: 0 0 1.5rem 0;
+      font-size: 5.5rem;
+      font-weight: 950;
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin: 0 0 2rem 0;
       color: var(--text-color);
     }
-    .header-left h1 .highlight { color: var(--primary) !important; }
+    .header-left h1 .highlight { 
+      display: block;
+      color: var(--primary) !important; 
+    }
 
     .meta-pills {
       display: flex;
@@ -125,13 +125,15 @@
       background: transparent;
       border: none;
       padding: 0.5rem 0;
-      font-size: 0.95rem;
-      font-weight: 700;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      opacity: 0.9;
+      gap: 0.75rem;
     }
+    .meta-pill span { color: var(--text-muted); }
+    .meta-pill svg { opacity: 0.6; width: 18px; height: 18px; }
 
     .header-right {
       display: flex;
@@ -438,7 +440,7 @@
       
       <header class="dashboard-header">
         <div class="header-left">
-          <h1>Evidence<br><span class="highlight">Dashboard</span></h1>
+          <h1>Evidence <span class="highlight">Dashboard</span></h1>
           <div class="meta-pills">
             <div class="meta-pill" id="chip-address">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>

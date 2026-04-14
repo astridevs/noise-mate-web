@@ -10,10 +10,7 @@
   <!-- Site-wide CSS (grid background + tokens) -->
   <link href="/css/techy.css" rel="stylesheet">
 
-  <!-- Google Fonts (matches main site) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- Fonts (matches main site by falling back to system defaults like SF Pro) -->
 
   <style>
     body {
@@ -88,29 +85,31 @@
     /* ---- Hero Text ---- */
     .portal-hero {
       text-align: center;
-      max-width: 600px;
+      max-width: 900px;
       margin: 0 auto 3.5rem;
     }
 
     .portal-hero h1 {
-      font-size: clamp(3.2rem, 10vw, 4.5rem);
-      font-weight: 900;
-      line-height: 0.9;
-      letter-spacing: -2.5px;
+      font-size: 5.5rem;
+      font-weight: 950;
+      line-height: 0.95;
+      letter-spacing: -2px;
       color: var(--text-color);
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       text-transform: none;
     }
 
     .portal-hero h1 .highlight {
+      display: block;
       color: var(--primary) !important;
     }
 
     .portal-hero p {
-      font-size: 1.1rem;
+      font-size: 1.4rem;
+      font-weight: 500;
       color: var(--text-muted);
       line-height: 1.6;
-      max-width: 480px;
+      max-width: 700px;
       margin: 0 auto;
     }
 
@@ -242,7 +241,7 @@
 
     <!-- Hero -->
     <div class="portal-hero">
-      <h1>Noise Mate<br><span class="highlight">Portal</span></h1>
+      <h1>Noise Mate <span class="highlight">Portal</span></h1>
       <p>Access your secure noise evidence records and incident reports.</p>
     </div>
 
