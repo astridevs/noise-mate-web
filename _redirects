@@ -9,5 +9,6 @@
 /signup /signup.html 200
 /dashboard /dashboard.html 200
 
-# Next.js App Routes (Fallback)
-/reports/* /index.html 200
+# Next.js App Routes
+/reports/* /portal/reports/:splat 200
+/reports /portal/reports 200
