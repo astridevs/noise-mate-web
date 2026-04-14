@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Noise Mate</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #164c78;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F6FA;
+            --text-color: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #0F172A;
+                --bg-secondary: #1A202C;
+                --text-color: #E2E8F0;
+                --text-muted: #A0AEC0;
+                --border-color: #2D3748;
+            }
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .nav-logo:hover {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .account-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .account-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: var(--bg-primary);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            padding: 12px 0;
+            z-index: 1;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            top: 100%;
+            margin-top: 8px;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-content a,
+        .dropdown-content button {
+            color: var(--text-color);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-content a:hover,
+        .dropdown-content button:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .welcome-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .welcome-card h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-card p {
+            color: var(--text-muted);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background-color: #1e40af;
+        }
+
+        .action-btn.secondary {
+            background: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .action-btn.secondary:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .welcome-card,
+            .stat-card {
+                background: var(--bg-primary);
+            }
+        }
+
+        .quick-actions {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .quick-actions h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .quick-actions {
+                background: var(--bg-primary);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">Noise Mate</a>
+        <div class="nav-links">
+            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link">Logs</a>
+            <a href="#" class="nav-link">Account</a>
+            <div class="dropdown account-section">
+                <div class="account-avatar" id="accountAvatar">JD</div>
+                <div class="dropdown-content">
+                    <a href="#"><i class="fas fa-user"></i> Profile Settings</a>
+                    <a href="#"><i class="fas fa-cog"></i> Account Settings</a>
+                    <button onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Pill Navigation -->
+<div class="floating-pill" id="floatingPill">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="blog.html">Community</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="container">
+        <div class="welcome-card" id="welcomeCard">
+            <h1>Welcome, <span id="userName">John</span>!</h1>
+            <p>Your noise monitoring dashboard. Start recording and tracking environmental noise in your area.</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Recordings</h3>
+                <div class="stat-value">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Peak Decibel Level</h3>
+                <div class="stat-value">--</div>
+            </div>
+            <div class="stat-card">
+                <h3>Average Duration</h3>
+                <div class="stat-value">--</div>
+            </div>
+            <div class="stat-card">
+                <h3>Current Plan</h3>
+                <div class="stat-value" id="planBadge">Free</div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="action-buttons">
+                <a href="#" class="action-btn">
+                    <i class="fas fa-microphone"></i> Start Recording
+                </a>
+                <a href="#" class="action-btn secondary">
+                    <i class="fas fa-list"></i> View All Logs
+                </a>
+                <a href="#" class="action-btn secondary">
+                    <i class="fas fa-crown"></i> View Plans
+                </a>
+                <a href="#" class="action-btn secondary">
+                    <i class="fas fa-download"></i> Export Data
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const userName = localStorage.getItem('userName') || 'User';
+            const userEmail = localStorage.getItem('userEmail') || '';
+            const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase();
+            
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('accountAvatar').textContent = initials;
+        });
+
+        function handleLogout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            window.location.href = 'login.html';
+        }
+
+        // Check if user is logged in
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+    <script src="js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0A0E21">
+    <title>Sign In - Noise Mate</title>
+    <link href="css/techy.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #164c78;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F6FA;
+            --text-color: #0F172A;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #0F172A;
+                --bg-secondary: #1A202C;
+                --text-color: #E2E8F0;
+                --text-muted: #A0AEC0;
+                --border-color: #2D3748;
+            }
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: transparent;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .nav-logo:hover {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            padding: 32px;
+            margin-top: 80px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-header h1 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            background-color: var(--bg-secondary);
+            color: var(--text-color);
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-bottom: 16px;
+        }
+
+        .submit-btn:hover {
+            background-color: #1e40af;
+        }
+
+        .signup-link {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">Noise Mate</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">← Back to site</a>
+        </div>
+    </nav>
+
+    <!-- Floating Pill Navigation -->
+<div class="floating-pill" id="floatingPill">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="blog.html">Community</a>
+        <a href="contact.html">Contact</a>
+    </div>
+
+    <div class="container">
+        <div class="form-header">
+            <h1>Welcome back</h1>
+            <p>Sign in to your account</p>
+        </div>
+
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="you@example.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="submit-btn">Sign In</button>
+
+            <div class="signup-link">
+                Don't have an account? <a href="signup.html">Sign up</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Store login state in localStorage
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('userName', email.split('@')[0]);
+            
+            alert('Signed in as ' + email);
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+    <script src="js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Noise Mate Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #3B82F6;
+            --primary-light: #60A5FA;
+            --primary-glow: rgba(59, 130, 246, 0.3);
+            --bg-dark: #0F172A;
+            --sidebar-bg: rgba(15, 23, 42, 0.8);
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --text-main: #F8FAFC;
+            --text-dim: #94A3B8;
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #020617;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(30, 58, 138, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            height: calc(100vh - 40px);
+            margin: 20px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 32px;
+            padding: 32px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), #1D4ED8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-text { font-weight: 800; font-size: 20px; letter-spacing: -0.5px; }
+
+        .nav-group { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+        
+        .nav-item {
+            padding: 12px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .nav-item i { font-size: 16px; width: 20px; text-align: center; }
+        
+        .nav-item:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .logout-btn {
+            border-top: 1px solid var(--border-glass);
+            padding-top: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px 40px 40px 0;
+            overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .main-content::-webkit-scrollbar { display: none; }
+
+        .section { display: none; transform: translateY(10px); opacity: 0; transition: all 0.4s ease; }
+        .section.active { display: block; transform: translateY(0); opacity: 1; }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { font-size: 32px; font-weight: 800; letter-spacing: -1px; }
+        .subtitle { color: var(--text-dim); font-size: 16px; }
+
+        /* Cards & Stats */
+        .glass-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-glass);
+            border-radius: 32px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 40px; }
+        
+        .stat-card {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 32px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .stat-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .stat-info span { font-size: 14px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-value { font-size: 36px; font-weight: 800; margin-top: 4px; }
+
+        /* Forms */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; position: relative; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: var(--text-dim); }
+        input, textarea, select {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 1px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.03);
+            color: white;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border-radius: 20px;
+            border: none;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--primary), #1D4ED8);
+            color: white;
+        }
+        .btn-secondary { background: rgba(255, 255, 255, 0.08); color: white; }
+        .btn:hover { transform: translateY(-3px); }
+        .btn-primary:hover { opacity: 0.9; }
+
+        /* Collage Preview */
+        .collage-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .collage-box {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed var(--border-glass);
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            font-size: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .collage-box.has-img { border-style: solid; border-color: transparent; }
+        .collage-box img { width: 100%; height: 100%; object-fit: cover; }
+        .remove-img {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Tables */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 12px; margin-top: -12px; }
+        th { text-align: left; padding: 16px 24px; color: var(--text-dim); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 20px 24px; background: rgba(255, 255, 255, 0.02); }
+        tr td:first-child { border-radius: 20px 0 0 20px; border-left: 1px solid var(--border-glass); }
+        tr td:last-child { border-radius: 0 20px 20px 0; border-right: 1px solid var(--border-glass); }
+        tr td { border-top: 1px solid var(--border-glass); border-bottom: 1px solid var(--border-glass); }
+        
+        .status-pill {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .status-draft { background: rgba(245, 158, 11, 0.1); color: #F59E0B; }
+        .status-published { background: rgba(16, 185, 129, 0.1); color: #10B981; }
+
+        @media (max-width: 1024px) {
+            .sidebar { width: 80px; padding: 32px 10px; }
+            .logo-text, .nav-item span { display: none; }
+            .nav-item { justify-content: center; padding: 14px; }
+            .main-content { padding: 30px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="../index.html" class="sidebar-logo">
+            <div class="logo-icon"><img src="../assets/logo.png" style="width: 100%; height: 100%; object-fit: contain; padding: 4px;"></div>
+            <span class="logo-text">Noise Mate</span>
+        </a>
+        
+        <nav class="nav-group">
+            <a href="#analytics" class="nav-item active" onclick="showSection('analytics')">
+                <i class="fas fa-chart-line"></i>
+                <span>Insights</span>
+            </a>
+            <a href="#community" class="nav-item" onclick="showSection('community')">
+                <i class="fas fa-feather"></i>
+                <span>Composer</span>
+            </a>
+            <a href="#drafts" class="nav-item" onclick="showSection('drafts')">
+                <i class="fas fa-tasks"></i>
+                <span>Management</span>
+            </a>
+        </nav>
+
+        <div class="logout-btn">
+            <a href="#" class="nav-item" onclick="handleLogout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Disconnect</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <!-- Analytics Section -->
+        <div id="analytics" class="section active">
+            <div class="header-content">
+                <div>
+                    <h1>Operational Insights</h1>
+                    <p class="subtitle">Platform performance & usage metrics</p>
+                </div>
+                <button class="btn btn-secondary" onclick="loadAnalytics()">
+                    <i class="fas fa-arrows-rotate"></i>
+                    <span>Sync Metrics</span>
+                </button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon"><i class="fas fa-clock-rotate-left"></i></div>
+                    </div>
+                    <div class="stat-info">
+                        <span>Daily Sessions</span>
+                        <div class="stat-value" id="statSessions">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="color: #A78BFA;"><i class="fas fa-fingerprint"></i></div>
+                    </div>
+                    <div class="stat-info">
+                        <span>Unique Users</span>
+                        <div class="stat-value" id="statUsers">0</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="color: #10B981;"><i class="fas fa-microphone"></i></div>
+                    </div>
+                    <div class="stat-info">
+                        <span>Logs Captured</span>
+                        <div class="stat-value" id="statLogs">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
+                    <h3 style="font-weight: 700;">Engagement Frequency</h3>
+                </div>
+                <div style="height: 400px; position: relative;">
+                    <canvas id="usageChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Section -->
+        <div id="community" class="section">
+            <div class="header-content">
+                <div>
+                    <h1>Content Composer</h1>
+                    <p class="subtitle" id="composerSubtitle">Draft and broadcast community updates</p>
+                </div>
+                <button class="btn btn-secondary" onclick="resetComposer()">
+                    <i class="fas fa-plus"></i>
+                    <span>New Post</span>
+                </button>
+            </div>
+
+            <div class="glass-card">
+                <form id="postForm" data-mode="create" data-edit-id="">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Master Title</label>
+                            <input type="text" id="postTitle" placeholder="The Borough Report: Camden" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Broadcast Channel</label>
+                            <select id="postCategory">
+                                <option value="Update">Update</option>
+                                <option value="Community">Community</option>
+                                <option value="Borough">Borough</option>
+                                <option value="Notice">Notice</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Brief Descriptor</label>
+                        <input type="text" id="postSubtitle" placeholder="Environmental impact updates for this week">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Detailed Content (Markdown Supported)</label>
+                        <textarea id="postContent" rows="10" placeholder="Articulate your thoughts here..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Visual Assets (Max 3)</label>
+                        <input type="file" id="postImages" accept="image/*" multiple onchange="handleImagePreview(event)" style="display: none;">
+                        <button type="button" class="btn btn-secondary" onclick="document.getElementById('postImages').click()" style="margin-bottom: 16px;">
+                            <i class="fas fa-cloud-arrow-up"></i> Select Assets
+                        </button>
+                        
+                        <div class="collage-container" id="imagePreview">
+                            <div class="collage-box"><i class="fas fa-plus"></i></div>
+                            <div class="collage-box"><i class="fas fa-plus"></i></div>
+                            <div class="collage-box"><i class="fas fa-plus"></i></div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 16px; margin-top: 40px;">
+                        <button type="submit" class="btn btn-primary" id="btnPublish">Deploy Transmission</button>
+                        <button type="button" class="btn btn-secondary" onclick="handleCreatePost(event, 'draft')" id="btnDraft">Store in Archive</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Drafts Section -->
+        <div id="drafts" class="section">
+            <div class="header-content">
+                <div>
+                    <h1>Transmission Management</h1>
+                    <p class="subtitle">Management of all community communications</p>
+                </div>
+            </div>
+
+            <div class="glass-card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Transmission Title</th>
+                                <th>Channel</th>
+                                <th>Status</th>
+                                <th>Deployment</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="draftsTableBody">
+                            <!-- Drafts loaded via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/admin.js"></script>
+    <script>
+        let selectedFiles = [];
+        let existingImageUrls = [];
+        let usageChart = null;
+        let allPosts = [];
+
+        window.addEventListener('load', async () => {
+            Chart.defaults.color = '#94A3B8';
+            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+            
+            const profile = await window.checkAdmin();
+            if (profile) {
+                loadAnalytics();
+                loadAllPosts();
+            }
+        });
+
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            setTimeout(() => {
+                document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+                const activeSection = document.getElementById(id);
+                activeSection.style.display = 'block';
+                setTimeout(() => activeSection.classList.add('active'), 50);
+            }, 300);
+
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            const navItem = document.querySelector(`[href="#${id}"]`);
+            if (navItem) navItem.classList.add('active');
+        }
+
+        async function loadAnalytics() {
+            const data = await window.getAppUsageAnalytics();
+            document.getElementById('statSessions').textContent = data.filter(e => e.event_name === 'session_start').length;
+            document.getElementById('statUsers').textContent = new Set(data.map(e => e.user_id)).size;
+            document.getElementById('statLogs').textContent = data.filter(e => e.event_name === 'log_generated').length;
+
+            const ctx = document.getElementById('usageChart').getContext('2d');
+            if (usageChart) usageChart.destroy();
+
+            const eventsByDate = data.reduce((acc, curr) => {
+                const date = new Date(curr.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                acc[date] = (acc[date] || 0) + 1;
+                return acc;
+            }, {});
+
+            usageChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: Object.keys(eventsByDate).reverse(),
+                    datasets: [{
+                        label: 'Interaction Frequency',
+                        data: Object.values(eventsByDate).reverse(),
+                        borderColor: '#3B82F6',
+                        borderWidth: 4,
+                        pointBackgroundColor: '#3B82F6',
+                        pointBorderColor: 'rgba(255,255,255,0.1)',
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: (context) => {
+                            const ctx = context.chart.ctx;
+                            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                            gradient.addColorStop(0, 'rgba(59, 130, 246, 0.2)');
+                            gradient.addColorStop(1, 'rgba(59, 130, 246, 0)');
+                            return gradient;
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)', drawBorder: false },
+                            ticks: { font: { size: 12, weight: 600 } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { size: 12, weight: 600 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function handleImagePreview(event) {
+            const files = Array.from(event.target.files).slice(0, 3 - existingImageUrls.length);
+            selectedFiles = files;
+            renderCollage();
+        }
+
+        function renderCollage() {
+            const container = document.getElementById('imagePreview');
+            container.innerHTML = '';
+            
+            // Render existing images
+            existingImageUrls.forEach((url, index) => {
+                const div = document.createElement('div');
+                div.className = 'collage-box has-img';
+                div.innerHTML = `<img src="${url}"><button class="remove-img" onclick="removeExistingImage(${index})"><i class="fas fa-times"></i></button>`;
+                container.appendChild(div);
+            });
+
+            // Render newly selected files
+            selectedFiles.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const div = document.createElement('div');
+                    div.className = 'collage-box has-img';
+                    div.innerHTML = `<img src="${e.target.result}"><button class="remove-img" onclick="removeNewImage(${index})"><i class="fas fa-times"></i></button>`;
+                    container.appendChild(div);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            const totalCount = existingImageUrls.length + selectedFiles.length;
+            for (let i = totalCount; i < 3; i++) {
+                const div = document.createElement('div');
+                div.className = 'collage-box';
+                div.innerHTML = '<i class="fas fa-plus" onclick="document.getElementById(\'postImages\').click()"></i>';
+                container.appendChild(div);
+            }
+        }
+
+        function removeNewImage(index) {
+            selectedFiles.splice(index, 1);
+            renderCollage();
+        }
+
+        function removeExistingImage(index) {
+            existingImageUrls.splice(index, 1);
+            renderCollage();
+        }
+
+        function resetComposer() {
+            const form = document.getElementById('postForm');
+            form.reset();
+            form.setAttribute('data-mode', 'create');
+            form.setAttribute('data-edit-id', '');
+            document.getElementById('composerSubtitle').textContent = 'Draft and broadcast community updates';
+            document.getElementById('btnPublish').textContent = 'Deploy Transmission';
+            document.getElementById('btnDraft').style.display = 'inline-flex';
+            selectedFiles = [];
+            existingImageUrls = [];
+            renderCollage();
+        }
+
+        async function handleCreatePost(event, status = 'published') {
+            event.preventDefault();
+            const form = document.getElementById('postForm');
+            const mode = form.getAttribute('data-mode');
+            const editId = form.getAttribute('data-edit-id');
+            
+            const btn = status === 'published' ? document.getElementById('btnPublish') : document.getElementById('btnDraft');
+            const originalHTML = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = `<span>${status === 'published' ? 'Broadcasting...' : 'Archiving...'}</span><i class="fas fa-circle-notch fa-spin"></i>`;
+
+            const postData = {
+                title: document.getElementById('postTitle').value,
+                category: document.getElementById('postCategory').value,
+                subtitle: document.getElementById('postSubtitle').value,
+                content: document.getElementById('postContent').value,
+                status: status
+            };
+
+            try {
+                if (mode === 'edit') {
+                    await window.updateCommunityPost(editId, postData, selectedFiles, existingImageUrls);
+                    alert('Transmission successfully updated!');
+                } else {
+                    await window.createCommunityPost(postData, selectedFiles);
+                    alert(status === 'published' ? 'Transmission successfully deployed!' : 'Communication archived!');
+                }
+                resetComposer();
+                loadAllPosts();
+            } catch (error) {
+                alert('Transmission Failure: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        async function loadAllPosts() {
+            const posts = await window.getAllPosts();
+            allPosts = posts;
+            const tbody = document.getElementById('draftsTableBody');
+            tbody.innerHTML = '';
+
+            posts.forEach(post => {
+                const tr = document.createElement('tr');
+                const statusClass = post.status === 'published' ? 'status-published' : 'status-draft';
+                tr.innerHTML = `
+                    <td style="font-weight: 700;">${post.title}</td>
+                    <td>${post.category}</td>
+                    <td><span class="status-pill ${statusClass}">${post.status.toUpperCase()}</span></td>
+                    <td>${new Date(post.created_at).toLocaleDateString()}</td>
+                    <td style="text-align: right; display: flex; gap: 8px; justify-content: flex-end;">
+                        <button class="btn btn-secondary" style="padding: 10px 14px;" onclick="editPost('${post.id}')">
+                            <i class="fas fa-pen-nib"></i>
+                        </button>
+                        ${post.status === 'draft' ? `
+                        <button class="btn btn-primary" style="padding: 10px 14px;" onclick="handlePublishDraft('${post.id}')">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        ` : ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function editPost(id) {
+            const post = allPosts.find(p => p.id === id);
+            if (!post) return;
+
+            const form = document.getElementById('postForm');
+            form.setAttribute('data-mode', 'edit');
+            form.setAttribute('data-edit-id', id);
+
+            document.getElementById('postTitle').value = post.title;
+            document.getElementById('postCategory').value = post.category || 'Community';
+            document.getElementById('postSubtitle').value = post.subtitle || '';
+            document.getElementById('postContent').value = post.content || '';
+            
+            existingImageUrls = [...(post.image_urls || [])];
+            selectedFiles = [];
+            
+            document.getElementById('composerSubtitle').textContent = `Editing: ${post.title}`;
+            document.getElementById('btnPublish').textContent = 'Update Transmission';
+            document.getElementById('btnDraft').style.display = 'none';
+
+            showSection('community');
+            renderCollage();
+        }
+
+        async function handlePublishDraft(id) {
+            if (confirm('Confirm transmission of archived content?')) {
+                try {
+                    await window.publishPost(id);
+                    alert('Transmission successful!');
+                    loadAllPosts();
+                } catch (error) {
+                    alert('Deployment Failed: ' + error.message);
+                }
+            }
+        }
+
+        async function handleLogout() {
+            if(confirm('Disconnect from Admin Vault?')) {
+                await window.supabaseClient.auth.signOut();
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Add form listener
+        document.getElementById('postForm').addEventListener('submit', (e) => handleCreatePost(e, 'published'));
+    </script>
+</body>
+</html>

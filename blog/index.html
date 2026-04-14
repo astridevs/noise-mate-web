@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0A0E21">
+    <title>Community - Noise Mate</title>
+    <link href="../css/techy.css" rel="stylesheet">
+    <link href="../css/global-nav.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            display: block;
+            position: relative;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Subpage Hero Style - Derived from index.html */
+        .subpage-hero {
+            width: 100%;
+            padding: 12rem 4rem 8rem;
+            background: transparent;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            max-width: 900px !important;
+            margin: 0 auto !important;
+        }
+
+        .hero-title {
+            font-size: 5.5rem;
+            font-weight: 950;
+            line-height: 0.95;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+            letter-spacing: -2px;
+        }
+
+
+        .hero-launch-badge {
+            display: inline-block;
+            background: transparent;
+            color: var(--primary);
+            padding: 0.65rem 1.25rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border: 2px solid var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
+            line-height: 1.6;
+            font-weight: 500;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Layout Grid */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem 8rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2.5rem;
+        }
+
+        /* Consistency with Mobile/App Style previously requested */
+        .blog-card {
+            position: relative;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 32px;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            height: 100%;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-12px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-card-content {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            flex: 1;
+        }
+
+        .blog-avatar {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transform: rotate(-3deg);
+            transition: transform 0.3s ease;
+        }
+
+        .blog-card:hover .blog-avatar {
+            transform: rotate(0deg) scale(1.1);
+        }
+
+        .blog-avatar i {
+            color: white !important;
+            font-size: 1.4rem;
+        }
+
+        .blog-header h3 {
+            font-size: 1.6rem;
+            font-weight: 850;
+            color: var(--text-color);
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-meta-details {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .blog-meta-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .blog-meta-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .gallery-container {
+            border-radius: 20px;
+            overflow: hidden;
+            display: grid;
+            gap: 4px;
+            margin: 0.5rem 0;
+        }
+
+        .gallery-1 { height: 260px; }
+        .gallery-2 { height: 200px; grid-template-columns: 1fr 1fr; }
+        .gallery-3 { height: 200px; grid-template-columns: 1.8fr 1fr; }
+
+        .gallery-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .blog-card:hover .gallery-container img {
+            transform: scale(1.05);
+        }
+
+        .blog-excerpt {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .read-more-btn {
+            margin-top: auto;
+            background: var(--primary);
+            color: white !important;
+            padding: 1rem;
+            border-radius: 100px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover .read-more-btn {
+            background: var(--primary-hover);
+        }
+
+        @media (max-width: 1024px) {
+            .hero-title { font-size: 4rem; }
+            .blog-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="global-nav"></div>
+
+    <!-- Hero Section -->
+    <section class="subpage-hero">
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <h1 class="hero-title">Noise Mate <span class="highlight">Community</span></h1>
+                <p class="hero-subtitle">Latest updates, tips, and insights on noise monitoring and environmental health.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <div id="blog-container" class="blog-grid">
+            <div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary);"></i>
+                <p style="margin-top: 1rem; color: var(--text-muted);">Syncing community updates...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Supabase Logic -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = 'https://fkludrjnyihdxlzhyofx.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZrbHVkcmpueWloZHhsemh5b2Z4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0MDAxNzMsImV4cCI6MjA4NTk3NjE3M30.K5pXfAfT6BZA6SQZNB6r9MCz50Tg0G8JALvsAttVMho';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        async function fetchCommunityData() {
+            const blogContainer = document.getElementById('blog-container');
+            
+            try {
+                const { data, error } = await supabaseClient
+                    .from('community_posts')
+                    .select(`
+                        *,
+                        profiles (first_name, last_name, profile_photo_url),
+                        community_comments (count),
+                        community_post_likes (count)
+                    `)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                function renderGallery(imageUrls, coverImageUrl) {
+                    let images = imageUrls || [];
+                    if (images.length === 0 && coverImageUrl) images = [coverImageUrl];
+                    if (images.length === 0) return '';
+                    if (images.length === 1) return `<div class="gallery-container gallery-1"><img src="${images[0]}" alt=""></div>`;
+                    if (images.length === 2) return `<div class="gallery-container gallery-2"><img src="${images[0]}" alt=""><img src="${images[1]}" alt=""></div>`;
+                    return `<div class="gallery-container gallery-3"><img src="${images[0]}" alt=""><div style="display: grid; gap: 4px; grid-template-rows: 1fr 1fr;"><img src="${images[1]}" alt=""><img src="${images[2]}" alt=""></div></div>`;
+                }
+
+                blogContainer.innerHTML = ''; 
+                data.forEach(post => {
+                    const authorName = (post.profiles?.first_name || 'User') + ' ' + (post.profiles?.last_name || '');
+                    const date = new Date(post.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+                    const iconClass = post.icon_name || 'fa-bullhorn';
+                    
+                    const card = document.createElement('a');
+                    card.className = 'blog-card';
+                    card.href = `../post?id=${post.id}`;
+                    card.innerHTML = `
+                        <div class="blog-card-content">
+                            <div class="blog-avatar"><i class="fas ${iconClass}"></i></div>
+                            <div class="blog-meta-details">
+                                <span class="blog-meta-name">${authorName}</span>
+                                <span class="blog-meta-date">${date}</span>
+                            </div>
+                            <div class="blog-header">
+                                <h3>${post.title}</h3>
+                                ${post.subtitle ? `<p style="font-size: 0.95rem; color: var(--primary); font-weight: 600; margin-bottom: 0.5rem;">${post.subtitle}</p>` : ''}
+                            </div>
+                            ${renderGallery(post.image_urls, post.cover_image_url)}
+                            <p class="blog-excerpt">${post.content}</p>
+                            <div class="read-more-btn">Explore Post</div>
+                        </div>
+                    `;
+                    blogContainer.appendChild(card);
+                });
+            } catch (error) {
+                blogContainer.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--primary); padding: 4rem;"><p>Failed to load updates. Please try again soon.</p></div>`;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchCommunityData);
+    </script>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Noise Mate</h4>
+                <p>Professional noise monitoring for UK residents.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="../index.html#features">Features</a></li>
+                    <li><a href="../index.html#pricing">Pricing</a></li>
+                    <li><a href="../index.html#about">About</a></li>
+                    <li><a href="../blog.html">Community</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                    <li><a href="/terms">Terms of Service</a></li>
+                    <li><a href="/compliance">Compliance</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>📧 <a href="mailto:support@noisemate.co.uk"
+                        style="color: var(--text-muted); text-decoration: none;">support@noisemate.co.uk</a></p>
+                <p>📞 <a href="tel:+441234567890" style="color: var(--text-muted); text-decoration: none;">+44 (0) 123
+                        456 7890</a></p>
+                <p><a href="/contact" style="color: var(--primary); text-decoration: none; font-weight: 600;">Get in
+                        Touch →</a></p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Noise Mate. All rights reserved. | Made in the UK 🇬🇧</p>
+        </div>
+    </footer>
+
+    <script src="../js/navigation.js"></script>
+    <script src="../js/common.js"></script>
+</body>
+</html>
