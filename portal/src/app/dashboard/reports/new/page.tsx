@@ -55,6 +55,11 @@ export default function NewReportPage() {
 
   const handleSubmit = async () => {
     setLoading(true);
+    
+    // Generate a 6-digit PIN and a short Report ID
+    const securityPin = Math.floor(100000 + Math.random() * 900000).toString();
+    const shortId = Math.random().toString(36).substring(2, 8).toUpperCase();
+
     // 1. Create Complaint
     const { data: complaint, error: cError } = await supabase
       .from('complaints')
@@ -66,6 +71,8 @@ export default function NewReportPage() {
         recipient_name: formData.recipient,
         case_name: formData.caseName,
         noise_log_ids: selectedLogs,
+        security_pin: securityPin,
+        report_id: shortId,
         user_id: (await supabase.auth.getUser()).data.user?.id
       })
       .select()
