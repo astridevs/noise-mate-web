@@ -91,12 +91,12 @@
     }
 
     .portal-hero h1 {
-      font-size: clamp(2.8rem, 8vw, 4rem);
-      font-weight: 900;
-      line-height: 1.0;
-      letter-spacing: -2px;
+      font-size: clamp(3.2rem, 10vw, 5rem);
+      font-weight: 950;
+      line-height: 0.9;
+      letter-spacing: -3px;
       color: var(--text-color);
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .portal-hero h1 .highlight {
@@ -112,12 +112,8 @@
 
     /* ---- Card ---- */
     .portal-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      padding: 2rem;
-      position: relative;
-      z-index: 2;
+      max-width: 480px;
+      margin: 0 auto;
     }
 
     /* ---- Form ---- */
@@ -181,32 +177,7 @@
 
     .error-msg.visible { display: block; }
 
-    .submit-btn {
-      margin-top: 0.25rem;
-      background: var(--primary);
-      color: white;
-      border: none;
-      padding: 1rem 1.5rem;
-      border-radius: 50px;
-      font-weight: 700;
-      font-size: 1rem;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-    }
-
-    .submit-btn:hover:not(:disabled) {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-    }
-
-    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-    .submit-btn span, .submit-btn svg { color: white !important; }
+    .submit-btn span { color: white !important; }
 
     /* ---- Footer ---- */
     .portal-footer {
@@ -234,7 +205,7 @@
     </div>
 
     <!-- Card with Form -->
-    <div class="portal-card">
+    <div class="portal-card bento-card">
       <form id="access-form" novalidate>
         <div class="field">
           <label for="report-id">Report ID</label>
@@ -260,7 +231,7 @@
 
         <div class="error-msg" id="error-msg"></div>
 
-        <button type="submit" class="submit-btn" id="submit-btn">
+        <button type="submit" class="btn-primary" id="submit-btn" style="width: 100%;">
           <span id="btn-label">Access Report</span>
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"/>
