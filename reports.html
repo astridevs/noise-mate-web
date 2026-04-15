@@ -584,13 +584,21 @@
     }
     
     // Debug helper for troubleshooting
-    function updateDebug() {
+    function updateDebug(technical = '') {
         const dbg = document.getElementById('debug-info');
         if (dbg) {
             dbg.style.display = 'block';
             document.getElementById('debug-id').textContent = 'ID: ' + (reportId || 'MISSING');
             document.getElementById('debug-pin').textContent = 'PIN: ' + (pin ? 'PRESENT' : 'MISSING');
             document.getElementById('debug-path').textContent = 'Path: ' + window.location.pathname;
+            if (technical) {
+                const techSpan = document.createElement('span');
+                techSpan.style.color = '#f43f5e';
+                techSpan.style.display = 'block';
+                techSpan.style.marginTop = '0.5rem';
+                techSpan.textContent = 'Error: ' + technical;
+                dbg.appendChild(techSpan);
+            }
         }
     }
 
@@ -638,9 +646,9 @@
       });
     }
 
-    function showError(msg) {
+    function showError(msg, technical = '') {
       document.getElementById('error-text').textContent = msg;
-      updateDebug();
+      updateDebug(technical);
       show('error-screen');
     }
 
@@ -879,8 +887,8 @@
           rErr = fallbackError;
       }
 
-      if (rErr || !report) return showError('Database miss. Record archived or deleted.');
-      if (String(report.report_pin) !== String(pin)) return showError('PIN validation failed.');
+      if (rErr || !report) return showError('Database miss. Record archived or deleted.', rErr?.message);
+      if (String(report.security_pin) !== String(pin)) return showError('PIN validation failed.');
 
       const displayId = report.report_id || report.id;
       setText('nav-report-id', displayId.length > 8 ? displayId.substring(0, 8) + '...' : displayId);
