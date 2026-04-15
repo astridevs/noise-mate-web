@@ -273,6 +273,7 @@
                     .from('community_posts')
                     .select('*, profiles:author_id(first_name, last_name, profile_photo_url)')
                     .eq('id', postId)
+                    .eq('status', 'published')
                     .single();
 
                 if (error || !post) throw new Error('Post not found');
