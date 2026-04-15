@@ -1,2 +1,2 @@
-/reports/*  /viewer.html  200
-/login      /login-manual.html  200
+/reports/*  /reports/index.html  200
+/login      /reports/login.html  200
