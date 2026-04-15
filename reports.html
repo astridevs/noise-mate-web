@@ -555,7 +555,7 @@
     const params = new URLSearchParams(window.location.search);
     
     // --- EXTRACTION ---
-    let reportId = params.get('id') || '';
+    let reportId = (params.get('id') || '').toUpperCase();
     let pin = params.get('pin') || '';
 
     // Fallback: Scan the path segments (for legacy links)
@@ -596,7 +596,8 @@
                 techSpan.style.color = '#f43f5e';
                 techSpan.style.display = 'block';
                 techSpan.style.marginTop = '0.5rem';
-                techSpan.textContent = 'Error: ' + technical;
+                techSpan.style.fontSize = '11px';
+                techSpan.textContent = technical;
                 dbg.appendChild(techSpan);
             }
         }
@@ -873,18 +874,18 @@
         .from('complaints')
         .select('*')
         .eq('report_id', reportId)
-        .single();
+        .maybeSingle(); // Better: returns null without error if not found
         
-      // Fallback: lookup by original UUID (id) for older reports
-      if (rErr || !report) {
+      // Fallback: lookup by original UUID (id) ONLY IF it looks like a UUID
+      if (!report && reportId.length === 36) {
          const { data: fallbackData, error: fallbackError } = await _sb
           .from('complaints')
           .select('*')
           .eq('id', reportId.toLowerCase())
-          .single();
+          .maybeSingle();
           
           report = fallbackData;
-          rErr = fallbackError;
+          rErr = rErr || fallbackError;
       }
 
       if (rErr || !report) return showError('Database miss. Record archived or deleted.', rErr?.message);
