@@ -88,6 +88,9 @@ export default function ReportsLandingPage() {
 
           <footer className="portal-footer">
             <p>Authorised access only. All sessions are encrypted and monitored for security purposes.</p>
+            <div className="footer-links" style={{ marginTop: '0.5rem', display: 'flex', justifyContent: 'center', gap: '1rem', fontSize: '0.75rem' }}>
+              <a href="/Help" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>Help Center</a>
+            </div>
           </footer>
         </main>
       </div>

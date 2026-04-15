@@ -67,6 +67,10 @@ export default function DashboardLayout({
         </nav>
 
         <div className="sidebar-footer">
+          <Link href="/Help" className="nav-item" style={{ marginBottom: '0.5rem', color: 'var(--primary)' }}>
+            <FileText size={20} />
+            <span>Help Center</span>
+          </Link>
           <button onClick={handleLogout} className="logout-btn">
             <LogOut size={20} />
             <span>Logout</span>
