@@ -324,7 +324,22 @@
                     </article>
                 `;
 
-                fetchComments(postId);
+                // --- REALTIME SYNC ---
+                supabaseClient
+                    .channel('post_sync')
+                    .on('postgres_changes', 
+                        { event: '*', schema: 'public', table: 'community_posts', filter: `id=eq.${postId}` }, 
+                        (payload) => {
+                            if (payload.new && payload.new.status === 'deleted') {
+                                alert('This post has been removed by an administrator.');
+                                location.href = 'blog.html';
+                            } else {
+                                // For other changes (edits), refresh UI
+                                init();
+                            }
+                        }
+                    )
+                    .subscribe();
 
             } catch (err) {
                 contentArea.innerHTML = `<div style="text-align: center; padding: 4rem;"><p>Post disappeared! <a href="blog.html" style="color: var(--primary);">Go back</a></p></div>`;

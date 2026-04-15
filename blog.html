@@ -345,6 +345,15 @@
             }
         }
 
+        // --- REALTIME SYNC ---
+        supabaseClient
+            .channel('community_sync')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'community_posts' }, (payload) => {
+                console.log('🔔 Community change detected:', payload.eventType);
+                fetchCommunityData();
+            })
+            .subscribe();
+
         window.addEventListener('DOMContentLoaded', fetchCommunityData);
     </script>
     <!-- Footer -->
