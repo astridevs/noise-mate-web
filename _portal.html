@@ -559,6 +559,11 @@
         reportId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
     }
 
+    // Safety Validation: Clear invalid IDs like 'view', 'viewer', or 'portal' captured from path
+    if (reportId && reportId.length !== 6 && reportId.length !== 36) {
+        reportId = ''; 
+    }
+
     // Light Map Style (Clean, minimalist)
     const LIGHT_MAP_STYLE = [
       { elementType: "geometry", stylers: [{ color: "#f5f5f5" }] },

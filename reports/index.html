@@ -331,7 +331,7 @@
 
         // Success — navigate to full evidence dashboard
         const portalId = data.id;
-        window.location.href = '/reports/viewer.html?id=' + encodeURIComponent(portalId) + '&pin=' + encodeURIComponent(pin);
+        window.location.href = '/_portal.html?id=' + encodeURIComponent(portalId) + '&pin=' + encodeURIComponent(pin);
 
       } catch (err) {
         showError('An unexpected error occurred. Please try again.');
