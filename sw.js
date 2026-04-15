@@ -11,10 +11,13 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  const isImage = IMAGE_TYPES.some(type => url.pathname.toLowerCase().endsWith(type)) || 
-                  url.hostname.includes('supabase.co');
+  
+  // Only cache static images and Supabase storage assets (user-uploaded photos)
+  // We explicitly avoid caching Supabase REST API requests (/rest/v1/) to keep data fresh
+  const isSupabaseStorage = url.hostname.includes('supabase.co') && url.pathname.includes('/storage/v1/object/');
+  const isStaticImage = IMAGE_TYPES.some(type => url.pathname.toLowerCase().endsWith(type));
 
-  if (event.request.method === 'GET' && isImage) {
+  if (event.request.method === 'GET' && (isSupabaseStorage || isStaticImage)) {
     event.respondWith(
       caches.open(CACHE_NAME).then((cache) => {
         return cache.match(event.request).then((response) => {
