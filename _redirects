@@ -1,2 +1,2 @@
 /report/*   /reports/:splat  301
-/reports/*  /reports/view.html  200
+/reports/:id  /reports/viewer.html?id=:id  200
