@@ -485,6 +485,30 @@
         <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.5; margin-top: 1rem;">REPORT ID: <span id="nav-report-id">...</span></div>
       </header>
 
+      <!-- Report Info Bar -->
+      <div id="report-info-bar" style="display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:2rem; padding:1.5rem 2rem; background:var(--glass-bg); border:2px solid var(--glass-border); border-radius:24px; box-shadow:var(--glass-shadow);">
+        <div style="flex:1; min-width:140px;">
+          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">Case</div>
+          <div style="font-weight:700; font-size:0.95rem;" id="info-case">—</div>
+        </div>
+        <div style="flex:1; min-width:140px;">
+          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">Recipient</div>
+          <div style="font-weight:700; font-size:0.95rem;" id="info-recipient">—</div>
+        </div>
+        <div style="flex:1; min-width:140px;">
+          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">First Incident</div>
+          <div style="font-weight:700; font-size:0.95rem;" id="info-first">—</div>
+        </div>
+        <div style="flex:1; min-width:140px;">
+          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">Last Incident</div>
+          <div style="font-weight:700; font-size:0.95rem;" id="info-last">—</div>
+        </div>
+        <div style="flex:1; min-width:140px;">
+          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">Generated</div>
+          <div style="font-weight:700; font-size:0.95rem;" id="info-generated">—</div>
+        </div>
+      </div>
+
       <section class="stats-grid">
         <div class="stat-card">
           <span class="label">Incident Count</span>
@@ -492,11 +516,24 @@
         </div>
         <div class="stat-card">
           <span class="label">Average Level</span>
-          <span class="value" id="stat-avg">0.0<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
+          <span class="value" id="stat-avg">—<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
         </div>
         <div class="stat-card">
           <span class="label">Peak Severity</span>
-          <span class="value" id="stat-peak">0.0<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
+          <span class="value" id="stat-peak">—<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
+        </div>
+        <div class="stat-card">
+          <span class="label">Night Incidents</span>
+          <span class="value" id="stat-night">0</span>
+          <span class="sub">after 23:00 or before 07:00</span>
+        </div>
+        <div class="stat-card">
+          <span class="label">Period</span>
+          <span class="value" id="stat-period">—<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">days</small></span>
+        </div>
+        <div class="stat-card">
+          <span class="label">Most Active Time</span>
+          <span class="value" style="font-size:2rem;" id="stat-activetime">—</span>
         </div>
       </section>
 
@@ -526,6 +563,10 @@
             <div class="pattern-item">
               <span class="p-label">Temporal Frequency</span>
               <span class="p-value" id="pat-freq">...</span>
+            </div>
+            <div class="pattern-item">
+              <span class="p-label">Submitted To</span>
+              <span class="p-value" id="pat-recipient">...</span>
             </div>
           </div>
         </div>
@@ -763,40 +804,55 @@
       const peakDb = (log.peak_decibel || 0).toFixed(0);
       const noiseColor = getCategoryColor(log.peak_decibel || 0);
 
+      const audioUrl = log.audio_url || log.recording_url || null;
+      const duration = log.duration_seconds ? `${log.duration_seconds}s` : null;
+      const nightBadge = log.is_night_disturbance ? `<span style="background:rgba(99,102,241,0.15);color:#818cf8;padding:0.3rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:700;">🌙 Night</span>` : '';
+
       card.innerHTML = `
         <div class="app-log-header">
           <div class="app-db-figure" style="color: ${noiseColor};">
             <span class="app-db-value">${peakDb}</span>
             <span class="app-db-unit">dB</span>
           </div>
-          ${log.recording_url ? `
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+            ${nightBadge}
+            ${duration ? `<span style="background:var(--glass-bg);border:1px solid var(--border-color);padding:0.3rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:700;">${duration}</span>` : ''}
+            ${audioUrl ? `
               <button class="app-play-button" id="play-${index}">
                 <svg id="icon-${index}" width="54" height="54" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
                 </svg>
               </button>
-            </div>
-          ` : ''}
+            ` : ''}
+          </div>
         </div>
-        
+
         <div class="app-log-meta">
           <span>${ts}</span>
           <span>•</span>
-          <span id="time-${index}">0:00 / 0:00 recording</span>
+          <span>Avg ${(log.average_decibel||0).toFixed(1)} dB</span>
+          <span>•</span>
+          <span id="time-${index}">${audioUrl ? '0:00 / 0:00 recording' : ''}</span>
         </div>
 
-        ${log.recording_url ? `
+        ${audioUrl ? `
           <div class="app-waveform-box">
             <div class="waveform-surface" id="wv-${index}"></div>
           </div>
-        ` : '<div style="opacity: 0.5; font-size: 0.9rem; font-weight: 600;">No audio recording attached.</div>'}
+        ` : `
+          <div style="padding:1.5rem;border-radius:20px;background:rgba(var(--primary-rgb),0.04);border:1px dashed var(--border-color);text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:0.5rem;">🎵</div>
+            <div style="font-weight:700;font-size:0.9rem;opacity:0.7;">Audio processing — check back later for playback</div>
+          </div>
+        `}
 
+        ${log.location_name ? `<div style="margin-top:1rem;font-size:0.85rem;font-weight:600;opacity:0.6;">📍 ${log.location_name}</div>` : ''}
         ${log.notes ? `<div class="log-notes" style="margin-top: 1rem;"><strong>Notes:</strong> ${log.notes}</div>` : ''}
+        ${log.impact_notes ? `<div class="log-notes" style="margin-top: 0.5rem; border-left-color: #f43f5e;"><strong>Impact:</strong> ${log.impact_notes}</div>` : ''}
       `;
       container.appendChild(card);
 
-      if (log.recording_url) {
+      if (audioUrl) {
         // App Parity: Solid thick continuous wave, `#2CB1FF` color, peak cursor
         const ws = WaveSurfer.create({
           container: `#wv-${index}`,
@@ -805,7 +861,7 @@
           cursorColor: noiseColor,  // Dynamic noise severity color
           cursorWidth: 3,
           height: 90,              // Fits inside the 140px box
-          url: log.recording_url
+          url: audioUrl
         });
         
         const btn = document.getElementById(`play-${index}`);
@@ -898,6 +954,12 @@
       setText('pat-type', report.noise_type || 'General Disturbance');
       setText('pat-hours', report.worst_hours_pattern || 'Varied Profile');
       setText('pat-freq', report.frequency_pattern || 'Sporadic Activity');
+      setText('pat-recipient', report.recipient_name || 'Not specified');
+
+      // Report info bar
+      setText('info-case', report.case_name || displayId);
+      setText('info-recipient', report.recipient_name || 'Not specified');
+      setText('info-generated', fmtDate(report.created_at));
 
       let logs = [];
       if (report.noise_log_ids?.length > 0) {
@@ -908,10 +970,38 @@
       const total = logs.length;
       const avg = total ? logs.reduce((a, l) => a + (l.average_decibel || 0), 0) / total : 0;
       const peak = total ? Math.max(...logs.map(l => l.peak_decibel || 0)) : 0;
+      const nightCount = logs.filter(l => l.is_night_disturbance).length;
+
+      // Period in days
+      let periodDays = '—';
+      let firstTs = null, lastTs = null;
+      if (total > 0) {
+        firstTs = new Date(logs[0].timestamp);
+        lastTs = new Date(logs[logs.length - 1].timestamp);
+        const diffMs = lastTs - firstTs;
+        periodDays = diffMs < 86400000 ? '1' : Math.ceil(diffMs / 86400000).toString();
+      }
+
+      // Most active hour
+      let activeTime = '—';
+      if (total > 0) {
+        const hourCounts = {};
+        logs.forEach(l => {
+          const h = new Date(l.timestamp).getHours();
+          hourCounts[h] = (hourCounts[h] || 0) + 1;
+        });
+        const peakHour = Object.entries(hourCounts).sort((a,b) => b[1]-a[1])[0][0];
+        activeTime = `${String(peakHour).padStart(2,'0')}:00`;
+      }
 
       setText('stat-incidents', total);
-      setText('stat-avg', avg.toFixed(1) + ' dB');
-      setText('stat-peak', peak.toFixed(1) + ' dB');
+      setText('stat-avg', avg.toFixed(1));
+      setText('stat-peak', peak.toFixed(1));
+      setText('stat-night', nightCount);
+      setText('stat-period', periodDays);
+      setText('stat-activetime', activeTime);
+      setText('info-first', firstTs ? fmtDateTime(firstTs) : '—');
+      setText('info-last', lastTs ? fmtDateTime(lastTs) : '—');
 
       show('dashboard');
       renderMarkers(logs);
