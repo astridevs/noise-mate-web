@@ -1,1 +1,2 @@
 /report/*   /reports/:splat  301
+/reports/*  /reports/view.html  200
