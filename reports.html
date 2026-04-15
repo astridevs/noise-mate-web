@@ -889,7 +889,7 @@
       }
 
       if (rErr || !report) return showError('Database miss. Record archived or deleted.', rErr?.message);
-      if (String(report.security_pin) !== String(pin)) return showError('PIN validation failed.');
+      if (String(report.report_pin) !== String(pin)) return showError('PIN validation failed.');
 
       const displayId = report.report_id || report.id;
       setText('nav-report-id', displayId.length > 8 ? displayId.substring(0, 8) + '...' : displayId);
