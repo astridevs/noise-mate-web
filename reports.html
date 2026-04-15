@@ -371,21 +371,20 @@
     .bento-master {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: auto 160px 160px 160px auto;
+      grid-template-rows: 160px 160px 160px auto;
       gap: 1.25rem;
       margin-bottom: 3rem;
     }
 
-    /* Grid area assignments */
-    .bento-info     { grid-area: 1 / 1 / 2 / 5; }
-    .bento-cnt      { grid-area: 1 / 5 / 2 / 7; }
-    .bento-map      { grid-area: 2 / 1 / 6 / 4; }
-    .bento-avg      { grid-area: 2 / 4 / 3 / 5; }
-    .bento-peak     { grid-area: 2 / 5 / 4 / 7; }
+    /* Grid area assignments — no info bar row */
+    .bento-map      { grid-area: 1 / 1 / 4 / 4; }
+    .bento-avg      { grid-area: 1 / 4 / 2 / 5; }
+    .bento-peak     { grid-area: 1 / 5 / 3 / 7; }
+    .bento-cnt      { grid-area: 2 / 4 / 3 / 5; }
     .bento-night    { grid-area: 3 / 4 / 4 / 5; }
-    .bento-period   { grid-area: 4 / 4 / 5 / 5; }
-    .bento-active   { grid-area: 4 / 5 / 5 / 7; }
-    .bento-profiling{ grid-area: 5 / 4 / 6 / 7; }
+    .bento-period   { grid-area: 3 / 5 / 4 / 6; }
+    .bento-active   { grid-area: 3 / 6 / 4 / 7; }
+    .bento-profiling{ grid-area: 4 / 1 / 5 / 7; }
 
     /* Base bento card */
     .bento-card {
@@ -461,7 +460,7 @@
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto;
       }
-      .bento-info, .bento-cnt, .bento-map, .bento-avg, .bento-peak,
+      .bento-cnt, .bento-map, .bento-avg, .bento-peak,
       .bento-night, .bento-period, .bento-active, .bento-profiling {
         grid-area: auto;
         grid-column: span 1;
@@ -938,31 +937,7 @@
       <!-- Master Bento Grid -->
       <div class="bento-master">
 
-        <!-- Info bar -->
-        <div class="bento-card bento-info" id="report-info-bar">
-          <div class="bento-info-item">
-            <span class="bento-label">Case</span>
-            <div class="bento-info-val" id="info-case">—</div>
-          </div>
-          <div class="bento-info-item">
-            <span class="bento-label">Recipient</span>
-            <div class="bento-info-val" id="info-recipient">—</div>
-          </div>
-          <div class="bento-info-item">
-            <span class="bento-label">First Incident</span>
-            <div class="bento-info-val" id="info-first">—</div>
-          </div>
-          <div class="bento-info-item">
-            <span class="bento-label">Last Incident</span>
-            <div class="bento-info-val" id="info-last">—</div>
-          </div>
-          <div class="bento-info-item">
-            <span class="bento-label">Generated</span>
-            <div class="bento-info-val" id="info-generated">—</div>
-          </div>
-        </div>
-
-        <!-- Incident Count — wide top right -->
+        <!-- Incident Count -->
         <div class="bento-card bento-cnt">
           <span class="bento-label">Incident Count</span>
           <span class="bento-value" id="stat-incidents">—</span>
@@ -1016,20 +991,12 @@
           </div>
           <div class="pattern-list">
             <div class="pattern-item">
-              <span class="p-label">Acoustic Classification</span>
-              <span class="p-value" id="pat-type">...</span>
-            </div>
-            <div class="pattern-item">
               <span class="p-label">Active Window</span>
               <span class="p-value" id="pat-hours">...</span>
             </div>
             <div class="pattern-item">
               <span class="p-label">Temporal Frequency</span>
               <span class="p-value" id="pat-freq">...</span>
-            </div>
-            <div class="pattern-item">
-              <span class="p-label">Submitted To</span>
-              <span class="p-value" id="pat-recipient">...</span>
             </div>
           </div>
         </div>
