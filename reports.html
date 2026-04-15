@@ -412,7 +412,7 @@
     .bento-map { padding: 0; border-radius: 28px; overflow: hidden; }
     .bento-map .panel-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); }
     .bento-map .panel-header h2 { font-size: 1rem; font-weight: 800; margin: 0; }
-    .bento-map .map-container { height: calc(100% - 65px); }
+    .bento-map .map-container { height: 440px; }
 
     .bento-profiling { padding: 0; }
     .bento-profiling .panel-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); }
@@ -1150,26 +1150,31 @@
       }
 
       const validLogs = logs.filter(l => l.latitude && l.longitude);
-      const center = validLogs.length ? { lat: validLogs[0].latitude, lng: validLogs[0].longitude } : { lat: 51.5074, lng: -0.1278 };
-      
-      _mapInstance = new google.maps.Map(document.getElementById("map"), {
-        zoom: validLogs.length ? 14 : 11,
+      if (!validLogs.length) return; // nothing to show
+
+      const center = { lat: validLogs[0].latitude, lng: validLogs[0].longitude };
+
+      // Use local var 'map' so all inner callbacks share the same reference
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 14,
         center: center,
         styles: getMapStyle(),
-        disableDefaultUI: true, // This handles most controls
-        zoomControl: false,      // Explicitly disable zoom
+        disableDefaultUI: true,
+        zoomControl: false,
         mapTypeControl: false,
         scaleControl: false,
         streetViewControl: false,
         rotateControl: false,
         fullscreenControl: false
       });
+      _mapInstance = map;
 
-      // Listen for system theme changes
+      // Force the map to repaint after the container is guaranteed visible
+      google.maps.event.trigger(map, 'resize');
+      map.setCenter(center);
+
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-        if (_mapInstance) {
-          _mapInstance.setOptions({ styles: getMapStyle() });
-        }
+        map.setOptions({ styles: getMapStyle() });
       });
 
       const bounds = new google.maps.LatLngBounds();
@@ -1179,7 +1184,7 @@
         const markerPos = { lat: log.latitude, lng: log.longitude };
         const marker = new google.maps.Marker({
           position: markerPos,
-          map: map,
+          map: map,                          // ← correct reference
           label: { text: (i + 1).toString(), color: "white", fontWeight: "800" },
           icon: {
             path: google.maps.SymbolPath.CIRCLE,
@@ -1210,7 +1215,10 @@
         });
       });
 
-      if (validLogs.length > 1) map.fitBounds(bounds);
+      // Fit all pins in view; pad slightly so pins aren't on the very edge
+      if (validLogs.length > 1) {
+        map.fitBounds(bounds, { top: 40, right: 40, bottom: 40, left: 40 });
+      }
     }
 
     // ---- Audio Timeline ----
@@ -1441,7 +1449,8 @@
       setText('info-last', lastTs ? fmtDateTime(lastTs) : '—');
 
       show('dashboard');
-      renderMarkers(logs);
+      // Defer so the browser completes layout before Maps reads container size
+      requestAnimationFrame(() => renderMarkers(logs));
 
       const list = document.getElementById('incidents-list');
       if (total === 0) {
