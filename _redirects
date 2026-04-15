@@ -1,2 +1,5 @@
 # Evidence Portal redirects are now handled by standard clean-url logic
 # and query parameters (?id=...&pin=...) to ensure stable routing.
+
+/reports        /reports.html   200
+/reports/*      /reports.html   200
