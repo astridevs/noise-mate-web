@@ -453,6 +453,12 @@
         </svg>
         <h2>Access Restricted</h2>
         <p id="error-text">Credential mismatch detected. Please verify your Report ID and Security PIN.</p>
+        <div id="debug-info" style="margin-top: 1.5rem; padding: 1rem; background: rgba(0,0,0,0.05); border-radius: 12px; font-family: monospace; font-size: 0.65rem; text-align: left; display: none; opacity: 0.7;">
+            <strong>Technical Details:</strong><br>
+            <span id="debug-id">ID: </span><br>
+            <span id="debug-pin">PIN: </span><br>
+            <span id="debug-path">Path: </span>
+        </div>
         <div style="margin-top: 2rem;">
           <a href="/reports.html" class="btn-pill">← Portal Home</a>
         </div>
@@ -548,22 +554,44 @@
     const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const params = new URLSearchParams(window.location.search);
     
-    // Primary extraction: Extract ID from path if present (e.g., /reports/UFZFZJ)
-    // Secondary: Check 'id' query parameter as fallback
-    let reportId = '';
-    if (window.location.pathname.startsWith('/reports/')) {
-        const pathParts = window.location.pathname.split('/');
-        reportId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
-    }
-    if (!reportId) {
-        reportId = params.get('id') || '';
-    }
-    
-    const pin = params.get('pin') || '';
+    // --- AGGRESSIVE EXTRACTION ---
+    let reportId = params.get('id') || '';
+    let pin = params.get('pin') || '';
 
-    // Safety Validation: Clear invalid IDs like 'view', 'viewer', or 'portal' captured from path
+    // If still missing, scan the path segments
+    if (!reportId || !pin) {
+        const pathParts = window.location.pathname.split('/').filter(p => p.length > 0);
+        
+        pathParts.forEach(part => {
+             // Look for a 6-char alphabetical code that isn't a known keyword
+             if (part.length === 6 && !['portal', 'viewer', 'report', 'portal.html'].includes(part.toLowerCase())) {
+                 if (!reportId) reportId = part.toUpperCase();
+             }
+             // Look for a 36-char UUID (standard Supabase ID)
+             if (part.length === 36 && !reportId) {
+                 reportId = part.toLowerCase();
+             }
+             // Fallback: If we find a numeric-only 6-char string in the path and have no PIN
+             if (part.length === 6 && /^\d+$/.test(part) && !pin) {
+                 pin = part;
+             }
+        });
+    }
+
+    // Safety Validation: Only allow realistic Report IDs
     if (reportId && reportId.length !== 6 && reportId.length !== 36) {
         reportId = ''; 
+    }
+    
+    // Debug helper for troubleshooting
+    function updateDebug() {
+        const dbg = document.getElementById('debug-info');
+        if (dbg) {
+            dbg.style.display = 'block';
+            document.getElementById('debug-id').textContent = 'ID: ' + (reportId || 'MISSING');
+            document.getElementById('debug-pin').textContent = 'PIN: ' + (pin ? 'PRESENT' : 'MISSING');
+            document.getElementById('debug-path').textContent = 'Path: ' + window.location.pathname;
+        }
     }
 
     // Light Map Style (Clean, minimalist)
@@ -612,6 +640,7 @@
 
     function showError(msg) {
       document.getElementById('error-text').textContent = msg;
+      updateDebug();
       show('error-screen');
     }
 
