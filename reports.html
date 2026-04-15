@@ -656,7 +656,7 @@
     }
 
     .app-waveform-box {
-      background: var(--bg-primary); /* Native dark/light background based on theme */
+      background: var(--bg-primary);
       border: 1px solid var(--border-color);
       border-radius: 24px;
       padding: 1.5rem 1rem;
@@ -664,6 +664,38 @@
       overflow: hidden;
     }
     .waveform-surface { height: 100%; cursor: pointer; }
+
+    /* ---- Audio uploading state ---- */
+    .audio-uploading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 2rem 1.5rem;
+      border-radius: 24px;
+      border: 1.5px dashed rgba(var(--primary-rgb), 0.3);
+      background: rgba(var(--primary-rgb), 0.03);
+      text-align: center;
+    }
+    .audio-uploading-spinner {
+      width: 28px; height: 28px;
+      border: 2.5px solid rgba(var(--primary-rgb), 0.12);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    .audio-uploading-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+      opacity: 0.8;
+    }
+    .audio-uploading-sub {
+      font-size: 0.75rem;
+      opacity: 0.45;
+      font-weight: 600;
+    }
 
     /* ---- Photo Gallery ---- */
     .log-photos {
@@ -1286,7 +1318,7 @@
             <span class="app-db-value">${peakDb}</span>
             <span class="app-db-unit">dB</span>
           </div>
-          <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          <div id="badge-row-${index}" style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
             ${nightBadge}
             ${duration ? `<span style="background:var(--glass-bg);border:1px solid var(--border-color);padding:0.3rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:700;">${duration}</span>` : ''}
             ${audioUrl ? `
@@ -1312,9 +1344,10 @@
             <div class="waveform-surface" id="wv-${index}"></div>
           </div>
         ` : `
-          <div style="padding:1.5rem;border-radius:20px;background:rgba(var(--primary-rgb),0.04);border:1px dashed var(--border-color);text-align:center;">
-            <div style="font-size:1.5rem;margin-bottom:0.5rem;">🎵</div>
-            <div style="font-weight:700;font-size:0.9rem;opacity:0.7;">Audio processing — check back later for playback</div>
+          <div class="audio-uploading" id="audio-pending-${index}">
+            <div class="audio-uploading-spinner"></div>
+            <div class="audio-uploading-title">Audio uploading from device…</div>
+            <div class="audio-uploading-sub">This page will update automatically when ready</div>
           </div>
         `}
 
@@ -1334,40 +1367,88 @@
       container.appendChild(card);
 
       if (audioUrl) {
-        // App Parity: Solid thick continuous wave, `#2CB1FF` color, peak cursor
-        const ws = WaveSurfer.create({
-          container: `#wv-${index}`,
-          waveColor: 'rgba(44, 177, 255, 0.3)',
-          progressColor: '#2CB1FF', // App chart color
-          cursorColor: noiseColor,  // Dynamic noise severity color
-          cursorWidth: 3,
-          height: 90,              // Fits inside the 140px box
-          url: audioUrl
-        });
-        
-        const btn = document.getElementById(`play-${index}`);
-        const icon = document.getElementById(`icon-${index}`);
-        const time = document.getElementById(`time-${index}`);
-        
-        btn.onclick = () => ws.playPause();
-        
-        ws.on('play', () => {
-           icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>`;
-        });
-        ws.on('pause', () => {
-           icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>`;
-        });
-        
-        const fmt = (s) => { const m = Math.floor(s / 60); const sec = Math.floor(s % 60); return `${m}:${sec.toString().padStart(2, '0')}`; };
-        ws.on('timeupdate', (cur) => {
-           const dur = ws.getDuration() || 0;
-           time.innerHTML = `${fmt(cur)} / ${fmt(dur)} <span style="opacity:0.6;">recording</span>`;
-        });
-        ws.on('ready', () => {
-           const dur = ws.getDuration() || 0;
-           time.innerHTML = `0:00 / ${fmt(dur)} <span style="opacity:0.6;">recording</span>`;
-        });
+        initWaveform(index, audioUrl, noiseColor);
+      } else {
+        // Register this log for polling — audio URL will appear once upload completes
+        _pendingAudio[log.id] = { index, noiseColor };
+        startAudioPoller();
       }
+    }
+
+    // ---- Named WaveSurfer init (called on render and after poll resolves) ----
+    function initWaveform(index, url, noiseColor) {
+      const ws = WaveSurfer.create({
+        container: `#wv-${index}`,
+        waveColor: 'rgba(44, 177, 255, 0.3)',
+        progressColor: '#2CB1FF',
+        cursorColor: noiseColor,
+        cursorWidth: 3,
+        height: 90,
+        url
+      });
+
+      const btn  = document.getElementById(`play-${index}`);
+      const icon = document.getElementById(`icon-${index}`);
+      const time = document.getElementById(`time-${index}`);
+
+      if (btn) btn.onclick = () => ws.playPause();
+
+      ws.on('play',  () => { if (icon) icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>`; });
+      ws.on('pause', () => { if (icon) icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>`; });
+
+      const fmt = s => { const m = Math.floor(s / 60), sec = Math.floor(s % 60); return `${m}:${sec.toString().padStart(2,'0')}`; };
+      ws.on('timeupdate', cur => { if (time) { const d = ws.getDuration()||0; time.innerHTML = `${fmt(cur)} / ${fmt(d)} <span style="opacity:.6">recording</span>`; } });
+      ws.on('ready',      ()  => { if (time) { const d = ws.getDuration()||0; time.innerHTML = `0:00 / ${fmt(d)} <span style="opacity:.6">recording</span>`; } });
+    }
+
+    // ---- Audio upload poller ----
+    // Tracks log IDs whose audio_url is still null. Polls Supabase every 8 s.
+    // When a URL appears it replaces the spinner placeholder with a live waveform.
+    const _pendingAudio = {}; // { logId: { index, noiseColor } }
+    let   _pollTimer    = null;
+
+    function startAudioPoller() {
+      if (_pollTimer) return; // already running
+      _pollTimer = setInterval(async () => {
+        const ids = Object.keys(_pendingAudio);
+        if (!ids.length) { clearInterval(_pollTimer); _pollTimer = null; return; }
+
+        try {
+          const { data } = await _sb
+            .from('noise_logs')
+            .select('id, audio_url')
+            .in('id', ids);
+
+          (data || []).forEach(row => {
+            if (!row.audio_url) return;
+
+            const { index, noiseColor } = _pendingAudio[row.id];
+            delete _pendingAudio[row.id];
+
+            // Swap spinner → play button + waveform box
+            const placeholder = document.getElementById(`audio-pending-${index}`);
+            if (!placeholder) return;
+
+            placeholder.outerHTML = `
+              <div class="app-waveform-box">
+                <div class="waveform-surface" id="wv-${index}"></div>
+              </div>`;
+
+            // Also inject the play button into the header badge row
+            const badgeRow = document.getElementById(`badge-row-${index}`);
+            if (badgeRow) {
+              const playBtn = document.createElement('button');
+              playBtn.className = 'app-play-button';
+              playBtn.id = `play-${index}`;
+              playBtn.innerHTML = `<svg id="icon-${index}" width="54" height="54" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>`;
+              badgeRow.appendChild(playBtn);
+            }
+
+            // Small delay so DOM is painted before WaveSurfer measures container
+            requestAnimationFrame(() => initWaveform(index, row.audio_url, noiseColor));
+          });
+        } catch(e) { /* ignore network errors, will retry next interval */ }
+      }, 8000);
     }
 
     async function init() {
