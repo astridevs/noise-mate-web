@@ -1,2 +1,2 @@
 /report/*   /reports/:splat  301
-/reports/*  /_portal.html?id=:splat  200
+/reports/*  /_portal.html  200

@@ -548,16 +548,18 @@
     const _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const params = new URLSearchParams(window.location.search);
     
-    // Extract ID from path if present (e.g., /reports/ABCDEF)
-    // Cloudflare _redirects will actually pass this as ?id=...
-    let reportId = params.get('id') || '';
-    const pin = params.get('pin') || '';
-
-    // If for some reason the path isn't mapped to ?id, try manual path extraction
-    if (!reportId && window.location.pathname.startsWith('/reports/')) {
+    // Primary extraction: Extract ID from path if present (e.g., /reports/UFZFZJ)
+    // Secondary: Check 'id' query parameter as fallback
+    let reportId = '';
+    if (window.location.pathname.startsWith('/reports/')) {
         const pathParts = window.location.pathname.split('/');
         reportId = pathParts[pathParts.length - 1] || pathParts[pathParts.length - 2];
     }
+    if (!reportId) {
+        reportId = params.get('id') || '';
+    }
+    
+    const pin = params.get('pin') || '';
 
     // Safety Validation: Clear invalid IDs like 'view', 'viewer', or 'portal' captured from path
     if (reportId && reportId.length !== 6 && reportId.length !== 36) {
