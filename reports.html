@@ -638,6 +638,61 @@
     }
     .waveform-surface { height: 100%; cursor: pointer; }
 
+    /* ---- Photo Gallery ---- */
+    .log-photos {
+      margin-top: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+    .log-photo-thumb {
+      aspect-ratio: 1;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid var(--glass-border);
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s;
+      background: var(--glass-bg);
+    }
+    .log-photo-thumb:hover { transform: scale(1.03); border-color: var(--primary); }
+    .log-photo-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Lightbox */
+    .photo-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .photo-lightbox.active { display: flex; }
+    .photo-lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 16px;
+      object-fit: contain;
+    }
+    .photo-lightbox-close {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: white;
+      border: none;
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800;
+    }
+
     .log-notes {
       margin-top: 1.5rem;
       padding: 1rem 1.5rem;
@@ -925,6 +980,12 @@
     </div><!-- /dashboard -->
   </div><!-- /portal-wrap -->
 
+  <!-- Photo Lightbox -->
+  <div class="photo-lightbox" id="photo-lightbox" onclick="closeLightbox()">
+    <button class="photo-lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightbox-img" src="" alt="Evidence photo">
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
   
@@ -1133,11 +1194,16 @@
         bounds.extend(markerPos);
 
         marker.addListener("click", () => {
+          map.panTo(markerPos);
+          map.setZoom(16);
           infoWindow.setContent(`
-            <div style="font-family:'Plus Jakarta Sans',sans-serif;padding:12px;color:#164c78">
-              <div style="font-weight:800;margin-bottom:4px">LOG #${i+1}</div>
-              <div style="font-size:11px;font-weight:600;opacity:0.6">${fmtDateTime(log.timestamp)}</div>
-              <div style="font-size:14px;font-weight:700;margin-top:4px">${(log.average_decibel || 0).toFixed(1)} dB AVG</div>
+            <div style="font-family:'Plus Jakarta Sans',sans-serif;padding:14px 16px;color:#164c78;min-width:180px">
+              <div style="font-weight:800;font-size:13px;margin-bottom:6px">Incident #${i+1}</div>
+              ${log.location_name ? `<div style="font-size:11px;font-weight:600;opacity:0.6;margin-bottom:4px">📍 ${log.location_name}</div>` : ''}
+              <div style="font-size:11px;font-weight:600;opacity:0.6;margin-bottom:6px">${fmtDateTime(log.timestamp)}</div>
+              <div style="font-size:15px;font-weight:800">${(log.peak_decibel || 0).toFixed(1)} dB Peak</div>
+              <div style="font-size:11px;font-weight:600;opacity:0.5">Avg ${(log.average_decibel || 0).toFixed(1)} dB</div>
+              ${log.notes ? `<div style="margin-top:8px;font-size:11px;font-weight:600;padding:6px 10px;background:rgba(22,76,120,0.07);border-radius:8px;border-left:3px solid #164c78">${log.notes}</div>` : ''}
             </div>
           `);
           infoWindow.open(map, marker);
@@ -1209,6 +1275,15 @@
         ${log.location_name ? `<div style="margin-top:1rem;font-size:0.85rem;font-weight:600;opacity:0.6;">📍 ${log.location_name}</div>` : ''}
         ${log.notes ? `<div class="log-notes" style="margin-top: 1rem;"><strong>Notes:</strong> ${log.notes}</div>` : ''}
         ${log.impact_notes ? `<div class="log-notes" style="margin-top: 0.5rem; border-left-color: #f43f5e;"><strong>Impact:</strong> ${log.impact_notes}</div>` : ''}
+        ${(log.image_urls && log.image_urls.length > 0) ? `
+          <div class="log-photos" id="photos-${index}">
+            ${log.image_urls.map((url, pi) => `
+              <div class="log-photo-thumb" onclick="openLightbox('${url}')">
+                <img src="${url}" alt="Evidence photo ${pi + 1}" loading="lazy" onerror="this.parentElement.style.display='none'">
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
       `;
       container.appendChild(card);
 
@@ -1375,6 +1450,19 @@
         logs.forEach((l, i) => renderLog(l, i, list));
       }
     }
+
+    // ---- Photo Lightbox ----
+    function openLightbox(url) {
+      const lb = document.getElementById('photo-lightbox');
+      document.getElementById('lightbox-img').src = url;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('photo-lightbox').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
     init();
   </script>
