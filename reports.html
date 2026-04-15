@@ -86,6 +86,94 @@
     }
     .btn-pill:hover { transform: translateY(-2px); }
 
+    /* ---- Entry Screen ---- */
+    .entry-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 32px;
+      padding: 3rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: left;
+    }
+    .entry-card-logo {
+      width: 48px; height: 48px;
+      background: var(--primary);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+    .entry-card h2 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin: 0 0 0.4rem;
+      color: var(--text-color);
+    }
+    .entry-card p {
+      font-size: 0.9rem;
+      opacity: 0.55;
+      margin: 0 0 2rem;
+      line-height: 1.5;
+    }
+    .entry-field {
+      margin-bottom: 1rem;
+    }
+    .entry-field label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      margin-bottom: 0.4rem;
+    }
+    .entry-field input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.85rem 1.1rem;
+      border-radius: 14px;
+      border: 1.5px solid var(--border-color);
+      background: var(--glass-bg);
+      color: var(--text-color);
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .entry-field input:focus { border-color: var(--primary); }
+    .entry-field input::placeholder { font-weight: 500; opacity: 0.4; letter-spacing: 0; }
+    .entry-error {
+      font-size: 0.8rem;
+      color: #f43f5e;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .entry-submit {
+      width: 100%;
+      padding: 0.9rem;
+      border-radius: 14px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: opacity 0.2s;
+    }
+    .entry-submit:hover { opacity: 0.85; }
+    .entry-footer {
+      margin-top: 1.5rem;
+      font-size: 0.78rem;
+      opacity: 0.4;
+      text-align: center;
+      line-height: 1.5;
+    }
+
     /* ---- Header & Nav ---- */
     .dashboard-header {
       text-align: center;
@@ -500,6 +588,30 @@
 
   <div class="portal-wrap">
 
+    <!-- Entry Screen -->
+    <div class="state-screen" id="entry-screen" style="display:none">
+      <div class="entry-card">
+        <div class="entry-card-logo">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h2>Evidence Portal</h2>
+        <p>Enter your Report ID and Security PIN from your evidence pack to access your report.</p>
+        <div class="entry-field">
+          <label>Report ID</label>
+          <input id="entry-id" type="text" placeholder="e.g. BSSUTF" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false">
+        </div>
+        <div class="entry-field">
+          <label>Security PIN</label>
+          <input id="entry-pin" type="tel" placeholder="6-digit PIN" maxlength="6" autocomplete="off">
+        </div>
+        <div class="entry-error" id="entry-error">Please enter both your Report ID and PIN.</div>
+        <button class="entry-submit" onclick="submitEntry()">Access Report →</button>
+        <div class="entry-footer">
+          Your Report ID and PIN are printed on the last page of your Noise Evidence Pack PDF.
+        </div>
+      </div>
+    </div>
+
     <!-- Loading -->
     <div class="state-screen" id="loading-screen">
       <div class="spinner"></div>
@@ -521,8 +633,8 @@
             <span id="debug-pin">PIN: </span><br>
             <span id="debug-path">Path: </span>
         </div>
-        <div style="margin-top: 2rem;">
-          <a href="/login.html" class="btn-pill">← Portal Home</a>
+        <div style="margin-top: 2rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+          <a href="/reports" class="btn-pill">← Try Again</a>
         </div>
       </div>
     </div>
@@ -759,10 +871,30 @@
     ];
 
     function show(id) {
-      ['loading-screen', 'error-screen', 'dashboard'].forEach(s => {
+      ['entry-screen', 'loading-screen', 'error-screen', 'dashboard'].forEach(s => {
         document.getElementById(s).style.display = s === id ? (id === 'dashboard' ? 'block' : 'flex') : 'none';
       });
     }
+
+    function submitEntry() {
+      const id = document.getElementById('entry-id').value.trim().toUpperCase();
+      const pin = document.getElementById('entry-pin').value.trim();
+      const err = document.getElementById('entry-error');
+      if (!id || id.length < 4 || !pin || pin.length < 4) {
+        err.style.display = 'block';
+        err.textContent = 'Please enter both your Report ID and PIN.';
+        return;
+      }
+      window.location.href = `/reports?id=${id}&pin=${pin}`;
+    }
+
+    // Allow Enter key to submit
+    document.addEventListener('DOMContentLoaded', () => {
+      ['entry-id', 'entry-pin'].forEach(fieldId => {
+        const el = document.getElementById(fieldId);
+        if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') submitEntry(); });
+      });
+    });
 
     function showError(msg, technical = '') {
       document.getElementById('error-text').textContent = msg;
@@ -966,7 +1098,7 @@
     }
 
     async function init() {
-      if (!reportId || !pin) return showError('System entry failed. Access requires Direct Report Link.');
+      if (!reportId || !pin) return show('entry-screen');
       
       // -- MOCK DATA BYPASS --
       if (reportId === 'MOCKDATA') {
