@@ -142,92 +142,112 @@
       gap: 1rem;
     }
 
-    /* ---- Stats Bento Grid ---- */
-    .stats-grid {
+    /* ---- Master Bento Grid ---- */
+    .bento-master {
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-template-rows: auto auto;
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: auto 160px 160px 160px auto;
       gap: 1.25rem;
       margin-bottom: 3rem;
     }
 
-    /* Tetris layout — irregular shapes */
-    .stat-card:nth-child(1) { grid-column: span 5; } /* Incidents — wide */
-    .stat-card:nth-child(2) { grid-column: span 3; } /* Avg — medium */
-    .stat-card:nth-child(3) { grid-column: span 4; grid-row: span 2; } /* Peak — tall */
-    .stat-card:nth-child(4) { grid-column: span 3; } /* Night — small */
-    .stat-card:nth-child(5) { grid-column: span 2; } /* Period — small */
-    .stat-card:nth-child(6) { grid-column: span 3; } /* Active Time — medium */
+    /* Grid area assignments */
+    .bento-info     { grid-area: 1 / 1 / 2 / 5; }
+    .bento-cnt      { grid-area: 1 / 5 / 2 / 7; }
+    .bento-map      { grid-area: 2 / 1 / 6 / 4; }
+    .bento-avg      { grid-area: 2 / 4 / 3 / 5; }
+    .bento-peak     { grid-area: 2 / 5 / 4 / 7; }
+    .bento-night    { grid-area: 3 / 4 / 4 / 5; }
+    .bento-period   { grid-area: 4 / 4 / 5 / 5; }
+    .bento-active   { grid-area: 4 / 5 / 5 / 7; }
+    .bento-profiling{ grid-area: 5 / 4 / 6 / 7; }
 
-    .stat-card {
+    /* Base bento card */
+    .bento-card {
       background: var(--glass-bg);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border: 2px solid var(--glass-border);
       border-radius: 28px;
-      padding: 2rem 2.25rem;
-      transition: all 0.3s ease;
+      padding: 1.75rem 2rem;
+      transition: border-color 0.3s ease, transform 0.3s ease;
       box-shadow: none;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      min-height: 140px;
+      overflow: hidden;
     }
-    .stat-card:hover {
-      transform: translateY(-4px);
-      border-color: var(--primary);
-      box-shadow: none;
+    .bento-card:hover {
+      border-color: rgba(var(--primary-rgb), 0.5);
+      transform: translateY(-3px);
     }
-    /* Tall peak card — accent border */
-    .stat-card:nth-child(3) {
-      border-color: rgba(var(--primary-rgb), 0.4);
-      background: linear-gradient(145deg, var(--glass-bg), rgba(var(--primary-rgb), 0.06));
-      min-height: 300px;
-      justify-content: flex-end;
-    }
-    .stat-card:nth-child(3) .value {
-      font-size: 5rem !important;
-    }
-    .stat-card .label {
-      font-size: 0.72rem;
+    .bento-label {
+      font-size: 0.68rem;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.13em;
       font-weight: 700;
       color: var(--primary);
-      opacity: 0.7;
-      margin-bottom: auto;
+      opacity: 0.65;
       display: block;
+      margin-bottom: 0.5rem;
     }
-    .stat-card .value {
-      font-size: 3.2rem;
+    .bento-value {
+      font-size: 3rem;
       font-weight: 900;
       line-height: 1;
       color: var(--primary);
-      margin-top: 0.75rem;
+      margin-top: auto;
     }
-    .stat-card .sub {
-      font-size: 0.78rem;
-      opacity: 0.5;
-      margin-top: 0.4rem;
-      display: block;
+    .bento-sub {
+      font-size: 0.72rem;
+      opacity: 0.45;
+      margin-top: 0.35rem;
       font-weight: 600;
     }
 
-    @media (max-width: 768px) {
-      .stats-grid {
+    /* Special cards */
+    .bento-peak {
+      background: linear-gradient(160deg, var(--glass-bg) 0%, rgba(var(--primary-rgb), 0.1) 100%);
+      border-color: rgba(var(--primary-rgb), 0.35);
+      justify-content: flex-end;
+    }
+    .bento-peak .bento-value { font-size: 4.5rem; }
+
+    .bento-map { padding: 0; border-radius: 28px; overflow: hidden; }
+    .bento-map .panel-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); }
+    .bento-map .panel-header h2 { font-size: 1rem; font-weight: 800; margin: 0; }
+    .bento-map .map-container { height: calc(100% - 65px); }
+
+    .bento-profiling { padding: 0; }
+    .bento-profiling .panel-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); }
+    .bento-profiling .panel-header h2 { font-size: 1rem; font-weight: 800; margin: 0; }
+
+    .bento-info {
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      padding: 1.25rem 2rem;
+    }
+    .bento-info-item .bento-label { margin-bottom: 0.25rem; }
+    .bento-info-item .bento-info-val { font-weight: 700; font-size: 0.95rem; }
+
+    @media (max-width: 900px) {
+      .bento-master {
         grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
       }
-      .stat-card:nth-child(1),
-      .stat-card:nth-child(2),
-      .stat-card:nth-child(3),
-      .stat-card:nth-child(4),
-      .stat-card:nth-child(5),
-      .stat-card:nth-child(6) {
+      .bento-info, .bento-cnt, .bento-map, .bento-avg, .bento-peak,
+      .bento-night, .bento-period, .bento-active, .bento-profiling {
+        grid-area: auto;
         grid-column: span 1;
         grid-row: span 1;
-        min-height: 120px;
+        min-height: 140px;
       }
-      .stat-card:nth-child(3) .value { font-size: 3.2rem !important; }
+      .bento-map { min-height: 300px; }
+      .bento-map .map-container { height: 240px; }
+      .bento-info { grid-column: span 2; }
+      .bento-profiling { grid-column: span 2; }
+      .bento-peak .bento-value { font-size: 3rem; }
     }
 
     /* ---- Content Panels ---- */
@@ -527,70 +547,83 @@
         <div style="font-size: 0.8rem; font-weight: 700; opacity: 0.5; margin-top: 1rem;">REPORT ID: <span id="nav-report-id">...</span></div>
       </header>
 
-      <!-- Report Info Bar -->
-      <div id="report-info-bar" style="display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:2rem; padding:1.5rem 2rem; background:var(--glass-bg); border:2px solid var(--glass-border); border-radius:24px; box-shadow:none;">
-        <div style="flex:1; min-width:140px;">
-          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">Case</div>
-          <div style="font-weight:700; font-size:0.95rem;" id="info-case">—</div>
-        </div>
-        <div style="flex:1; min-width:140px;">
-          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">Recipient</div>
-          <div style="font-weight:700; font-size:0.95rem;" id="info-recipient">—</div>
-        </div>
-        <div style="flex:1; min-width:140px;">
-          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">First Incident</div>
-          <div style="font-weight:700; font-size:0.95rem;" id="info-first">—</div>
-        </div>
-        <div style="flex:1; min-width:140px;">
-          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">Last Incident</div>
-          <div style="font-weight:700; font-size:0.95rem;" id="info-last">—</div>
-        </div>
-        <div style="flex:1; min-width:140px;">
-          <div style="font-size:0.7rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--primary); opacity:0.8; margin-bottom:0.3rem;">Generated</div>
-          <div style="font-weight:700; font-size:0.95rem;" id="info-generated">—</div>
-        </div>
-      </div>
+      <!-- Master Bento Grid -->
+      <div class="bento-master">
 
-      <section class="stats-grid">
-        <div class="stat-card">
-          <span class="label">Incident Count</span>
-          <span class="value" id="stat-incidents">0</span>
+        <!-- Info bar -->
+        <div class="bento-card bento-info" id="report-info-bar">
+          <div class="bento-info-item">
+            <span class="bento-label">Case</span>
+            <div class="bento-info-val" id="info-case">—</div>
+          </div>
+          <div class="bento-info-item">
+            <span class="bento-label">Recipient</span>
+            <div class="bento-info-val" id="info-recipient">—</div>
+          </div>
+          <div class="bento-info-item">
+            <span class="bento-label">First Incident</span>
+            <div class="bento-info-val" id="info-first">—</div>
+          </div>
+          <div class="bento-info-item">
+            <span class="bento-label">Last Incident</span>
+            <div class="bento-info-val" id="info-last">—</div>
+          </div>
+          <div class="bento-info-item">
+            <span class="bento-label">Generated</span>
+            <div class="bento-info-val" id="info-generated">—</div>
+          </div>
         </div>
-        <div class="stat-card">
-          <span class="label">Average Level</span>
-          <span class="value" id="stat-avg">—<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
-        </div>
-        <div class="stat-card">
-          <span class="label">Peak Severity</span>
-          <span class="value" id="stat-peak">—<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">dB</small></span>
-        </div>
-        <div class="stat-card">
-          <span class="label">Night Incidents</span>
-          <span class="value" id="stat-night">0</span>
-          <span class="sub">after 23:00 or before 07:00</span>
-        </div>
-        <div class="stat-card">
-          <span class="label">Period</span>
-          <span class="value" id="stat-period">—<small style="font-size: 1rem; opacity: 0.5; margin-left: 4px;">days</small></span>
-        </div>
-        <div class="stat-card">
-          <span class="label">Most Active Time</span>
-          <span class="value" style="font-size:2rem;" id="stat-activetime">—</span>
-        </div>
-      </section>
 
-      <div class="dashboard-grid">
-        <div class="panel">
+        <!-- Incident Count — wide top right -->
+        <div class="bento-card bento-cnt">
+          <span class="bento-label">Incident Count</span>
+          <span class="bento-value" id="stat-incidents">—</span>
+        </div>
+
+        <!-- Map — dominant left column -->
+        <div class="bento-card bento-map">
           <div class="panel-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <h2>Geospatial Evidence</h2>
           </div>
           <div id="map" class="map-container"></div>
         </div>
 
-        <div class="panel">
+        <!-- Average Level -->
+        <div class="bento-card bento-avg">
+          <span class="bento-label">Average Level</span>
+          <span class="bento-value" id="stat-avg">—<small style="font-size:1rem;opacity:0.5;margin-left:3px;">dB</small></span>
+        </div>
+
+        <!-- Peak Severity — tall accent card -->
+        <div class="bento-card bento-peak">
+          <span class="bento-label">Peak Severity</span>
+          <span class="bento-value" id="stat-peak">—<small style="font-size:1.2rem;opacity:0.5;margin-left:4px;">dB</small></span>
+        </div>
+
+        <!-- Night Incidents -->
+        <div class="bento-card bento-night">
+          <span class="bento-label">Night Incidents</span>
+          <span class="bento-value" id="stat-night">—</span>
+          <span class="bento-sub">after 23:00 / before 07:00</span>
+        </div>
+
+        <!-- Period -->
+        <div class="bento-card bento-period">
+          <span class="bento-label">Period</span>
+          <span class="bento-value" id="stat-period">—<small style="font-size:0.9rem;opacity:0.5;margin-left:3px;">days</small></span>
+        </div>
+
+        <!-- Most Active Time -->
+        <div class="bento-card bento-active">
+          <span class="bento-label">Most Active Time</span>
+          <span class="bento-value" id="stat-activetime">—</span>
+        </div>
+
+        <!-- Noise Profiling -->
+        <div class="bento-card bento-profiling">
           <div class="panel-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             <h2>Noise Profiling</h2>
           </div>
           <div class="pattern-list">
@@ -612,6 +645,7 @@
             </div>
           </div>
         </div>
+
       </div>
 
       <section class="timeline-wrap">
