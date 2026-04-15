@@ -63,7 +63,7 @@ export default function ReportViewerPage({ params }: { params: Promise<{ reportI
       }
 
       // 2. Verify PIN
-      if (complaints.security_pin !== urlPin) {
+      if (complaints.report_pin !== urlPin) {
         setError('Invalid Security PIN');
         setLoading(false);
         return;
