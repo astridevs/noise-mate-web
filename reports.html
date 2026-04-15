@@ -87,63 +87,92 @@
     .btn-pill:hover { transform: translateY(-2px); }
 
     /* ---- Entry Screen ---- */
-    .entry-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 32px;
-      padding: 3rem;
-      max-width: 420px;
+    #entry-screen {
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+    }
+    .entry-wrapper {
       width: 100%;
-      text-align: left;
+      max-width: 580px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2.5rem;
     }
-    .entry-card-logo {
-      width: 48px; height: 48px;
+    .entry-brand {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .entry-brand-icon {
+      width: 56px; height: 56px;
       background: var(--primary);
-      border-radius: 14px;
+      border-radius: 18px;
       display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1.5rem;
+      flex-shrink: 0;
     }
-    .entry-card h2 {
-      font-size: 1.6rem;
-      font-weight: 800;
-      margin: 0 0 0.4rem;
+    .entry-title {
+      font-size: 4.2rem;
+      font-weight: 950;
+      line-height: 0.92;
+      letter-spacing: -2px;
+      margin: 0;
       color: var(--text-color);
     }
-    .entry-card p {
-      font-size: 0.9rem;
+    .entry-title .entry-title-accent {
+      color: var(--primary);
+    }
+    .entry-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 2px solid var(--glass-border);
+      border-radius: 28px;
+      padding: 2.5rem;
+      width: 100%;
+      box-sizing: border-box;
+      text-align: left;
+    }
+    .entry-desc {
+      font-size: 0.92rem;
       opacity: 0.55;
       margin: 0 0 2rem;
-      line-height: 1.5;
+      line-height: 1.6;
+      color: var(--text-color);
     }
-    .entry-field {
-      margin-bottom: 1rem;
+    .entry-fields-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
     }
     .entry-field label {
       display: block;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      opacity: 0.5;
-      margin-bottom: 0.4rem;
+      letter-spacing: 0.13em;
+      color: var(--primary);
+      opacity: 0.65;
+      margin-bottom: 0.5rem;
     }
     .entry-field input {
       width: 100%;
       box-sizing: border-box;
-      padding: 0.85rem 1.1rem;
-      border-radius: 14px;
-      border: 1.5px solid var(--border-color);
+      padding: 0.9rem 1rem;
+      border-radius: 16px;
+      border: 2px solid var(--glass-border);
       background: var(--glass-bg);
       color: var(--text-color);
-      font-size: 1rem;
-      font-weight: 700;
+      font-size: 1.1rem;
+      font-weight: 800;
       font-family: inherit;
       outline: none;
       transition: border-color 0.2s;
       letter-spacing: 0.05em;
     }
     .entry-field input:focus { border-color: var(--primary); }
-    .entry-field input::placeholder { font-weight: 500; opacity: 0.4; letter-spacing: 0; }
+    .entry-field input::placeholder { font-weight: 500; opacity: 0.35; letter-spacing: 0; font-size: 0.9rem; }
     .entry-error {
       font-size: 0.8rem;
       color: #f43f5e;
@@ -153,25 +182,28 @@
     }
     .entry-submit {
       width: 100%;
-      padding: 0.9rem;
-      border-radius: 14px;
+      padding: 1rem;
+      border-radius: 16px;
       border: none;
       background: var(--primary);
       color: white;
       font-size: 1rem;
-      font-weight: 700;
+      font-weight: 800;
       font-family: inherit;
       cursor: pointer;
-      margin-top: 0.5rem;
-      transition: opacity 0.2s;
+      letter-spacing: 0.02em;
+      transition: opacity 0.2s, transform 0.2s;
     }
-    .entry-submit:hover { opacity: 0.85; }
+    .entry-submit:hover { opacity: 0.85; transform: translateY(-2px); }
     .entry-footer {
-      margin-top: 1.5rem;
-      font-size: 0.78rem;
-      opacity: 0.4;
-      text-align: center;
+      font-size: 0.75rem;
+      opacity: 0.38;
       line-height: 1.5;
+      text-align: left;
+    }
+    @media (max-width: 520px) {
+      .entry-fields-row { grid-template-columns: 1fr; }
+      .entry-title { font-size: 2.8rem; }
     }
 
     /* ---- Header & Nav ---- */
@@ -590,22 +622,30 @@
 
     <!-- Entry Screen -->
     <div class="state-screen" id="entry-screen" style="display:none">
-      <div class="entry-card">
-        <div class="entry-card-logo">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="entry-wrapper">
+        <div class="entry-brand">
+          <div class="entry-brand-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h1 class="entry-title">Evidence<br><span class="entry-title-accent">Portal</span></h1>
         </div>
-        <h2>Evidence Portal</h2>
-        <p>Enter your Report ID and Security PIN from your evidence pack to access your report.</p>
-        <div class="entry-field">
-          <label>Report ID</label>
-          <input id="entry-id" type="text" placeholder="e.g. BSSUTF" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false">
+
+        <div class="entry-card">
+          <p class="entry-desc">Enter your Report ID and Security PIN from your noise evidence pack to access your secure report.</p>
+          <div class="entry-fields-row">
+            <div class="entry-field">
+              <label>Report ID</label>
+              <input id="entry-id" type="text" placeholder="BSSUTF" maxlength="6" autocomplete="off" autocapitalize="characters" spellcheck="false">
+            </div>
+            <div class="entry-field">
+              <label>Security PIN</label>
+              <input id="entry-pin" type="tel" placeholder="000000" maxlength="6" autocomplete="off">
+            </div>
+          </div>
+          <div class="entry-error" id="entry-error">Please enter both your Report ID and PIN.</div>
+          <button class="entry-submit" onclick="submitEntry()">Access Report →</button>
         </div>
-        <div class="entry-field">
-          <label>Security PIN</label>
-          <input id="entry-pin" type="tel" placeholder="6-digit PIN" maxlength="6" autocomplete="off">
-        </div>
-        <div class="entry-error" id="entry-error">Please enter both your Report ID and PIN.</div>
-        <button class="entry-submit" onclick="submitEntry()">Access Report →</button>
+
         <div class="entry-footer">
           Your Report ID and PIN are printed on the last page of your Noise Evidence Pack PDF.
         </div>
