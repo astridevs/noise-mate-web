@@ -136,8 +136,8 @@
     <section class="subpage-hero">
         <div class="hero-wrapper">
             <div class="hero-content">
-                <h1 class="hero-title">Privacy <span class="highlight">Policy</span></h1>
-                <p class="hero-subtitle">Last updated: February 12, 2026</p>
+                <h1 class="hero-title">Privacy <span class="highlight">Compliance</span></h1>
+                <p class="hero-subtitle">Last updated: April 17, 2026</p>
             </div>
         </div>
     </section>
@@ -145,76 +145,73 @@
     <main class="container">
         <div class="legal-content">
             <h2>1. Introduction</h2>
-            <p>Noise Mate ("we," "us," "our," or "Company") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our mobile application and website.</p>
+            <p>Noise Mate ("we," "us," "our," or "Company") is committed to protecting your privacy. This Privacy Policy is designed to be comprehensive and transparent, covering our web platform and our mobile applications for Android and iOS. We prioritise a "Local-First" data architecture, ensuring your sensitive noise evidence remains under your control.</p>
 
             <h2>2. Information We Collect</h2>
-            <h3>Personal Information</h3>
-            <p>We collect information you provide directly, including:</p>
+            <h3>2.1 Personal Information</h3>
+            <p>We collect information you provide directly to facilitate account management and professional reporting:</p>
             <ul>
-                <li>Name, email address, and phone number</li>
-                <li>Account credentials and profile information</li>
-                <li>Billing and payment information</li>
-                <li>Communication preferences</li>
+                <li>Name and contact details (email, phone number)</li>
+                <li>Account credentials for secure access</li>
+                <li>Billing and subscription status (processed via RevenueCat)</li>
+                <li>Communication history with our support team</li>
             </ul>
 
-            <h3>Noise Recording Data</h3>
-            <p>When you use Noise Mate to record noise incidents, we collect:</p>
+            <h3>2.2 Sensitive Mobile Data</h3>
+            <p>To provide professional noise monitoring, our mobile applications require specific permissions:</p>
             <ul>
-                <li>Audio recordings and acoustic measurements</li>
-                <li>GPS location data (with your permission)</li>
-                <li>Timestamp and metadata information</li>
-                <li>Device identifiers and environmental conditions</li>
+                <li><strong>Audio Data (Microphone):</strong> We use the microphone to record noise disturbances. Audio is processed locally on your device. We do not record unless you initiate a session or enable Auto-Detection.</li>
+                <li><strong>Location Data (GPS):</strong> With your permission, we tag recordings with precise coordinates to provide legally-relevant evidence of where a disturbance occurred.</li>
+                <li><strong>Photo Attachments:</strong> If you choose to attach photos to a log, these are stored alongside your noise evidence.</li>
             </ul>
 
-            <h3>Device Information</h3>
-            <p>We automatically collect technical information, including:</p>
+            <h3>2.3 Technical & Usage Data</h3>
+            <p>We automatically collect technical telemetry to maintain app stability:</p>
             <ul>
-                <li>Device type, operating system, and version</li>
-                <li>IP address and mobile network information</li>
-                <li>App usage patterns and interaction data</li>
-                <li>Crash reports and performance metrics</li>
+                <li>Device hardware specifications and OS version</li>
+                <li>IP address (for security and region-specific compliance)</li>
+                <li>Anonymous crash reports via Sentry</li>
+                <li>Feature interaction metrics via Mixpanel (anonymous)</li>
             </ul>
 
-            <h2>3. How We Use Your Information</h2>
-            <p>We use the information we collect to:</p>
+            <h2>3. Mobile Platform Specifics</h2>
+            
+            <h3>3.1 Android (Google Play) Disclosure</h3>
+            <p>Noise Mate complies with Google Play's Prominent Disclosure requirements. Access to the microphone (<code>RECORD_AUDIO</code>) is used exclusively for noise measurement and recording. This data is processed on-device and is only uploaded to your private cloud storage if you explicitly enable Cloud Sync. We do not share audio data with third-party advertisers.</p>
+
+            <h3>3.2 iOS (App Store) Privacy Manifest</h3>
+            <p>In accordance with Apple's Privacy Manifest requirements, our data collection is categorised as follows:</p>
             <ul>
-                <li>Provide, maintain, and improve our services</li>
-                <li>Process transactions and send billing information</li>
-                <li>Send technical notices and customer support messages</li>
-                <li>Generate noise documentation reports for personal records</li>
-                <li>Comply with necessary regulatory obligations</li>
-                <li>Analyze trends and monitor system performance</li>
+                <li><strong>Data Not Linked to You:</strong> Diagnostics and usage data are anonymised and not linked to your identity.</li>
+                <li><strong>Data Linked to You:</strong> Contact information and User IDs (if you create an account) are used for app functionality and account management.</li>
+                <li><strong>Sensitive Data:</strong> Audio and Location data are classified as "User Content" and are never used for tracking purposes across other companies' apps or websites.</li>
             </ul>
 
-            <h2>4. Data Security</h2>
-            <p>We implement comprehensive security measures to protect your data, including:</p>
+            <h2>4. Data Storage & "Local-First" Architecture</h2>
+            <p>Noise Mate uses a layered storage model to maximise privacy:</p>
             <ul>
-                <li>Secure encryption for all sensitive user data</li>
-                <li>Secure HTTPS connections for all communications</li>
-                <li>Regular security reviews and system audits</li>
-                <li>Multi-factor authentication for account access</li>
-                <li>Redundant backup systems for data protection</li>
+                <li><strong>Local Storage:</strong> All recordings and logs are stored in an encrypted database on your device (Hive). On the Free tier, your data never leaves your device.</li>
+                <li><strong>Optional Cloud Sync:</strong> For Plus and Ultimate users, data is synchronised with our secure backend (Supabase) using industry-standard AES-256 encryption. This sync is optional and can be disabled at any time.</li>
+                <li><strong>E2E Encryption:</strong> We are committed to end-to-end encryption principles for all user-generated evidence.</li>
             </ul>
 
-            <h2>5. Data Retention</h2>
-            <p>We retain your information as long as necessary to provide our services. You may request deletion of your data at any time, subject to legal and compliance requirements.</p>
+            <h2>5. How We Use and Share Information</h2>
+            <p>We use your information strictly to provide the noise monitoring service. **We do not sell your personal data or audio recordings to any third parties.** Information is shared only with our core infrastructure partners (Supabase, RevenueCat) as necessary to maintain your account and subscriptions.</p>
 
-            <h2>6. Third-Party Services</h2>
-            <p>We may share non-personal, aggregated data with third-party service providers for analytics and hosting. We do not sell your personal information to any third parties.</p>
+            <h2>6. Data Security & Retention</h2>
+            <p>We implement comprehensive security measures, including multi-factor authentication (MFA) and regular security audits. We retain your information as long as your account is active. You can trigger a full permanent deletion of all data, including cloud-synced evidence, from within the app settings at any time.</p>
 
-            <h2>7. Your Rights</h2>
-            <p>Under UK GDPR and other applicable laws, you have the right to:</p>
+            <h2>7. Your Rights (UK GDPR & International)</h2>
+            <p>Under the UK General Data Protection Regulation (UK GDPR), you are the data controller of your personal evidence. You have the right to:</p>
             <ul>
-                <li>Access your personal data</li>
-                <li>Correct inaccurate information</li>
-                <li>Request deletion of your data</li>
-                <li>Restrict processing of your information</li>
-                <li>Object to data processing</li>
-                <li>Withdraw consent at any time</li>
+                <li><strong>Access:</strong> Download all your logs and recordings at any time.</li>
+                <li><strong>Portability:</strong> Professional exports are provided in standard formats (PDF/CSV).</li>
+                <li><strong>Erasure:</strong> Request the deletion of your entire account and all associated evidence.</li>
+                <li><strong>Restriction:</strong> Object to the processing of your data for specific purposes.</li>
             </ul>
 
             <h2>8. Children's Privacy</h2>
-            <p>Noise Mate is not intended for individuals under 18 years of age. We do not knowingly collect personal information from minors.</p>
+            <p>Noise Mate is a professional tool and is not intended for individuals under 18 years of age. We do not knowingly collect personal information from minors.</p>
 
             <h2>9. Contact Us</h2>
             <p>If you have questions about this Privacy Policy, please contact us at:</p>
