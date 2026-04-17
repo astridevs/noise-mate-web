@@ -54,6 +54,93 @@
             z-index: 2;
         }
 
+        /* Flow Section */
+        .flow-section {
+            margin-bottom: 8rem;
+            position: relative;
+            padding: 0 2rem;
+        }
+
+        .flow-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Connecting Flow Line */
+        .flow-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.3;
+            z-index: 1;
+            transform: translateY(-50%);
+        }
+
+        .flow-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            position: relative;
+            z-index: 3;
+        }
+
+        .flow-card:hover {
+            transform: scale(1.05) translateY(-5px);
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .flow-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .flow-card span {
+            font-size: 0.9rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-color);
+        }
+
+        .flow-number {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 900;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
         /* Bento Grid */
         .bento-grid {
             display: grid;
@@ -222,6 +309,8 @@
         }
 
         @media (max-width: 1024px) {
+            .flow-container { grid-template-columns: repeat(2, 1fr); }
+            .flow-section::before { display: none; }
             .bento-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
             .span-2x2, .span-1x2, .span-2x1 { grid-column: span 2; grid-row: auto; }
             .hero-title { font-size: 3.5rem; }
@@ -230,6 +319,7 @@
 
         @media (max-width: 768px) {
             .container { padding: 0 1.5rem 8rem; }
+            .flow-container { grid-template-columns: 1fr; }
             .bento-grid { grid-template-columns: 1fr; }
             .bento-card { padding: 2rem; }
         }
@@ -243,15 +333,42 @@
         <div class="hero-wrapper">
             <div class="hero-content">
                 <h1 class="hero-title">Step-by-Step <span class="highlight">Proof</span></h1>
-                <p class="hero-subtitle">Noise Mate makes it simple to see, save, and share evidence in a few taps. Click a card to see how it works.</p>
+                <p class="hero-subtitle">Noise Mate makes it simple to see, save, and share evidence in a few taps. Follow the journey below.</p>
             </div>
         </div>
     </section>
 
     <main class="container">
+        <!-- 1. Flow Design Section -->
+        <section class="flow-section">
+            <div class="flow-container">
+                <a href="#see-it" class="flow-card">
+                    <div class="flow-number">1</div>
+                    <i class="fas fa-eye"></i>
+                    <span>See It</span>
+                </a>
+                <a href="#record-it" class="flow-card">
+                    <div class="flow-number">2</div>
+                    <i class="fas fa-microphone"></i>
+                    <span>Record It</span>
+                </a>
+                <a href="#report-it" class="flow-card">
+                    <div class="flow-number">3</div>
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Report It</span>
+                </a>
+                <a href="#send-it" class="flow-card">
+                    <div class="flow-number">4</div>
+                    <i class="fas fa-paper-plane"></i>
+                    <span>Send It</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- 2. Bento Grid Section -->
         <div class="bento-grid">
             <!-- Card 1: See the Noise (Large) -->
-            <div class="bento-card span-2x2" onclick="toggleCard(this)">
+            <div id="see-it" class="bento-card span-2x2" onclick="toggleCard(this)">
                 <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
                 <h2>See the Noise</h2>
@@ -264,7 +381,7 @@
             </div>
 
             <!-- Card 2: Clear Proof (Small) -->
-            <div class="bento-card span-1x1" onclick="toggleCard(this)">
+            <div id="record-it" class="bento-card span-1x1" onclick="toggleCard(this)">
                 <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-music"></i></div>
                 <h2>Clear Proof</h2>
@@ -301,7 +418,7 @@
             </div>
 
             <!-- Card 5: Ready Reports (Small) -->
-            <div class="bento-card span-1x1" onclick="toggleCard(this)">
+            <div id="report-it" class="bento-card span-1x1" onclick="toggleCard(this)">
                 <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-file-check"></i></div>
                 <h2>Ready Reports</h2>
@@ -313,7 +430,7 @@
             </div>
 
             <!-- Card 6: Safe Sharing (Wide) -->
-            <div class="bento-card span-2x1" onclick="toggleCard(this)">
+            <div id="send-it" class="bento-card span-2x1" onclick="toggleCard(this)">
                 <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-lock"></i></div>
                 <h2>Safe Sharing</h2>
