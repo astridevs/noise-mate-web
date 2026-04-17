@@ -17,50 +17,49 @@
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Subpage Hero Style */
         .subpage-hero {
-            padding: 12rem 4rem 6rem;
+            padding: 12rem 4rem 4rem;
             text-align: center;
         }
 
         .hero-title {
             font-size: 5.5rem;
-            font-weight: 950;
+            font-weight: 900;
             line-height: 0.95;
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
         }
 
-
-        .hero-launch-badge {
-            display: inline-block;
-            color: var(--primary);
-            padding: 0.65rem 1.25rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border: 2px solid var(--primary);
-        }
-
+        /* Upgraded sleek badge for the time */
         .hero-subtitle {
-            font-size: 1.4rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0.75rem 1.75rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
             color: var(--text-muted);
-            line-height: 1.6;
-            font-weight: 500;
-            max-width: 700px;
+            font-weight: 600;
             margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
         }
 
-        /* Legal Content Layout */
+        .hero-subtitle i {
+            color: var(--primary);
+        }
+
+        /* Premium Legal Content Layout */
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -69,19 +68,38 @@
             z-index: 2;
         }
 
+        /* Glassmorphism card implementation */
         .legal-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 40px;
-            padding: 4rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 32px;
+            padding: 5rem 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top gradient accent line */
+        .legal-content::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
 
         .legal-content h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 850;
-            margin: 3rem 0 1.5rem;
-            color: var(--primary);
+            margin: 4.5rem 0 1.5rem;
             letter-spacing: -0.5px;
+            /* Gradient text effect */
+            background: linear-gradient(135deg, var(--text-color) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
         }
 
         .legal-content h2:first-of-type {
@@ -89,43 +107,70 @@
         }
 
         .legal-content h3 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 800;
-            margin: 2rem 0 1rem;
+            margin: 2.5rem 0 1rem;
             color: var(--text-color);
         }
 
         .legal-content p {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
+            margin-bottom: 1.75rem;
+            line-height: 1.85;
         }
 
         .legal-content ul, .legal-content ol {
-            margin-bottom: 2rem;
-            padding-left: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding-left: 0;
             color: var(--text-muted);
+            list-style: none; /* Custom list styling */
         }
 
         .legal-content li {
-            margin-bottom: 0.75rem;
-            padding-left: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+            padding-left: 2rem;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .legal-content li:hover {
+            transform: translateX(4px);
+        }
+
+        /* Custom Bullet points matching the accent */
+        .legal-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.8rem;
+            line-height: 1;
+            top: -2px;
+        }
+        
+        .legal-content li strong {
+            color: var(--text-color);
         }
 
         .legal-content a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 700;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
         }
 
         .legal-content a:hover {
-            text-decoration: underline;
+            border-bottom-color: var(--primary);
         }
 
         @media (max-width: 768px) {
             .hero-title { font-size: 3.5rem; }
-            .legal-content { padding: 2rem; border-radius: 24px; }
+            .legal-content { padding: 3rem 2rem; border-radius: 24px; }
+            .hero-subtitle { font-size: 0.85rem; padding: 0.6rem 1.25rem; }
         }
     </style>
 </head>
@@ -137,7 +182,10 @@
         <div class="hero-wrapper">
             <div class="hero-content">
                 <h1 class="hero-title">Privacy <span class="highlight">Compliance</span></h1>
-                <p class="hero-subtitle">Last updated: April 17, 2026</p>
+                <div class="hero-subtitle">
+                    <i class="fa-regular fa-clock"></i>
+                    Last updated: April 17, 2026 at 18:01 (BST/GMT+1)
+                </div>
             </div>
         </div>
     </section>
