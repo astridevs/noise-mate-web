@@ -17,49 +17,31 @@
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Subpage Hero Style */
         .subpage-hero {
-            padding: 12rem 4rem 6rem;
+            padding: 12rem 4rem 4rem;
             text-align: center;
         }
 
         .hero-title {
             font-size: 5.5rem;
-            font-weight: 950;
+            font-weight: 900;
             line-height: 0.95;
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
         }
 
-        .highlight {
-            color: var(--primary);
-        }
-
-        .hero-launch-badge {
-            display: inline-block;
-            color: var(--primary);
-            padding: 0.65rem 1.25rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border: 2px solid var(--primary);
-        }
-
         .hero-subtitle {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
-            line-height: 1.6;
             font-weight: 500;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -72,78 +54,182 @@
             z-index: 2;
         }
 
-        .guide-section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 40px;
-            padding: 4rem;
+        .lifecycle-overview {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 6rem;
+            text-align: center;
+        }
+
+        .lifecycle-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .step-pill {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 1.5rem;
+            border-radius: 20px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .step-pill:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .step-pill i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-pill span {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .step-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Detailed Bento Grid */
+        .detailed-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
             margin-bottom: 4rem;
         }
 
-        .section-header {
-            margin-bottom: 3rem;
+        .bento-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 3rem;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 900;
-            letter-spacing: -1px;
-            color: var(--text-color);
+        .bento-card.wide {
+            grid-column: span 2;
         }
 
-        .guide-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .guide-item {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 2.5rem;
-            transition: all 0.3s ease;
+        .card-header {
             display: flex;
-            gap: 2rem;
-            align-items: flex-start;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .guide-item:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-        }
-
-        .step-number {
-            width: 48px;
-            height: 48px;
-            background: var(--primary);
-            color: white;
-            border-radius: 12px;
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            font-weight: 900;
-            flex-shrink: 0;
-        }
-
-        .guide-content h3 {
-            font-size: 1.4rem;
-            font-weight: 850;
-            margin-bottom: 1rem;
             color: var(--primary);
         }
 
-        .guide-content p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
-            line-height: 1.7;
+        .card-header h2 {
+            font-size: 1.8rem;
+            font-weight: 850;
+            letter-spacing: -0.5px;
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
             margin-bottom: 1.5rem;
         }
 
-        @media (max-width: 768px) {
+        .feature-item i {
+            color: var(--secondary);
+            font-size: 1rem;
+            margin-top: 0.3rem;
+        }
+
+        .feature-item div h3 {
+            font-size: 1.1rem;
+            font-weight: 750;
+            margin: 0 0 0.25rem;
+            color: var(--text-color);
+        }
+
+        .feature-item div p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .cta-box {
+            margin-top: 6rem;
+            text-align: center;
+            padding: 4rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 32px;
+        }
+
+        .cta-box h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .cta-box a {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 1rem 2.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .cta-box a:hover {
+            transform: translateY(-2px);
+            background: var(--secondary);
+        }
+
+        @media (max-width: 1024px) {
+            .lifecycle-overview { grid-template-columns: 1fr; gap: 2rem; }
+            .detailed-grid { grid-template-columns: 1fr; }
+            .bento-card.wide { grid-column: span 1; }
             .hero-title { font-size: 3.5rem; }
-            .guide-section { padding: 2rem; border-radius: 24px; }
-            .guide-item { flex-direction: column; gap: 1rem; }
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 0 2rem 8rem; }
+            .bento-card { padding: 2rem; }
         }
     </style>
 </head>
@@ -154,52 +240,219 @@
     <section class="subpage-hero">
         <div class="hero-wrapper">
             <div class="hero-content">
-                <h1 class="hero-title">How Noise Mate <span class="highlight">Works</span></h1>
-                <p class="hero-subtitle">Turn your smartphone into a professional noise monitoring and evidence collection tool.</p>
+                <h1 class="hero-title">Legally Robust <span class="highlight">Evidence</span></h1>
+                <p class="hero-subtitle">Noise Mate turns complex acoustic data into clear, authority-grade documentation. Explore the detailed mechanics of our monitoring engine.</p>
             </div>
         </div>
     </section>
 
     <main class="container">
-        <!-- Step-by-Step Guide Section -->
-        <section class="guide-section">
-            <div class="section-header">
-                <h2>The 3-Step Evidence Guide</h2>
-            </div>
-            <div class="guide-grid">
-                <!-- Step 1 -->
-                <div class="guide-item">
-                    <div class="step-number">1</div>
-                    <div class="guide-content">
-                        <h3>Monitor & Record</h3>
-                        <p>Launch the Noise Mate meter to track decibel levels in real-time. When a disturbance occurs, the app automatically captures high-fidelity audio spikes, ensuring you have the auditory proof needed for your case.</p>
-                    </div>
-                </div>
-
-                <!-- Step 2 -->
-                <div class="guide-item">
-                    <div class="step-number">2</div>
-                    <div class="guide-content">
-                        <h3>Document & Tag</h3>
-                        <p>Organise your recordings with vital context. Tag each incident with its source (e.g., loud music, barking dog), severity level, and specific location markers. Our system automatically includes time-stamps and duration logs.</p>
-                    </div>
-                </div>
-
-                <!-- Step 3 -->
-                <div class="guide-item">
-                    <div class="step-number">3</div>
-                    <div class="guide-content">
-                        <h3>Export & Share</h3>
-                        <p>Generate professional, evidence-grade PDF reports with a single tap. These reports are formatted to meet the standards of UK landlords, local councils, and legal proceedings, making it easier to present your evidence clearly.</p>
-                    </div>
+        <!-- 1. The Evidence Lifecycle -->
+        <div class="lifecycle-overview">
+            <div class="lifecycle-step">
+                <div class="step-pill">
+                    <i class="fas fa-microchip"></i>
+                    <span>Monitor</span>
                 </div>
             </div>
-        </section>
+            <div class="lifecycle-step">
+                <div class="step-pill">
+                    <i class="fas fa-microphone-alt"></i>
+                    <span>Capture</span>
+                </div>
+            </div>
+            <div class="lifecycle-step">
+                <div class="step-pill">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Organise</span>
+                </div>
+            </div>
+            <div class="lifecycle-step">
+                <div class="step-pill">
+                    <i class="fas fa-file-pdf"></i>
+                    <span>Generate</span>
+                </div>
+            </div>
+            <div class="lifecycle-step">
+                <div class="step-pill">
+                    <i class="fas fa-share-nodes"></i>
+                    <span>Resolve</span>
+                </div>
+            </div>
+        </div>
 
-        <!-- Final Notice -->
-        <div style="text-align: center; color: var(--text-muted);">
-            <p>Ready to start building your evidence timeline?</p>
-            <p><a href="index.html" class="highlight" style="font-weight: 700; text-decoration: none;">Download the App Now →</a></p>
+        <div class="detailed-grid">
+            <!-- 2. Precision Monitoring -->
+            <div class="bento-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h2>Precision Monitoring</h2>
+                </div>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Real-time Decibel Engine</h3>
+                            <p>Our meter tracks sound pressure levels with sub-second latency, providing peak and average dB readings calibrated for mobile microphone response curves.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Acoustic Visualisation</h3>
+                            <p>Live timeline charts plot every fluctuation, making it easy to see environmental noise patterns and frequency spikes visually.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Impact Indicators</h3>
+                            <p>Categorise noise from 'Quiet' to 'Dangerous' automatically based on standard acoustic disturbance guidelines.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. High-Fidelity Capture -->
+            <div class="bento-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-fingerprint"></i></div>
+                    <h2>Forensic Capture</h2>
+                </div>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Auditory Fingerprinting</h3>
+                            <p>Capture high-fidelity m4a recordings of the disturbance. Audio is securely stored and can be looped or scrubbed for detailed review.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Visual Documentation</h3>
+                            <p>Attach photographic evidence directly to specific logs to document the source, such as construction equipment or property damage.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Verified Metadata</h3>
+                            <p>Every log is anchored with a GPS location marker and a forensic timestamp that cannot be manually altered.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Strategic Case Management -->
+            <div class="bento-card wide">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-layer-group"></i></div>
+                    <h2>Strategic Case Management</h2>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h3>The Complaint Wizard</h3>
+                                <p>Structure your logs into cohesive 'Cases'. Our guided wizard helps you identify the noise type, the specific source, and the intended recipient (Council, Landlord, etc.).</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h3>Temporal Pattern Mapping</h3>
+                                <p>Identify 'Worst Hours'—whether the noise is night-time, afternoon, or persistent all day. This pattern data is critical for council investigations.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h3>Frequency Tracking</h3>
+                                <p>Document if the noise is Daily, Weekly, or Irregular. We build a frequency heat-map that authorities use to determine the severity of the nuisance.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <h3>Recipient Directives</h3>
+                                <p>Manage unique cases for different recipients. Keep your landlord complaint separate from your environmental health logs automatically.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Authority Reporting -->
+            <div class="bento-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-file-signature"></i></div>
+                    <h2>Authority Reporting</h2>
+                </div>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>UK-Standard PDF Engine</h3>
+                            <p>Generate reports professionally formatted for UK Councils and Environmental Health Officers. No more handwritten diaries.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Evidence Packs (Premium)</h3>
+                            <p>Bundle audit trails, photo logs, and acoustic summaries into a single comprehensive evidence package ready for legal review.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Automated Email Drafting</h3>
+                            <p>Our wizard drafts the cover email for you, and identifies the correct council borough or landlord contact to ensure your evidence reaches the right desk.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Secure Share Portal -->
+            <div class="bento-card">
+                <div class="card-header">
+                    <div class="card-icon"><i class="fas fa-vault"></i></div>
+                    <h2>Secure Share Portal</h2>
+                </div>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Evidence Viewer (Ultimate)</h3>
+                            <p>Instead of sending huge files, send a secure link to your private Share Portal where a Case Officer can listen to recordings and view photos directly.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>2FA & PIN Protection</h3>
+                            <p>Recipients must enter a unique PIN or undergo 2-Factor authentication to access your data. You maintain total control over who sees what.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <h3>Instant Revocation</h3>
+                            <p>Set links to expire automatically, or revoke access instantly with a single tap in the app once your case is resolved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-box">
+            <h3>Start Your Evidence Timeline</h3>
+            <p>Join thousands of users using Noise Mate to regain their peace and quiet with professional-grade tools.</p>
+            <a href="index.html">Download the App Now</a>
         </div>
     </main>
 
@@ -220,20 +473,20 @@
                 <h4>Product</h4>
                 <ul>
                     <li><a href="index.html#features">Features</a></li>
-                    <li><a href="how-it-works.html">How it Works</a></li>
+                    <li><a href="how-it-works/">How it Works</a></li>
+                    <li><a href="index.html#pricing">Pricing</a></li>
                     <li><a href="index.html#about">About</a></li>
-                    <li><a href="blog.html">Community</a></li>
-
+                    <li><a href="blog/index.html">Community</a></li>
                 </ul>
             </div>
 
             <div class="footer-section">
                 <h4>Legal</h4>
                 <ul>
-                    <li><a href="privacy-policy.html">Privacy Policy</a></li>
-                    <li><a href="terms-of-service.html">Terms of Service</a></li>
-                    <li><a href="compliance.html">Compliance</a></li>
-                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="privacy/index.html">Privacy Policy</a></li>
+                    <li><a href="terms/index.html">Terms of Service</a></li>
+                    <li><a href="compliance/index.html">Compliance</a></li>
+                    <li><a href="contact/index.html">Contact</a></li>
                 </ul>
             </div>
 
@@ -242,8 +495,8 @@
                 <p>📧 <a href="mailto:support@noisemate.co.uk"
                         style="color: var(--text-muted); text-decoration: none;">support@noisemate.co.uk</a></p>
                 
-                <p>❓ <a href="/help" style="color: var(--text-muted); text-decoration: none;">Help Center</a></p>
-                <p><a href="contact.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Get in
+                <p>❓ <a href="help/index.html" style="color: var(--text-muted); text-decoration: none;">Help Center</a></p>
+                <p><a href="contact/index.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Get in
                         Touch →</a></p>
             </div>
         </div>

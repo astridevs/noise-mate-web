@@ -1,2 +1,4 @@
 # Evidence Portal redirects are now handled by standard clean-url logic
 # and query parameters (?id=...&pin=...) to ensure stable routing.
+
+/how-it-works.html /how-it-works/ 301
