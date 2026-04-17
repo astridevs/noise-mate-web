@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Detect page depth to adjust relative paths
     const path = window.location.pathname;
     const isSubDir = path.includes('/blog/') || path.includes('/contact/') || path.includes('/help/') || 
-                     path.includes('/compliance/') || path.includes('/privacy/') || path.includes('/terms/');
+                     path.includes('/compliance/') || path.includes('/privacy/') || path.includes('/terms/') ||
+                     path.includes('/how-it-works/');
     const base = isSubDir ? '../' : '';
 
     const isHomePage = (path.endsWith('index.html') || path.endsWith('/')) && !isSubDir;
