@@ -17,104 +17,103 @@
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Subpage Hero Style */
         .subpage-hero {
-            padding: 12rem 4rem 6rem;
+            padding: 12rem 4rem 4rem;
             text-align: center;
         }
 
         .hero-title {
             font-size: 5.5rem;
-            font-weight: 950;
+            font-weight: 900;
             line-height: 0.95;
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
         }
 
-
-        .hero-launch-badge {
-            display: inline-block;
-            color: var(--primary);
-            padding: 0.65rem 1.25rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border: 2px solid var(--primary);
-        }
-
         .hero-subtitle {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
-            line-height: 1.6;
             font-weight: 500;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 2rem 8rem;
             position: relative;
             z-index: 2;
         }
 
-        /* Search Box Consistent with Homepage Inputs */
-        .search-container {
-            max-width: 600px;
-            margin: 0 auto 4rem;
+        /* Premium Search Container */
+        .search-wrapper {
+            max-width: 700px;
+            margin: 0 auto 5rem;
             position: relative;
+        }
+
+        .search-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 24px;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-container:focus-within {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            padding: 0 1.5rem;
+            color: var(--primary);
+            font-size: 1.2rem;
         }
 
         .search-input {
             width: 100%;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border-color);
-            border-radius: 20px;
-            padding: 1.5rem 2rem 1.5rem 3.5rem;
+            background: transparent;
+            border: none;
+            padding: 1.25rem 1rem 1.25rem 0;
             font-family: inherit;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-color);
-            transition: all 0.3s ease;
         }
 
         .search-input:focus {
             outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
 
-        .search-icon {
-            position: absolute;
-            left: 1.5rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 1.2rem;
-        }
-
-        /* Bento Categories */
+        /* Bento Categories Grid */
         .categories-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1.25rem;
             margin-bottom: 6rem;
         }
 
         .category-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 32px;
-            padding: 2.5rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem 1.5rem;
             text-align: center;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             cursor: pointer;
@@ -123,80 +122,185 @@
         .category-card:hover {
             transform: translateY(-8px);
             border-color: var(--primary);
-            background: var(--bg-primary);
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .category-card.active {
+            border-color: var(--primary);
+            background: rgba(37, 99, 235, 0.1);
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.15);
         }
 
         .category-icon {
-            width: 64px;
-            height: 64px;
-            background: rgba(37, 99, 235, 0.1);
-            border-radius: 20px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(37, 99, 235, 0.2));
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 1.8rem;
+            margin: 0 auto 1.25rem;
+            font-size: 1.5rem;
             color: var(--primary);
         }
 
         .category-card h3 {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
             font-weight: 800;
+            margin: 0;
+            color: var(--text-color);
         }
 
-        /* FAQ Layout */
-        .faq-list {
+        /* Help Content Area */
+        .help-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .category-section {
+            scroll-margin-top: 100px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .section-header i {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.75rem;
+            font-weight: 850;
+            margin: 0;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--text-color) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* FAQ Accordion Styling */
+        .faq-grid {
             display: grid;
             gap: 1rem;
-            max-width: 900px;
-            margin: 0 auto;
         }
 
         .faq-item {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
             overflow: hidden;
             transition: all 0.3s ease;
         }
 
+        .faq-item:hover {
+            border-color: rgba(37, 99, 235, 0.3);
+            transform: translateX(4px);
+        }
+
         .faq-question {
-            padding: 2rem;
+            padding: 1.75rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
             font-weight: 700;
             font-size: 1.1rem;
+            color: var(--text-color);
         }
 
         .faq-answer {
             padding: 0 2rem 2rem;
             color: var(--text-muted);
             display: none;
-            line-height: 1.7;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .faq-answer strong {
+            color: var(--text-color);
+        }
+
+        .faq-answer a {
+            color: var(--primary);
+            text-decoration: underline;
         }
 
         .faq-icon {
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             color: var(--primary);
+            font-size: 0.9rem;
         }
 
         .faq-item.active {
             border-color: var(--primary);
-            background: var(--bg-primary);
+            background: rgba(37, 99, 235, 0.03);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
 
         .faq-item.active .faq-icon {
             transform: rotate(180deg);
         }
 
+        .faq-item.active .faq-answer {
+            display: block;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* No Results found */
+        #noResults {
+            text-align: center;
+            padding: 4rem;
+            display: none;
+        }
+
+        #noResults i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        #noResults h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Category Filter Styles */
+        .faq-item.hidden {
+            display: none;
+        }
+
+        .category-section.hidden {
+            display: none;
+        }
+
         @media (max-width: 1024px) {
-            .categories-grid { grid-template-columns: repeat(2, 1fr); }
+            .categories-grid { grid-template-columns: repeat(3, 1fr); }
             .hero-title { font-size: 3.5rem; }
         }
 
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
+            .categories-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero-subtitle { font-size: 1rem; }
+            .faq-question { padding: 1.5rem; }
+            .faq-answer { padding: 0 1.5rem 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
             .categories-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -209,96 +313,261 @@
         <div class="hero-wrapper">
             <div class="hero-content">
                 <h1 class="hero-title">Help <span class="highlight">Center</span></h1>
-                <p class="hero-subtitle">Find answers to common questions and learn how to get the most out of Noise Mate.</p>
+                <p class="hero-subtitle">Find answers to common questions about your privacy, storage modes, share links, and how to use Noise Mate effectively.</p>
             </div>
         </div>
     </section>
 
     <main class="container">
-        <div class="search-container">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Search help topics, features, and more...">
+        <!-- Search -->
+        <div class="search-wrapper">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search by feature, keyword, or tier...">
+            </div>
         </div>
 
+        <!-- Categories -->
         <div class="categories-grid">
-            <div class="category-card">
+            <div class="category-card" data-category="getting-started">
                 <div class="category-icon"><i class="fas fa-rocket"></i></div>
-                <h3>Getting Started</h3>
+                <h3>Starting Out</h3>
             </div>
-            <div class="category-card">
-                <div class="category-icon"><i class="fas fa-chart-line"></i></div>
-                <h3>Trusted Reporting</h3>
-            </div>
-            <div class="category-card">
-                <div class="category-icon"><i class="fas fa-layer-group"></i></div>
-                <h3>Features</h3>
-            </div>
-            <div class="category-card">
+            <div class="category-card" data-category="privacy">
                 <div class="category-icon"><i class="fas fa-user-shield"></i></div>
-                <h3>Account & Security</h3>
+                <h3>Privacy First</h3>
+            </div>
+            <div class="category-card" data-category="storage">
+                <div class="category-icon"><i class="fas fa-database"></i></div>
+                <h3>Data & Storage</h3>
+            </div>
+            <div class="category-card" data-category="sharing">
+                <div class="category-icon"><i class="fas fa-share-nodes"></i></div>
+                <h3>Share Links</h3>
+            </div>
+            <div class="category-card" data-category="billing">
+                <div class="category-icon"><i class="fas fa-credit-card"></i></div>
+                <h3>Billing & Tiers</h3>
             </div>
         </div>
 
-        <div class="faq-list" id="faqList">
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>How do I join the waitlist with Noise Mate?</span>
-                    <i class="fas fa-chevron-down faq-icon"></i>
+        <!-- FAQ Categories -->
+        <div class="help-layout">
+            
+            <!-- Getting Started -->
+            <section class="category-section" id="getting-started">
+                <div class="section-header">
+                    <i class="fas fa-rocket"></i>
+                    <h2>Getting Started</h2>
                 </div>
-                <div class="faq-answer">
-                    <p>Simply click any "Join Waitlist" button on our homepage, fill in your details, and you'll be among the first to experience Noise Mate when we launch. Our team is working hard to bring advanced noise monitoring to everyone.</p>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I join the waitlist with Noise Mate?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Simply click any <strong>"Join Waitlist"</strong> button on our homepage, fill in your details, and you'll be among the first to experience Noise Mate when we launch. Our team is working hard to bring advanced noise monitoring to everyone.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What are the age requirements for using the app?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Noise Mate is intended exclusively for individuals aged <strong>18 and over</strong>. Because the app involves gathering evidence for noise disputes and requires signing legal terms of service, we do not knowingly allow minors to create accounts.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I have multiple accounts for different properties?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>No. Our Terms of Service require <strong>one account per user</strong>. However, if you are on the <strong>Ultimate tier</strong>, you can use our upcoming "Multi-Address Tracking" feature to separate logs for different locations within a single account.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Can I share my logs with my landlord or council?</span>
-                    <i class="fas fa-chevron-down faq-icon"></i>
+            <!-- Privacy & Security -->
+            <section class="category-section" id="privacy">
+                <div class="section-header">
+                    <i class="fas fa-user-shield"></i>
+                    <h2>Privacy & Security</h2>
                 </div>
-                <div class="faq-answer">
-                    <p>Yes. Noise Mate is designed to help you document disturbances clearly and accurately. Our reports provide a reliable record that you can share with landlords, housing associations, or local councils to help resolve persistent noise issues.</p>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Does Noise Mate sell my data?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>Emphatically no.</strong> We do not sell, rent, or trade your personal information or audio recordings to advertisers, data brokers, or any third parties. Your data is your property.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Are my audio recordings private?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes. Audio is processed on-device. We use <strong>AES-256 bank-level encryption</strong> both in transit and at rest. Astri Devs Ltd staff cannot freely browse or listen to your recordings without your explicit permission or a formal legal order.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How does Noise Mate use my GPS location?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>We capture your latitude and longitude only when you generate a noise log. This provides <strong>legally robust attribution</strong> for your reports—proving exactly where the disturbance was recorded. You can revoke location access at any time in your phone's settings.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What is your data retention policy?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>We keep your cloud data as long as your account is active. To protect your privacy, we purge accounts that have been inactive for more than <strong>18 months</strong>. We will always send you a warning email 30 days before this happens so you can sign in and keep your data.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>How is my data protected?</span>
-                    <i class="fas fa-chevron-down faq-icon"></i>
+            <!-- Storage Modes -->
+            <section class="category-section" id="storage">
+                <div class="section-header">
+                    <i class="fas fa-database"></i>
+                    <h2>Data & Storage</h2>
                 </div>
-                <div class="faq-answer">
-                    <p>Your data is securely encrypted and stored on our protected servers. We take privacy seriously and ensure your information is safe, organized, and only accessible to you across all your devices.</p>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What is the difference between Cloud Sync and Local-Only?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>Cloud Sync (Default):</strong> Logs are stored on your phone and backed up to our secure servers. This allows multi-device access and data recovery if you lose your phone.</p>
+                            <p><strong>Local-Only Mode:</strong> Logs exist <em>only</em> on your device. All existing cloud backups are permanently deleted. This is the ultimate privacy option, but you are responsible for your own backups.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What happens if I switch to Local-Only Mode?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Switching to Local-Only Mode triggers an <strong>immediate and irreversible deletion</strong> of all your noise recordings from our cloud servers. Your data will then live only on your physical phone.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Can I use the app without an internet connection?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes. You can record logs and measure decibels entirely offline. If you have Cloud Sync enabled, the app will automatically upload your recordings once you reconnect to Wi-Fi or cellular data.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>Can I export my reports for councils?</span>
-                    <i class="fas fa-chevron-down faq-icon"></i>
+            <!-- Share Links -->
+            <section class="category-section" id="sharing">
+                <div class="section-header">
+                    <i class="fas fa-share-nodes"></i>
+                    <h2>Evidence Share Links</h2>
                 </div>
-                <div class="faq-answer">
-                    <p>Absolutely. You can export professional PDF reports that include noise timelines and log details. These reports are designed to be clear and easy to read, helping you communicate effectively with property managers or local authorities.</p>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I share my logs with my landlord or council?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If you are on the <strong>Ultimate tier</strong>, you can generate a secure share link. The recipient receives a <strong>Case ID</strong> and a <strong>unique password</strong> to view your Evidence Portal at <a href="/reports">noisemate.co.uk/reports</a>.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What personal information do recipients see?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Recipients can see the noise data, audio files (if allowed), and your <strong>name and email address</strong> for attribution purposes. They <strong>cannot</strong> see your account ID, password, or precise GPS coordinates.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How secure are these reports?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Reports use <strong>Two-Factor Access</strong>. A recipient must have both the Case ID and the specific unique password. You can also set links to expire or revoke access instantly via the app.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>Why is my shared report paused?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If your subscription tier drops below <strong>Ultimate</strong>, all your active share links are automatically paused to protect your data. They will reactivate instantly if you re-upgrade.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>What devices does Noise Mate support?</span>
-                    <i class="fas fa-chevron-down faq-icon"></i>
+            <!-- Billing & Tiers -->
+            <section class="category-section" id="billing">
+                <div class="section-header">
+                    <i class="fas fa-credit-card"></i>
+                    <h2>Billing & Tiers</h2>
                 </div>
-                <div class="faq-answer">
-                    <p>Noise Mate is available on iOS (iPhone and iPad) and Android devices. We recommend devices with at least iOS 13 or Android 8.0 for optimal performance.</p>
+                <div class="faq-grid">
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>What are the subscription tiers?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>Free:</strong> Basic logging, limited monthly recordings.</p>
+                            <p><strong>Plus:</strong> Unlimited local logging, cloud sync, PDF exports.</p>
+                            <p><strong>Ultimate:</strong> Full Evidence Share portal, AI analysis, priority support.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How are payments processed?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>All payments are handled securely by **Apple App Store** or **Google Play Store**. Astri Devs Ltd never sees or stores your credit card details.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I cancel my subscription?</span>
+                            <i class="fas fa-chevron-down faq-icon"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>You can manage or cancel your subscription at any time through your device's subscription settings (Apple ID or Google Account). Cancellation is effective at the end of the current billing cycle.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="faq-item">
-                <div class="faq-question">
-                    <span>How do I manage my subscription?</span>
-                    <i class="fas fa-chevron-down faq-icon"></i>
-                </div>
-                <div class="faq-answer">
-                    <p>You will be able to manage your subscription directly from your account settings in the app. We believe in transparency and simplicity, allowing you to upgrade or downgrade at any time once we launch.</p>
-                </div>
-            </div>
+        </div>
+
+        <!-- No Results -->
+        <div id="noResults">
+            <i class="fas fa-search"></i>
+            <h3>No results found</h3>
+            <p>Try searching for different keywords or check our categories above.</p>
+            <p>Can't find what you're looking for? <a href="/contact">Contact Support</a>.</p>
         </div>
     </main>
 
@@ -322,7 +591,6 @@
                     <li><a href="index.html#pricing">Pricing</a></li>
                     <li><a href="index.html#about">About</a></li>
                     <li><a href="blog.html">Community</a></li>
-
                 </ul>
             </div>
 
@@ -338,17 +606,13 @@
 
             <div class="footer-section">
                 <h4>Contact</h4>
-                <p>📧 <a href="mailto:support@noisemate.co.uk"
-                        style="color: var(--text-muted); text-decoration: none;">support@noisemate.co.uk</a></p>
-                
+                <p>📧 <a href="mailto:support@noisemate.co.uk" style="color: var(--text-muted); text-decoration: none;">support@noisemate.co.uk</a></p>
                 <p>❓ <a href="/help" style="color: var(--text-muted); text-decoration: none;">Help Center</a></p>
-                <p><a href="/contact" style="color: var(--primary); text-decoration: none; font-weight: 600;">Get in
-                        Touch →</a></p>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <p>&copy; 2026 Noise Mate. Developed & Maintained by <a href="https://astridevs.co.uk" target="_blank" style="color: var(--primary); text-decoration: none;">Astri Devs Ltd</a>. All rights reserved.</p>
+            <p>&copy; 2026 Noise Mate. Developed by <a href="https://astridevs.co.uk" target="_blank" style="color: var(--primary); text-decoration: none;">Astri Devs Ltd</a>.</p>
         </div>
     </footer>
 
@@ -359,28 +623,62 @@
         document.querySelectorAll('.faq-question').forEach(q => {
             q.addEventListener('click', () => {
                 const item = q.parentElement;
-                const answer = q.nextElementSibling;
-                const isActive = item.classList.contains('active');
-                
-                // Close others
-                document.querySelectorAll('.faq-item').forEach(other => {
-                    other.classList.remove('active');
-                    other.querySelector('.faq-answer').style.display = 'none';
-                });
-
-                if (!isActive) {
-                    item.classList.add('active');
-                    answer.style.display = 'block';
-                }
+                item.classList.toggle('active');
             });
         });
 
         // Search logic
-        document.getElementById('searchInput').addEventListener('input', (e) => {
+        const searchInput = document.getElementById('searchInput');
+        const faqItems = document.querySelectorAll('.faq-item');
+        const sections = document.querySelectorAll('.category-section');
+        const noResults = document.getElementById('noResults');
+
+        searchInput.addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            document.querySelectorAll('.faq-item').forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(term) ? 'block' : 'none';
+            let hasAnyResult = false;
+
+            sections.forEach(section => {
+                let sectionHasResult = false;
+                const items = section.querySelectorAll('.faq-item');
+                
+                items.forEach(item => {
+                    const question = item.querySelector('.faq-question span').textContent.toLowerCase();
+                    const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                    
+                    if (question.includes(term) || answer.includes(term)) {
+                        item.classList.remove('hidden');
+                        sectionHasResult = true;
+                        hasAnyResult = true;
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                });
+
+                if (sectionHasResult) {
+                    section.classList.remove('hidden');
+                } else {
+                    section.classList.add('hidden');
+                }
+            });
+
+            noResults.style.display = hasAnyResult ? 'none' : 'block';
+        });
+
+        // Category Filtering
+        document.querySelectorAll('.category-card').forEach(card => {
+            card.addEventListener('click', () => {
+                searchInput.value = '';
+                const categoryId = card.getAttribute('data-category');
+                const targetSection = document.getElementById(categoryId);
+                
+                document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+
+                targetSection.style.transition = 'background 0.5s';
+                targetSection.style.background = 'rgba(37, 99, 235, 0.05)';
+                setTimeout(() => targetSection.style.background = 'transparent', 1000);
             });
         });
     </script>
