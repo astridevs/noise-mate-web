@@ -54,113 +54,137 @@
             z-index: 2;
         }
 
-        .lifecycle-overview {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1.5rem;
-            margin-bottom: 6rem;
-            text-align: center;
-        }
-
-        .lifecycle-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .step-pill {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            padding: 2rem;
-            border-radius: 24px;
-            width: 100%;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .step-pill:hover {
-            transform: translateY(-8px);
-            border-color: var(--primary);
-            background: rgba(37, 99, 235, 0.05);
-        }
-
-        .step-pill i {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .step-pill span {
-            display: block;
-            font-size: 1rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Square Grid */
-        .square-grid {
+        /* Bento Grid */
+        .bento-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+            grid-auto-rows: 220px;
+            gap: 1.5rem;
             margin-bottom: 4rem;
+            grid-auto-flow: dense;
         }
 
-        .square-card {
+        .bento-card {
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
             border-radius: 32px;
             padding: 2.5rem;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
-            aspect-ratio: 1 / 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            cursor: pointer;
         }
 
-        .square-card:hover {
-            transform: scale(1.02);
+        .bento-card:hover {
+            transform: translateY(-5px);
             border-color: var(--primary);
             background: rgba(37, 99, 235, 0.05);
         }
 
+        /* Tetris Spans */
+        .span-2x2 { grid-column: span 2; grid-row: span 2; }
+        .span-1x1 { grid-column: span 1; grid-row: span 1; }
+        .span-1x2 { grid-column: span 1; grid-row: span 2; }
+        .span-2x1 { grid-column: span 2; grid-row: span 1; }
+
         .card-icon {
-            width: 64px;
-            height: 64px;
+            width: 56px;
+            height: 56px;
             background: rgba(37, 99, 235, 0.1);
-            border-radius: 20px;
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             color: var(--primary);
             margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
         }
 
-        .square-card h2 {
-            font-size: 1.6rem;
+        .bento-card h2 {
+            font-size: 1.5rem;
             font-weight: 850;
             letter-spacing: -0.5px;
-            margin: 0 0 1rem;
+            margin: 0 0 0.5rem;
             color: var(--text-color);
         }
 
-        .square-card p {
+        .bento-card p.summary {
             font-size: 1rem;
             color: var(--text-muted);
             line-height: 1.5;
             margin: 0;
-            max-width: 240px;
+            max-width: 100%;
+        }
+
+        /* Collapsible Details */
+        .card-details {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 0;
+        }
+
+        .bento-card.active {
+            grid-row: span 3;
+            background: rgba(37, 99, 235, 0.08);
+            border-color: var(--primary);
+        }
+
+        .bento-card.active .card-details {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            color: var(--text-color);
+            align-items: flex-start;
+        }
+
+        .detail-item i {
+            color: var(--primary);
+            margin-top: 0.25rem;
+        }
+
+        .expand-hint {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .bento-card:hover .expand-hint {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .bento-card.active .expand-hint {
+            transform: rotate(45deg);
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
         }
 
         .cta-box {
@@ -198,15 +222,16 @@
         }
 
         @media (max-width: 1024px) {
-            .lifecycle-overview { grid-template-columns: repeat(2, 1fr); }
-            .square-grid { grid-template-columns: repeat(2, 1fr); }
+            .bento-grid { grid-template-columns: repeat(2, 1fr); grid-auto-rows: auto; }
+            .span-2x2, .span-1x2, .span-2x1 { grid-column: span 2; grid-row: auto; }
             .hero-title { font-size: 3.5rem; }
+            .bento-card.active { grid-row: auto; }
         }
 
         @media (max-width: 768px) {
-            .container { padding: 0 2rem 8rem; }
-            .square-grid { grid-template-columns: 1fr; }
-            .square-card { aspect-ratio: auto; min-height: 300px; }
+            .container { padding: 0 1.5rem 8rem; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-card { padding: 2rem; }
         }
     </style>
 </head>
@@ -217,82 +242,86 @@
     <section class="subpage-hero">
         <div class="hero-wrapper">
             <div class="hero-content">
-                <h1 class="hero-title">Simple <span class="highlight">Proof</span></h1>
-                <p class="hero-subtitle">Stop worrying about noisy neighbours. Noise Mate makes it easy to see, save, and share evidence in a few simple taps.</p>
+                <h1 class="hero-title">Step-by-Step <span class="highlight">Proof</span></h1>
+                <p class="hero-subtitle">Noise Mate makes it simple to see, save, and share evidence in a few taps. Click a card to see how it works.</p>
             </div>
         </div>
     </section>
 
     <main class="container">
-        <!-- 1. The Simple Flow -->
-        <div class="lifecycle-overview">
-            <div class="lifecycle-step">
-                <div class="step-pill">
-                    <i class="fas fa-eye"></i>
-                    <span>See It</span>
-                </div>
-            </div>
-            <div class="lifecycle-step">
-                <div class="step-pill">
-                    <i class="fas fa-microphone"></i>
-                    <span>Record It</span>
-                </div>
-            </div>
-            <div class="lifecycle-step">
-                <div class="step-pill">
-                    <i class="fas fa-file-pdf"></i>
-                    <span>Report It</span>
-                </div>
-            </div>
-            <div class="lifecycle-step">
-                <div class="step-pill">
-                    <i class="fas fa-paper-plane"></i>
-                    <span>Send It</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="square-grid">
-            <!-- Card 1 -->
-            <div class="square-card">
+        <div class="bento-grid">
+            <!-- Card 1: See the Noise (Large) -->
+            <div class="bento-card span-2x2" onclick="toggleCard(this)">
+                <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
                 <h2>See the Noise</h2>
-                <p>Watch decibels go up and down live on your screen as the noise happens.</p>
+                <p class="summary">Watch decibels go up and down live on your screen as the noise happens.</p>
+                <div class="card-details">
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Live visual meter tracking every sound peak.</span></div>
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Automatic decibel averaging for better accuracy.</span></div>
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Time-stamped charts showing the exact duration.</span></div>
+                </div>
             </div>
 
-            <!-- Card 2 -->
-            <div class="square-card">
+            <!-- Card 2: Clear Proof (Small) -->
+            <div class="bento-card span-1x1" onclick="toggleCard(this)">
+                <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-music"></i></div>
                 <h2>Clear Proof</h2>
-                <p>Record high-quality audio so everyone can hear exactly what you hear.</p>
+                <p class="summary">Record high-quality audio proof.</p>
+                <div class="card-details">
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Crystal clear auditory recording.</span></div>
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Background noise reduction.</span></div>
+                </div>
             </div>
 
-            <!-- Card 3 -->
-            <div class="square-card">
+            <!-- Card 3: Add Photos (Tall) -->
+            <div class="bento-card span-1x2" onclick="toggleCard(this)">
+                <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-camera"></i></div>
                 <h2>Add Photos</h2>
-                <p>Take pictures of the problem to show councils and landlords the full story.</p>
+                <p class="summary">Take pictures to show the full story.</p>
+                <div class="card-details">
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Direct camera integration.</span></div>
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Attach images to specific logs.</span></div>
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Visual evidence of the source.</span></div>
+                </div>
             </div>
 
-            <!-- Card 4 -->
-            <div class="square-card">
+            <!-- Card 4: Smart Folders (Wide) -->
+            <div class="bento-card span-2x1" onclick="toggleCard(this)">
+                <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-folder-closed"></i></div>
                 <h2>Smart Folders</h2>
-                <p>Keep your recordings neatly organized into folders for different cases.</p>
+                <p class="summary">Keep your recordings neatly organized into folders for different cases.</p>
+                <div class="card-details">
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Group logs by neighbour or noise type.</span></div>
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Search through case history easily.</span></div>
+                </div>
             </div>
 
-            <!-- Card 5 -->
-            <div class="square-card">
+            <!-- Card 5: Ready Reports (Small) -->
+            <div class="bento-card span-1x1" onclick="toggleCard(this)">
+                <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-file-check"></i></div>
                 <h2>Ready Reports</h2>
-                <p>Create a professional PDF report from your phone in just a few seconds.</p>
+                <p class="summary">Professional PDF reports in seconds.</p>
+                <div class="card-details">
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Council-standard formatting.</span></div>
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Automatic audit trails.</span></div>
+                </div>
             </div>
 
-            <!-- Card 6 -->
-            <div class="square-card">
+            <!-- Card 6: Safe Sharing (Wide) -->
+            <div class="bento-card span-2x1" onclick="toggleCard(this)">
+                <div class="expand-hint"><i class="fas fa-plus"></i></div>
                 <div class="card-icon"><i class="fas fa-lock"></i></div>
                 <h2>Safe Sharing</h2>
-                <p>Send a private, PIN-protected link to authorities securely and easily.</p>
+                <p class="summary">Send a private, PIN-protected link to authorities securely. Click for details.</p>
+                <div class="card-details">
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Encrypted evidence portal access.</span></div>
+                    <div class="detail-item"><i class="fas fa-check"></i> <span>Revoke access at any time.</span></div>
+                </div>
             </div>
         </div>
 
@@ -355,5 +384,23 @@
 
     <script src="js/navigation.js"></script>
     <script src="js/common.js"></script>
+    <script>
+        function toggleCard(element) {
+            const isActive = element.classList.contains('active');
+            
+            // Close all cards for focus (optional)
+            document.querySelectorAll('.bento-card').forEach(card => {
+                card.classList.remove('active');
+            });
+
+            if (!isActive) {
+                element.classList.add('active');
+                // Smooth scroll to card if needed
+                setTimeout(() => {
+                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 300);
+            }
+        }
+    </script>
 </body>
 </html>
