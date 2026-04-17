@@ -31,7 +31,7 @@
     --text-color: #0F172A;
     --text-muted: #64748B;
     --border-color: #E2E8F0;
-    --shadow-color: rgba(0, 0, 0, 0.05);
+    --shadow-color: transparent;
     --card-bg: #FFFFFF;
     --overlay-light: rgba(255, 255, 255, 0.5);
     --overlay-dark: rgba(0, 0, 0, 0.05);
@@ -39,7 +39,12 @@
     /* --- Glassmorphism Tokens --- */
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(22, 76, 120, 0.12);
-    --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+    --glass-shadow: none;
+
+    /* --- Layout Tokens --- */
+    --site-width: 1400px;
+    --site-padding: 4rem;
+    --site-padding-mobile: 1.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,7 +65,7 @@
         --text-color: #F8FAFC;
         --text-muted: rgba(248, 250, 252, 0.65);
         --border-color: rgba(255, 255, 255, 0.1);
-        --shadow-color: rgba(0, 0, 0, 0.4);
+        --shadow-color: transparent;
         --card-bg: #1A202C;
         --overlay-light: rgba(255, 255, 255, 0.07);
         --overlay-dark: rgba(0, 0, 0, 0.25);
@@ -68,7 +73,7 @@
         /* --- Glassmorphism Tokens --- */
         --glass-bg: rgba(30, 41, 59, 0.4);
         --glass-border: rgba(37, 99, 235, 0.15);
-        --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        --glass-shadow: none;
     }
 }
 
@@ -83,13 +88,13 @@
     --text-color: #F8FAFC;
     --text-muted: rgba(248, 250, 252, 0.65);
     --border-color: rgba(255, 255, 255, 0.1);
-    --shadow-color: rgba(0, 0, 0, 0.4);
+    --shadow-color: transparent;
     --card-bg: #1A202C;
     --overlay-light: rgba(255, 255, 255, 0.07);
     --overlay-dark: rgba(0, 0, 0, 0.25);
     --glass-bg: rgba(30, 41, 59, 0.4);
     --glass-border: rgba(37, 99, 235, 0.15);
-    --glass-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    --glass-shadow: none;
 }
 
 /* ============================================================
