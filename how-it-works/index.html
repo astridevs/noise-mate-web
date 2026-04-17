@@ -17,313 +17,259 @@
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--text-color);
-            line-height: 1.5;
+            line-height: 1.7;
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* --- COMPACT HERO --- */
+        /* Subpage Hero Style */
         .subpage-hero {
-            padding: 6rem 4rem 1rem;
+            padding: 12rem 4rem 4rem;
             text-align: center;
         }
 
         .hero-title {
-            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            font-size: 5.5rem;
             font-weight: 900;
-            line-height: 1;
-            margin-bottom: 1rem;
+            line-height: 0.95;
+            margin-bottom: 2rem;
             color: var(--text-color);
-            letter-spacing: -1.5px;
+            letter-spacing: -2px;
         }
 
         .hero-subtitle {
-            font-size: 1rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
             font-weight: 500;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
+        /* Content Layout */
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 2rem 4rem;
+            padding: 0 4rem 8rem;
             position: relative;
             z-index: 2;
         }
 
-        /* --- JOURNEY TRACK (COMPACT) --- */
-        .journey-track {
-            margin: 3rem 0 4rem;
+        .legal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            padding: 4rem;
             position: relative;
+            overflow: hidden;
         }
 
-        .track-rail {
+        /* Top gradient accent line */
+        .legal-content::before {
+            content: '';
             position: absolute;
-            top: 35px;
-            left: 50px;
-            right: 50px;
-            height: 2px;
-            background: var(--glass-border);
-            z-index: 1;
+            top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
 
-        .steps-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+        /* Flow Diagram Styling */
+        .flow-diagram-container {
+            margin: 4rem 0 6rem;
+            padding: 3rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed var(--glass-border);
+            border-radius: 24px;
+            text-align: center;
+        }
+
+        .flow-diagram-title {
+            font-size: 1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            margin-bottom: 3rem;
+            display: block;
+        }
+
+        .flow-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             gap: 1rem;
+            max-width: 1000px;
+            margin: 0 auto;
             position: relative;
-            z-index: 2;
         }
 
-        .step-block {
+        .flow-node {
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            gap: 1rem;
+            z-index: 2;
+            width: 120px;
         }
 
-        .step-circle {
+        .node-icon {
             width: 70px;
             height: 70px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: var(--bg-primary);
             border: 2px solid var(--glass-border);
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-
-        .step-block:hover .step-circle {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-            background: var(--bg-secondary);
-        }
-
-        .step-num {
-            position: absolute;
-            top: -6px;
-            left: -6px;
-            width: 22px;
-            height: 22px;
-            background: var(--primary);
-            color: white;
-            border-radius: 6px;
-            font-size: 0.65rem;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .step-label {
-            font-size: 0.85rem;
-            font-weight: 800;
+            font-size: 1.6rem;
             color: var(--text-color);
-            margin-bottom: 0.15rem;
+            transition: all 0.3s ease;
         }
 
-        .step-desc {
-            font-size: 0.75rem;
+        .flow-node:hover .node-icon {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .node-label {
+            font-size: 0.85rem;
+            font-weight: 700;
             color: var(--text-muted);
-            line-height: 1.3;
-            max-width: 150px;
         }
 
-        /* --- COMPACT & INFORMATIVE BENTO GRID --- */
-        .grid-header {
-            margin-bottom: 2rem;
-            padding-left: 0.5rem;
-            border-left: 3px solid var(--primary);
+        .flow-arrow {
+            flex-grow: 1;
+            height: 2px;
+            background: var(--glass-border);
+            position: relative;
+            margin-top: -30px;
         }
 
-        .grid-header h2 {
-            font-size: 1.5rem;
+        .flow-arrow::after {
+            content: '\f105';
+            font-family: 'Font Awesome 6 Free';
             font-weight: 900;
-            margin: 0;
+            position: absolute;
+            right: -5px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--glass-border);
         }
 
-        .bento-grid {
+        /* Deep Dive Content Styling */
+        .section-tag {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-auto-rows: 180px;
-            gap: 1rem;
-            grid-auto-flow: dense;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            margin: 4rem 0;
         }
 
-        .card {
-            background: var(--glass-bg);
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 1.25rem;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
         }
 
-        .card:hover {
+        .feature-card:hover {
             border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.02);
-            transform: translateY(-3px);
+            transform: translateY(-5px);
         }
 
-        /* Bento Geometry */
-        .large { grid-column: span 2; grid-row: span 2; }
-        .tall { grid-column: span 1; grid-row: span 2; }
-        .wide { grid-column: span 2; grid-row: span 1; }
-
-        .card-icon {
-            width: 40px;
-            height: 40px;
-            background: rgba(37, 99, 235, 0.08);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .card h3 {
-            font-size: 1.2rem;
+        .feature-card h3 {
+            font-size: 1.5rem;
             font-weight: 850;
-            margin: 0 0 0.5rem;
-        }
-
-        .card p.summary {
-            font-size: 0.85rem;
-            color: var(--text-muted);
             margin-bottom: 1rem;
-            line-height: 1.4;
-        }
-
-        /* Information Density Features */
-        .feature-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
-            margin-top: auto;
-        }
-
-        .card.wide .feature-list, .card:not(.large):not(.tall) .feature-list {
-            grid-template-columns: 1fr;
-        }
-
-        .feat-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
             color: var(--text-color);
-            background: rgba(37, 99, 235, 0.05);
-            padding: 0.35rem 0.6rem;
-            border-radius: 8px;
-            border: 1px solid var(--glass-border);
         }
 
-        .feat-item i {
-            color: var(--primary);
-            font-size: 0.7rem;
+        .feature-card p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 0;
         }
 
-        .details {
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-            transition: all 0.5s ease;
-            margin-top: 0;
-        }
-
-        .card.active {
-            grid-row: span 3;
-            background: var(--bg-secondary);
-        }
-
-        .card.active .details {
-            max-height: 500px;
-            opacity: 1;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .detail-item {
+        .forensic-callout {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border: 1px solid var(--primary);
+            border-radius: 24px;
+            padding: 3rem;
+            margin: 6rem 0;
             display: flex;
-            gap: 0.5rem;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .callout-icon {
+            font-size: 3rem;
+            color: var(--primary);
+        }
+
+        .callout-content h4 {
+            font-size: 1.4rem;
+            font-weight: 900;
             margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .expand-btn {
-            position: absolute;
-            top: 1.25rem;
-            right: 1.25rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            transition: transform 0.3s ease;
-        }
-
-        .card.active .expand-btn {
-            transform: rotate(45deg);
         }
 
         .cta-box {
-            margin-top: 4rem;
+            margin-top: 6rem;
             text-align: center;
-            padding: 3rem;
+            padding: 4rem;
             background: var(--bg-secondary);
             border: 1px solid var(--border-color);
-            border-radius: 24px;
+            border-radius: 32px;
         }
 
         .cta-box h3 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 800;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
         }
 
         .cta-box a {
             display: inline-block;
-            margin-top: 1rem;
-            padding: 0.75rem 2rem;
+            margin-top: 1.5rem;
+            padding: 1rem 2.5rem;
             background: var(--primary);
             color: white;
             text-decoration: none;
             border-radius: 100px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
         }
 
+        .cta-box a:hover {
+            transform: translateY(-2px);
+            background: var(--secondary);
+        }
+
         @media (max-width: 1024px) {
-            .steps-container { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-            .track-rail { display: none; }
-            .bento-grid { grid-template-columns: repeat(2, 1fr); }
-            .large, .tall, .wide { grid-column: span 2; grid-row: auto; }
-            .feature-list { grid-template-columns: 1fr; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .flow-wrapper { flex-wrap: wrap; justify-content: center; }
+            .flow-arrow { display: none; }
         }
 
         @media (max-width: 768px) {
-            .container { padding: 0 1rem 4rem; }
-            .steps-container { grid-template-columns: 1fr; }
-            .bento-grid { grid-template-columns: 1fr; }
-            .hero-title { font-size: 2.2rem; }
+            .hero-title { font-size: 3.5rem; }
+            .legal-content { padding: 3rem 2rem; border-radius: 24px; }
+            .forensic-callout { flex-direction: column; text-align: center; gap: 1.5rem; }
         }
     </style>
 </head>
@@ -332,131 +278,130 @@
     <div id="global-nav"></div>
 
     <section class="subpage-hero">
-        <h1 class="hero-title">Step-by-Step <span class="highlight">Proof</span></h1>
-        <p class="hero-subtitle">Simple, professional evidence collection. No jargon, just results.</p>
+        <div class="hero-wrapper">
+            <div class="hero-content">
+                <h1 class="hero-title">Inside the <span class="highlight">Engine</span></h1>
+                <p class="hero-subtitle">Noise Mate isn't just a recorder; it's a forensic evidence laboratory in your pocket. Here is how we turn sound into proof.</p>
+            </div>
+        </div>
     </section>
 
     <main class="container">
-        <!-- Journey Track -->
-        <section class="journey-track">
-            <div class="track-rail"></div>
-            <div class="steps-container">
-                <a href="#monitor" class="step-block">
-                    <div class="step-circle">
-                        <div class="step-num">1</div>
-                        <i class="fas fa-eye"></i>
+        <div class="legal-content">
+            
+            <!-- Flow Diagram -->
+            <div class="flow-diagram-container">
+                <span class="flow-diagram-title">The Evidence Lifecycle</span>
+                <div class="flow-wrapper">
+                    <div class="flow-node">
+                        <div class="node-icon"><i class="fa-solid fa-microphone-lines"></i></div>
+                        <span class="node-label">Capture</span>
                     </div>
-                    <div class="step-label">See It</div>
-                    <div class="step-desc">Watch the noise meter track live peaks.</div>
-                </a>
-                <a href="#capture" class="step-block">
-                    <div class="step-circle">
-                        <div class="step-num">2</div>
-                        <i class="fas fa-microphone"></i>
+                    <div class="flow-arrow"></div>
+                    <div class="flow-node">
+                        <div class="node-icon"><i class="fa-solid fa-bolt"></i></div>
+                        <span class="node-label">Analyze</span>
                     </div>
-                    <div class="step-label">Record It</div>
-                    <div class="step-desc">Capture high-quality audio proof.</div>
-                </a>
-                <a href="#report" class="step-block">
-                    <div class="step-circle">
-                        <div class="step-num">3</div>
-                        <i class="fas fa-file-pdf"></i>
+                    <div class="flow-arrow"></div>
+                    <div class="flow-node">
+                        <div class="node-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                        <span class="node-label">Secure</span>
                     </div>
-                    <div class="step-label">Report It</div>
-                    <div class="step-desc">Generate a professional PDF report.</div>
-                </a>
-                <a href="#share" class="step-block">
-                    <div class="step-circle">
-                        <div class="step-num">4</div>
-                        <i class="fas fa-paper-plane"></i>
+                    <div class="flow-arrow"></div>
+                    <div class="flow-node">
+                        <div class="node-icon"><i class="fa-solid fa-file-signature"></i></div>
+                        <span class="node-label">Certify</span>
                     </div>
-                    <div class="step-label">Send It</div>
-                    <div class="step-desc">Share securely with authorities.</div>
-                </a>
-            </div>
-        </section>
-
-        <!-- Compact Details -->
-        <div class="grid-header">
-            <h2>The Details</h2>
-        </div>
-
-        <div class="bento-grid">
-            <div id="monitor" class="card large" onclick="toggleCard(this)">
-                <i class="fas fa-plus expand-btn"></i>
-                <div class="card-icon"><i class="fas fa-chart-bar"></i></div>
-                <h3>See the Noise</h3>
-                <p class="summary">Visual meter tracking for every peak. It acts as a real-time monitor for legal peace.</p>
-                <div class="feature-list">
-                    <div class="feat-item"><i class="fas fa-bolt"></i> Live dB(A) Meter</div>
-                    <div class="feat-item"><i class="fas fa-history"></i> Rolling Charts</div>
-                    <div class="feat-item"><i class="fas fa-microchip"></i> Auto-Baselines</div>
-                    <div class="feat-item"><i class="fas fa-clock"></i> Peak Stamping</div>
-                </div>
-                <div class="details">
-                    <div class="detail-item"><i class="fas fa-check"></i> <span>Professional calibration for accuracy.</span></div>
-                    <div class="detail-item"><i class="fas fa-check"></i> <span>Exportable time-series data.</span></div>
+                    <div class="flow-arrow"></div>
+                    <div class="flow-node">
+                        <div class="node-icon"><i class="fa-solid fa-share-nodes"></i></div>
+                        <span class="node-label">Share</span>
+                    </div>
                 </div>
             </div>
 
-            <div id="capture" class="card" onclick="toggleCard(this)">
-                <i class="fas fa-plus expand-btn"></i>
-                <div class="card-icon"><i class="fas fa-music"></i></div>
-                <h3>Clear Proof</h3>
-                <p class="summary">High-fidelity audio capturing every nuance.</p>
-                <div class="feature-list">
-                    <div class="feat-item"><i class="fas fa-waveform"></i> HD Audio</div>
-                    <div class="feat-item"><i class="fas fa-filter"></i> Voice Filter</div>
+            <!-- Detailed Steps -->
+            <div class="guide-steps">
+                
+                <span class="section-tag">Step 1: Forensic Monitoring</span>
+                <h2>Zero-Latency Calibration</h2>
+                <p>When you launch the Noise Mate meter, our engine begins sampling external audio at 44.1kHz. We don't just measure volume; we track <strong>Peak Decibels (dB)</strong>, <strong>Average Levels</strong>, and <strong>Frequency Oscillations</strong>. This allows the app to distinguish between a passing car and a persistent nuisance noise.</p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Peak Detection</h3>
+                        <p>Our algorithm catches instantaneous noise spikes that standard recorders miss, ensuring 'thumping' or 'impact' noises are recorded at their true intensity.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Smart Thresholds</h3>
+                        <p>Set custom sensitivity levels. Noise Mate can run in the background and only trigger recording when the noise exceeds your predefined 'Nuisance Threshold'.</p>
+                    </div>
+                </div>
+
+                <span class="section-tag">Step 2: Authenticated Documentation</span>
+                <h2>Binding Truth to Metadata</h2>
+                <p>A recording alone is weak evidence. Noise Mate builds a "Case File" by binding your recordings to high-integrity metadata that landlords and councils trust. Every log captures the exact second of the event, duration, and environmental tags.</p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>GPS Benchmarking</h3>
+                        <p>Every recording is stamped with verified GPS coordinates, proving the incident occurred at your registered address or a specific location of interest.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Taxonomy Tagging</h3>
+                        <p>Categorize events instantly: construction, pets, parties, or DIY. This tagging allows for "Pattern Recognition" reports that show authorities when and how often disturbances occur.</p>
+                    </div>
+                </div>
+
+                <!-- Forensic Callout -->
+                <div class="forensic-callout">
+                    <div class="callout-icon"><i class="fa-solid fa-microchip"></i></div>
+                    <div class="callout-content">
+                        <h4>Local-First Forensic Vault</h4>
+                        <p>We believe your data is yours alone. Noise Mate uses a Local-First architecture. All decibel processing and audio capture happen on your device's raw hardware. No audio is transmitted to our servers unless you explicitly enable Cloud Sync for your Case Reports.</p>
+                    </div>
+                </div>
+
+                <span class="section-tag">Step 3: The Share Link Portal</span>
+                <h2>Professional Evidence Distribution</h2>
+                <p>Once your evidence is collected, Noise Mate simplifies discovery. Instead of sending bulky email attachments, subscribers can generate a <strong>Secure Share Link</strong>. This allows third parties to interact with your data in a controlled environment.</p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>2-Factor Access (Ultimate)</h3>
+                        <p>Recipients must enter a unique Case ID and a 6-digit PIN. You maintain full control: revoke access or set expiry dates on any evidence link at any time.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Interactive Web Viewer</h3>
+                        <p>Landlords and Officers can play audio, view intensity charts, and audit your photo evidence directly in their browser without installing the app.</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="card tall" onclick="toggleCard(this)">
-                <i class="fas fa-plus expand-btn"></i>
-                <div class="card-icon"><i class="fas fa-camera"></i></div>
-                <h3>Visual Context</h3>
-                <p class="summary">Attach photos for a full forensic picture of the disturbance.</p>
-                <div class="feature-list">
-                    <div class="feat-item"><i class="fas fa-location-dot"></i> GPS Verified</div>
-                    <div class="feat-item"><i class="fas fa-calendar"></i> Date Stamped</div>
-                    <div class="feat-item"><i class="fas fa-image"></i> Multi-Photo</div>
+            <!-- Pro Tips -->
+            <div style="margin-top: 6rem; padding-top: 4rem; border-top: 1px solid var(--glass-border);">
+                <h3 style="font-size: 1.8rem; font-weight: 850; margin-bottom: 2rem; color: var(--text-color);">Expert Capture Tips</h3>
+                <div class="feature-grid">
+                    <div class="feature-card" style="background: transparent;">
+                        <h3>Clear Path</h3>
+                        <p style="font-size: 0.95rem;">Ensure your phone microphone is not obstructed by a case or your hand. Position the device 1-2 meters away from the source wall for best surface-noise capture.</p>
+                    </div>
+                    <div class="feature-card" style="background: transparent;">
+                        <h3>Reference Point</h3>
+                        <p style="font-size: 0.95rem;">Capture a 30-second 'Ambient Log' when it's quiet. This provides a baseline for council officers to see just how much louder the nuisance noise is compared to your normal environment.</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="card wide" onclick="toggleCard(this)">
-                <i class="fas fa-plus expand-btn"></i>
-                <div class="card-icon"><i class="fas fa-folder-closed"></i></div>
-                <h3>Smart Folder</h3>
-                <p class="summary">Automatically group logs into case files for management.</p>
-                <div class="feature-list">
-                    <div class="feat-item"><i class="fas fa-brain"></i> Case Logic</div>
-                    <div class="feat-item"><i class="fas fa-magnifying-glass"></i> Smart Search</div>
-                </div>
-            </div>
-
-            <div id="report" class="card" onclick="toggleCard(this)">
-                <i class="fas fa-plus expand-btn"></i>
-                <div class="card-icon"><i class="fas fa-file-check"></i></div>
-                <h3>Ready PDF</h3>
-                <p class="summary">Compliant reports ready for any complaint.</p>
-                <div class="feature-list">
-                    <div class="feat-item"><i class="fas fa-shield"></i> Legal-Ready</div>
-                    <div class="feat-item"><i class="fas fa-list-check"></i> Audit Trail</div>
-                </div>
-            </div>
-
-            <div id="share" class="card wide" onclick="toggleCard(this)">
-                <i class="fas fa-plus expand-btn"></i>
-                <div class="card-icon"><i class="fas fa-lock"></i></div>
-                <h3>Safe Sharing</h3>
-                <p class="summary">Private portals with PIN-protected links for authorities.</p>
-                <div class="feature-list">
-                    <div class="feat-item"><i class="fas fa-key"></i> PIN Access</div>
-                    <div class="feat-item"><i class="fas fa-eye-slash"></i> View Log</div>
-                </div>
+            <div class="cta-box">
+                <h3>Start Your Legal Timeline Today</h3>
+                <p>Don't just complain. Provide authenticated evidence with Noise Mate.</p>
+                <a href="../index.html">Download Now </a>
             </div>
         </div>
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
@@ -473,7 +418,6 @@
                 <h4>Product</h4>
                 <ul>
                     <li><a href="../index.html#features">Features</a></li>
-                    <li><a href="../how-it-works/">How it Works</a></li>
                     <li><a href="../index.html#pricing">Pricing</a></li>
                     <li><a href="../index.html#about">About</a></li>
                     <li><a href="../blog/index.html">Community</a></li>
@@ -508,17 +452,5 @@
 
     <script src="../js/navigation.js"></script>
     <script src="../js/common.js"></script>
-    <script>
-        function toggleCard(element) {
-            const isActive = element.classList.contains('active');
-            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-            if (!isActive) {
-                element.classList.add('active');
-                setTimeout(() => {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 300);
-            }
-        }
-    </script>
 </body>
 </html>

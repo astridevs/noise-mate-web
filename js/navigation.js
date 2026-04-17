@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Detect page depth to adjust relative paths
     const path = window.location.pathname;
     const isSubDir = path.includes('/blog/') || path.includes('/contact/') || path.includes('/help/') || 
-                     path.includes('/compliance/') || path.includes('/privacy/') || path.includes('/terms/') ||
-                     path.includes('/how-it-works/');
+                     path.includes('/compliance/') || path.includes('/privacy/') || path.includes('/terms/');
     const base = isSubDir ? '../' : '';
 
     const isHomePage = (path.endsWith('index.html') || path.endsWith('/')) && !isSubDir;
@@ -28,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="nav-container">
                 <ul class="nav-menu">
                     ${desktopMenu}
-                    <li><a href="${base}how-it-works/">How it Works</a></li>
+                    <li><a href="${base}how-it-works.html">How it Works</a></li>
                     <li><a href="${base}blog.html">Community</a></li>
                     <li><a href="${base}contact.html">Contact</a></li>
                 </ul>
@@ -36,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </nav>
 
         <div class="floating-pill" id="floatingPill">
-            ${pillMenu}<a href="${base}how-it-works/">How it Works</a><a href="${base}blog.html">Community</a><a href="${base}contact.html">Contact</a>
+            ${pillMenu}<a href="${base}how-it-works.html">How it Works</a><a href="${base}blog.html">Community</a><a href="${base}contact.html">Contact</a>
         </div>
     `;
 
