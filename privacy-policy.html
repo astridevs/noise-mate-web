@@ -17,50 +17,38 @@
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Subpage Hero Style */
         .subpage-hero {
-            padding: 12rem 4rem 6rem;
+            padding: 12rem 4rem 4rem;
             text-align: center;
         }
 
         .hero-title {
             font-size: 5.5rem;
-            font-weight: 950;
+            font-weight: 900;
             line-height: 0.95;
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
         }
 
-
-        .hero-launch-badge {
-            display: inline-block;
-            color: var(--primary);
-            padding: 0.65rem 1.25rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border: 2px solid var(--primary);
-        }
-
         .hero-subtitle {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
-            line-height: 1.6;
             font-weight: 500;
-            max-width: 700px;
             margin: 0 auto;
         }
 
-        /* Legal Content Layout */
+        .hero-subtitle i {
+            color: var(--primary);
+        }
+
+        /* Premium Legal Content Layout */
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -69,19 +57,38 @@
             z-index: 2;
         }
 
+        /* Glassmorphism card implementation */
         .legal-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 40px;
-            padding: 4rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 32px;
+            padding: 5rem 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top gradient accent line */
+        .legal-content::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
 
         .legal-content h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 850;
-            margin: 3rem 0 1.5rem;
-            color: var(--primary);
+            margin: 4.5rem 0 1.5rem;
             letter-spacing: -0.5px;
+            /* Gradient text effect */
+            background: linear-gradient(135deg, var(--text-color) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
         }
 
         .legal-content h2:first-of-type {
@@ -89,43 +96,70 @@
         }
 
         .legal-content h3 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 800;
-            margin: 2rem 0 1rem;
+            margin: 2.5rem 0 1rem;
             color: var(--text-color);
         }
 
         .legal-content p {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
+            margin-bottom: 1.75rem;
+            line-height: 1.85;
         }
 
         .legal-content ul, .legal-content ol {
-            margin-bottom: 2rem;
-            padding-left: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding-left: 0;
             color: var(--text-muted);
+            list-style: none; /* Custom list styling */
         }
 
         .legal-content li {
-            margin-bottom: 0.75rem;
-            padding-left: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+            padding-left: 2rem;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .legal-content li:hover {
+            transform: translateX(4px);
+        }
+
+        /* Custom Bullet points matching the accent */
+        .legal-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.8rem;
+            line-height: 1;
+            top: -2px;
+        }
+        
+        .legal-content li strong {
+            color: var(--text-color);
         }
 
         .legal-content a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 700;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
         }
 
         .legal-content a:hover {
-            text-decoration: underline;
+            border-bottom-color: var(--primary);
         }
 
         @media (max-width: 768px) {
             .hero-title { font-size: 3.5rem; }
-            .legal-content { padding: 2rem; border-radius: 24px; }
+            .legal-content { padding: 3rem 2rem; border-radius: 24px; }
+            .hero-subtitle { font-size: 0.85rem; padding: 0.6rem 1.25rem; }
         }
     </style>
 </head>
@@ -137,7 +171,10 @@
         <div class="hero-wrapper">
             <div class="hero-content">
                 <h1 class="hero-title">Privacy <span class="highlight">Compliance</span></h1>
-                <p class="hero-subtitle">Last updated: April 17, 2026</p>
+                <div class="hero-subtitle">
+                    <i class="fa-regular fa-clock"></i>
+                    Last updated: April 17, 2026 at 18:01 (BST/GMT+1)
+                </div>
             </div>
         </div>
     </section>
@@ -145,7 +182,7 @@
     <main class="container">
         <div class="legal-content">
             <h2>Introduction</h2>
-            <p><strong>Noise Mate ("we", "our", or "us")</strong> is deeply committed to protecting your privacy and security. We operate under a "Privacy-First" and "Local-First" methodology. This comprehensive Privacy Policy explicitly details exactly what information we collect, why we collect it, our legal justifications for doing so, and your extensive rights under applicable global data protection laws, including the <strong>General Data Protection Regulation (GDPR / UK GDPR)</strong> and the <strong>California Consumer Privacy Act (CCPA) / California Privacy Rights Act (CPRA)</strong>.</p>
+            <p><strong>Noise Mate</strong>, fully developed and maintained by <strong><a href="https://astridevs.co.uk" target="_blank" style="text-decoration: underline; color: inherit;">Astri Devs Ltd</a></strong> ("we", "our", or "us"), is deeply committed to protecting your privacy and security. We operate under a "Privacy-First" and "Local-First" methodology. This comprehensive Privacy Policy explicitly details exactly what information we collect, why we collect it, our legal justifications for doing so, and your extensive rights under applicable global data protection laws, including the <strong>General Data Protection Regulation (GDPR / UK GDPR)</strong> and the <strong>California Consumer Privacy Act (CCPA) / California Privacy Rights Act (CPRA)</strong>.</p>
 
             <h2>1. Comprehensive Declaration of Information We Collect and Why</h2>
             <p>To operate Noise Mate effectively and legally assist you in gathering noise dispute evidence, we must collect certain categories of data. We pledge to only collect what is strictly necessary.</p>
@@ -173,16 +210,18 @@
 
             <h3>1.4 Transaction and Subscription Data</h3>
             <ul>
-                <li><strong>What we collect:</strong> Subscription status, purchase history, and entitlement tiers. (Note: We use <strong>RevenueCat</strong>, Google Play, and Apple App Store for payments. <strong>We never see or store your raw credit card numbers or billing addresses</strong>).</li>
-                <li><strong>Why we collect it:</strong> To unlock premium app features.</li>
+                <li><strong>What we collect:</strong> Subscription status, purchase history, and entitlement tiers.</li>
+                <li><strong>How payments are handled:</strong> All payments are processed securely and directly by the Google Play Store (Android) or Apple App Store (iOS). We use a third-party subscription management platform solely to verify your entitlements. <strong>We never receive, see, or store your raw payment card details or billing address.</strong> These remain exclusively between you and the respective app store.</li>
+                <li><strong>Why we collect it:</strong> To unlock premium app features when you purchase a subscription.</li>
                 <li><strong>Legal Basis (GDPR):</strong> Contractual necessity.</li>
             </ul>
 
             <h3>1.5 Technical Telemetry and Usage Diagnostics</h3>
             <ul>
-                <li><strong>What we collect:</strong> Device type, Operating System version, crash trace logs, and anonymous app usage patterns.</li>
-                <li><strong>Why we collect it:</strong> To identify and fix app crashes quickly via <strong>Sentry</strong>, and to understand aggregated user behaviour via <strong>Mixpanel</strong>. We never link your sensitive audio to these analytics.</li>
-                <li><strong>Legal Basis (GDPR):</strong> Legitimate Interest.</li>
+                <li><strong>What we collect:</strong> Device type, Operating System version, anonymised crash trace logs, and anonymous app usage patterns.</li>
+                <li><strong>Crash Reporting:</strong> When an unexpected error occurs and you have enabled error reporting in Settings, an anonymised crash report is automatically sent to our internal support inbox at <a href="mailto:support@astridevs.co.uk">support@astridevs.co.uk</a>. These reports contain only device type, OS version, and a technical stack trace. They never include your name, email, audio recordings, or any personal data.</li>
+                <li><strong>Usage Analytics:</strong> If you have enabled analytics in Settings, anonymised feature usage events (e.g. which app screens you navigate to) are recorded and sent to our internal team. These events contain no personally identifiable information and are never linked to your audio recordings or identity.</li>
+                <li><strong>Legal Basis (GDPR):</strong> Legitimate Interest. Both crash reporting and usage analytics can be individually disabled at any time in Settings → Permissions &amp; Privacy.</li>
             </ul>
 
             <h2>2. Mobile Platform Specifics</h2>
@@ -193,29 +232,81 @@
             <h3>2.2 iOS (App Store) Privacy Manifest</h3>
             <p>In accordance with Apple's Privacy Manifest requirements, our data collection is categorised as follows:</p>
             <ul>
-                <li><strong>Data Not Linked to You:</strong> Diagnostics and usage data (via Sentry/Mixpanel) are anonymised and not linked to your identity.</li>
+                <li><strong>Data Not Linked to You:</strong> Diagnostics and usage data are anonymised and not linked to your identity. These are reported to our internal support team only.</li>
                 <li><strong>Data Linked to You:</strong> Contact information and User IDs (if you create an account) are used for app functionality and account management.</li>
                 <li><strong>Sensitive Data:</strong> Audio and Location data are classified as "User Content" and are never used for tracking purposes across other companies' apps or websites.</li>
             </ul>
 
-            <h2>3. Data Storage, Security, and "Local-First" Architecture</h2>
-            <p>Noise Mate is built to protect you from data breaches using a <strong>"Local-First"</strong> security model:</p>
+            <h2>3. Data Storage, Security, and Storage Modes</h2>
+            <p>Noise Mate gives you direct control over where your data lives.</p>
+            <h3>3.1 Cloud Sync (Default)</h3>
+            <p>By default, all noise logs, audio recordings, and metadata are saved to your device <strong>and</strong> automatically synchronised with our secure backend infrastructure. This allows you to access your logs across multiple devices, restore data when you change phones, and benefit from an encrypted off-device backup. Cloud storage uses industry-standard <strong>AES-256 encryption</strong> in transit and at rest. Our staff cannot freely browse, listen to, or extract your private audio recordings without explicit legal authority.</p>
+            <h3>3.2 Local-Only Mode (Privacy Option)</h3>
+            <p>If you prefer greater privacy and do not want your data stored on any external server, you may switch to <strong>Local-Only Mode</strong> in <em>Settings → Permissions &amp; Privacy → Data Storage</em>. When enabled:</p>
             <ul>
-                <li><strong>Local-Only Mode:</strong> By default, all noise logs, audio recordings, and metadata are stored in an encrypted database on your device (Hive). On the Free tier, this data never leaves your device's local storage.</li>
-                <li><strong>Encrypted Cloud Sync:</strong> For users with a premium subscription, you may optionally enable "Cloud Sync." This synchronises your data with our secure backend (Supabase) using industry-standard <strong>AES-256 encryption</strong> in transit and at rest.</li>
-                <li><strong>Access Control:</strong> We aim for end-to-end encryption principles. Our staff cannot freely browse, listen to, or extract your private audio recordings.</li>
+                <li>All existing cloud-stored noise logs and audio recordings are <strong>permanently and irreversibly deleted</strong> from our servers.</li>
+                <li>All new recordings are saved only to your device's local storage, organised in a dedicated <code>NoiseMate/Logs/&lt;your-account&gt;/</code> folder.</li>
+                <li>No new logs are transmitted to any external server.</li>
+                <li>Logs will not appear if you switch phones or reinstall the app. They exist only on the original device.</li>
+                <li>Each log is tied to your account ID so that if another user signs into the same device, they cannot see your logs. Your logs reappear when you sign back in.</li>
+                <li>When you switch back to Cloud Sync, all local logs and audio files will be automatically re-uploaded to your account.</li>
             </ul>
 
-            <h2>3. How We Share Information (We Do Not Sell Your Data)</h2>
+            <h2>4. Evidence Share Links &amp; Online Report Viewer</h2>
+            <p>Noise Mate allows you to generate a <strong>secure shared evidence report</strong> accessible at <strong>noisemate.co.uk/reports</strong>. This section explains how it works, who it's for, and your legal responsibilities.</p>
+
+            <h3>4.1 What Share Links Are</h3>
+            <ul>
+                <li>When you share evidence, the recipient receives a <strong>Case ID</strong> and a <strong>unique auto-generated password</strong> to access the report at <strong>noisemate.co.uk/reports</strong>.</li>
+                <li>Both credentials are required. Neither alone is sufficient. Only someone you have personally given both pieces of information to can access the report.</li>
+                <li>The recipient (a landlord, solicitor, local council, environmental health officer, or any third party) does <strong>not</strong> need a Noise Mate account to view it.</li>
+                <li>The online viewer displays decibel readings, timestamps, audio playback (if enabled), photos, and incident location for the linked evidence only.</li>
+            </ul>
+
+            <h3>4.2 Who This Feature Is For</h3>
+            <p>Share links are designed for:</p>
+            <ul>
+                <li><strong>Legal and dispute proceedings:</strong> Providing evidence to solicitors, mediators, or courts.</li>
+                <li><strong>Authority reporting:</strong> Sending evidence to environmental health officers, housing associations, or the police in support of a formal complaint.</li>
+                <li><strong>Landlord correspondence:</strong> Providing documented evidence without emailing large files.</li>
+            </ul>
+            <p>This feature is available on the <strong>Ultimate</strong> subscription tier.</p>
+
+            <h3>4.3 Data Visible to Recipients</h3>
+            <p>Recipients can see: incident titles, timestamps, decibel levels, duration, audio playback, attached photos, location names, and the incident date range. The recipient can also see your <strong>name and email address</strong> as attribution for the evidence report. They cannot see your account ID, password, precise GPS coordinates, subscription tier, or any other account metadata.</p>
+
+            <h3>4.4 Security &amp; Control</h3>
+            <ul>
+                <li><strong>Two-Factor Access:</strong> Recipients must supply both a Case ID and a unique password. Possessing only one does not grant access.</li>
+                <li><strong>Password Uniqueness:</strong> Each password is auto-generated and unique per share event. It cannot be reused across different cases.</li>
+                <li><strong>Expiry:</strong> You may set an expiry period (e.g., 7 or 30 days). After expiry both credentials are permanently deactivated.</li>
+                <li><strong>Revocation:</strong> You can revoke access instantly from the Share Link Manager in the app. Revocation is immediate and permanent.</li>
+                <li><strong>Watermarking:</strong> Report packs carry a Noise Mate watermark by default to preserve evidential integrity.</li>
+                <li><strong>Tier Downgrade:</strong> If your subscription drops below Ultimate, active shared reports are automatically paused until you re-upgrade.</li>
+            </ul>
+
+            <h3>4.5 Your Legal Responsibility as the Initiator</h3>
+            <p>When you create and distribute a share link, <strong>you act as the data controller</strong> for that sharing action under GDPR and equivalent laws:</p>
+            <ul>
+                <li>You are responsible for ensuring a lawful basis for sharing (e.g., legitimate interest in resolving a noise dispute).</li>
+                <li>Audio may capture the voices of third parties. In the UK, recordings made in your own home for personal dispute evidence are generally permissible. Verify local laws before sharing in other jurisdictions.</li>
+                <li>Noise Mate acts as a <strong>data processor</strong> in this context, executing your explicit instruction. We do not monitor share link content or recipient identity.</li>
+            </ul>
+
+            <h3>4.6 Cloud Dependency</h3>
+            <p><strong>Note for Local-Only Mode users:</strong> The online report viewer at noisemate.co.uk/reports requires Cloud Sync to be enabled, as the evidence must be accessible from our servers when a recipient views the report. Shared report access is unavailable while in Local-Only Mode.</p>
+
+            <h2>5. How We Share Information (We Do Not Sell Your Data)</h2>
             <p><strong>We emphatically do not sell, rent, or trade your personal data or audio recordings to third-party advertisers or data brokers.</strong></p>
             <p>We only share data in the following highly restricted situations:</p>
             <ul>
-                <li><strong>Essential Service Providers:</strong> With infrastructure providers (Supabase, RevenueCat, Sentry) who process data strictly on our behalf under strict Data Processing Agreements (DPAs).</li>
+                <li><strong>Essential Service Providers:</strong> With infrastructure providers (Supabase for secure databases and cloud storage) who process data strictly on our behalf under strict Data Processing Agreements (DPAs).</li>
+                <li><strong>Internal Error Reporting:</strong> Anonymised crash reports may be sent to our internal team at <a href="mailto:support@astridevs.co.uk">support@astridevs.co.uk</a> for debugging. No personal data is included.</li>
                 <li><strong>Legal Compliance:</strong> If required by law, subpoena, or a formal court order, we may disclose specific data to law enforcement.</li>
                 <li><strong>Your Explicit Action:</strong> When you explicitly choose to generate and share a PDF/CSV report of your evidence with your landlord, lawyer, or local council.</li>
             </ul>
 
-            <h2>4. Your Rights Under GDPR (UK/EU Residents)</h2>
+            <h2>5. Your Rights Under GDPR (UK/EU Residents)</h2>
             <p>If you are located in the European Economic Area (EEA) or the UK, you are protected by the GDPR. As the data controller of your own recordings, you are guaranteed:</p>
             <ul>
                 <li><strong>Right to Access:</strong> You can browse, view, and export all your data directly within the Noise Mate app.</li>
@@ -224,10 +315,10 @@
                 <li><strong>Right to Restrict or Object:</strong> You can disable Cloud Sync, Location Services, or microphone permissions at the OS level at any time.</li>
             </ul>
 
-            <h2>5. Privacy Notice for California Residents (CCPA / CPRA)</h2>
+            <h2>6. Privacy Notice for California Residents (CCPA / CPRA)</h2>
             <p>This section applies specifically to users residing in California, aiming to comply with the California Consumer Privacy Act (CCPA) and the California Privacy Rights Act (CPRA).</p>
 
-            <h3>5.1 Categories of Personal Information Collected</h3>
+            <h3>6.1 Categories of Personal Information Collected</h3>
             <p>In the past 12 months, we have collected the following statutory categories of personal information:</p>
             <ul>
                 <li><strong>Category A (Identifiers):</strong> Name, email address, unique account IDs.</li>
@@ -236,10 +327,10 @@
                 <li><strong>Category G (Geolocation Data):</strong> GPS coordinates (when explicitly authorised by the user).</li>
             </ul>
 
-            <h3>5.2 Disclosure of "Sale" or "Sharing"</h3>
+            <h3>6.2 Disclosure of "Sale" or "Sharing"</h3>
             <p><strong>We do not sell and have not sold any personal information in the preceding 12 months.</strong> We do not "share" personal information for cross-context behavioural advertising.</p>
 
-            <h3>5.3 Your California Privacy Rights</h3>
+            <h3>6.3 Your California Privacy Rights</h3>
             <ul>
                 <li><strong>Right to Know & Access:</strong> Request the specific pieces and categories of personal information we have collected.</li>
                 <li><strong>Right to Delete:</strong> Request the deletion of your personal information.</li>
@@ -248,21 +339,36 @@
                 <li><strong>Right to Non-Discrimination:</strong> We will not deny you goods or services, or provide a different quality of service for exercising your CCPA rights.</li>
             </ul>
 
-            <h2>6. Data Retention Policy</h2>
+            <h2>7. Global Privacy Regulations (Worldwide Applicability)</h2>
+            <p>We recognise that noise disputes and monitoring cross borders. If you access or use Noise Mate from outside the UK, EU, or California, the following regional guidelines outline your privacy protections in addition to the strict "Local-First" foundational principles of our app.</p>
+
+            <h3>7.1 Australia (Privacy Act 1988)</h3>
+            <p>If you reside in Australia, your data is handled in accordance with the Australian Privacy Principles (APPs). We will not use your personal information for direct marketing without your explicit consent. If you wish to make a complaint about a breach of the APPs, please contact us via our Privacy email. We will respond within 30 days. Your local audio recordings and evidence remain securely stored on your device, preventing unauthorised offshore disclosures.</p>
+
+            <h3>7.2 Canada (PIPEDA)</h3>
+            <p>For Canadian users, we comply with the Personal Information Protection and Electronic Documents Act (PIPEDA). We rely exclusively on meaningful consent as the basis for collecting your data. You may withdraw this consent at any time without penalty by managing your OS permissions or deleting your account. Subscriptions are processed in compliance with modern Canadian e-commerce laws, and any cloud backups you manually initiate are secured with end-to-end encryption in transit.</p>
+
+            <h3>7.3 India (Digital Personal Data Protection Act 2023)</h3>
+            <p>If you are a Data Principal located in India, we act as a Data Fiduciary in compliance with the DPDP Act. We ensure notice and request verifiable consent before processing personal data. You possess the right to grievance redressal and the right to nominate an individual to act on your behalf in the event of incapacity. We categorically do not process personal data of children in a manner that would cause them harm.</p>
+
+            <h3>7.4 Other International Jurisdictions</h3>
+            <p>If you are accessing Noise Mate from other regions (e.g., South America, Asia, Africa), we commit to general overarching principles of internationally recognised data privacy: data minimisation, explicit permission (especially regarding the microphone and GPS), and the absolute non-sale of personal data. When you optionally enable Cloud Sync, your data is securely transferred and processed on world-class encrypted infrastructure. We reserve the right to block access in regions where strict censorship prevents us from offering secure, encrypted tools.</p>
+
+            <h2>8. Data Retention Policy</h2>
             <p>We keep your personal information only as long as necessary to fulfil the purposes outlined in this policy.</p>
             <ul>
                 <li><strong>Local Data:</strong> Remains on your phone until you delete the app or clear the app's cache.</li>
-                <li><strong>Cloud Data:</strong> If you use our cloud sync, your data remains until you manually delete standard logs or initiate an Account Deletion. If inactive for over 24 months, we may securely purge your account data.</li>
+                <li><strong>Cloud Data:</strong> If you use cloud sync, your data remains until you manually delete standard logs, switch to Local-Only Mode, or initiate an Account Deletion. If you are inactive for over <strong>18 months</strong>, we will send you a <strong>30-day advance warning email</strong> before we securely purge your account data. You can prevent purging by signing back into the app within that 30-day window.</li>
             </ul>
 
-            <h2>7. Children's Privacy</h2>
+            <h2>9. Children's Privacy</h2>
             <p>Noise Mate is a professional documentation tool meant for resolving disputes, and is exclusively intended for individuals aged 18 and older. We do not knowingly collect personal information from minors.</p>
 
-            <h2>8. Changes to This Privacy Policy</h2>
+            <h2>10. Changes to This Privacy Policy</h2>
             <p>We may routinely update this Privacy Policy to ensure compliance with emerging international privacy laws. We will notify you of any material changes via a prominent in-app notification before the changes take effect.</p>
 
-            <h2>9. Contact Us & Exercise Your Rights</h2>
-            <p>If you have any questions, require a copy of your data, or wish to exercise your data rights under GDPR or CCPA, please contact our Data Protection representative directly:</p>
+            <h2>11. Contact Us & Exercise Your Rights</h2>
+            <p>If you have any questions, require a copy of your data, or wish to exercise your data rights under GDPR, CCPA, or other regional regulations, please contact our Data Protection representative directly:</p>
             <p>📧 <a href="mailto:privacy@noisemate.co.uk">privacy@noisemate.co.uk</a></p>
         </div>
     </main>

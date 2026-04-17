@@ -17,50 +17,38 @@
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--text-color);
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* Subpage Hero Style */
         .subpage-hero {
-            padding: 12rem 4rem 6rem;
+            padding: 12rem 4rem 4rem;
             text-align: center;
         }
 
         .hero-title {
             font-size: 5.5rem;
-            font-weight: 950;
+            font-weight: 900;
             line-height: 0.95;
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
         }
 
-
-        .hero-launch-badge {
-            display: inline-block;
-            color: var(--primary);
-            padding: 0.65rem 1.25rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 2.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border: 2px solid var(--primary);
-        }
-
         .hero-subtitle {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             color: var(--text-muted);
-            line-height: 1.6;
             font-weight: 500;
-            max-width: 700px;
             margin: 0 auto;
         }
 
-        /* Legal Content Layout */
+        .hero-subtitle i {
+            color: var(--primary);
+        }
+
+        /* Premium Legal Content Layout */
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -69,19 +57,37 @@
             z-index: 2;
         }
 
+        /* Glassmorphism card */
         .legal-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 40px;
-            padding: 4rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
+            border-radius: 32px;
+            padding: 5rem 6rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Top gradient accent line */
+        .legal-content::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 6px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
         }
 
         .legal-content h2 {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 850;
-            margin: 3rem 0 1.5rem;
-            color: var(--primary);
+            margin: 4.5rem 0 1.5rem;
             letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--text-color) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
         }
 
         .legal-content h2:first-of-type {
@@ -89,58 +95,92 @@
         }
 
         .legal-content h3 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 800;
-            margin: 2rem 0 1rem;
+            margin: 2.5rem 0 1rem;
             color: var(--text-color);
         }
 
         .legal-content p {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            line-height: 1.8;
+            margin-bottom: 1.75rem;
+            line-height: 1.85;
         }
 
         .legal-content ul, .legal-content ol {
-            margin-bottom: 2rem;
-            padding-left: 1.5rem;
+            margin-bottom: 2.5rem;
+            padding-left: 0;
             color: var(--text-muted);
+            list-style: none;
         }
 
         .legal-content li {
-            margin-bottom: 0.75rem;
-            padding-left: 0.5rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+            padding-left: 2rem;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+
+        .legal-content li:hover {
+            transform: translateX(4px);
+        }
+
+        /* Custom bullet dots */
+        .legal-content li::before {
+            content: '\2022';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.8rem;
+            line-height: 1;
+            top: -2px;
+        }
+
+        .legal-content li strong {
+            color: var(--text-color);
         }
 
         .legal-content a {
             color: var(--primary);
             text-decoration: none;
             font-weight: 700;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
         }
 
         .legal-content a:hover {
-            text-decoration: underline;
+            border-bottom-color: var(--primary);
         }
 
-        /* Essential Notice Block */
+        /* Important notice box */
         .essential-notice {
-            background: rgba(37, 99, 235, 0.05);
+            background: rgba(37, 99, 235, 0.07);
             border: 1px solid var(--primary);
             border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 3rem;
+            padding: 2.5rem;
+            margin-bottom: 3.5rem;
         }
 
         .essential-notice h2 {
-            margin-top: 0;
-            font-size: 1.4rem;
+            margin-top: 0 !important;
+            -webkit-text-fill-color: unset;
+            background: none;
             color: var(--primary);
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        .essential-notice p {
+            margin-bottom: 0;
         }
 
         @media (max-width: 768px) {
             .hero-title { font-size: 3.5rem; }
-            .legal-content { padding: 2rem; border-radius: 24px; }
+            .legal-content { padding: 3rem 2rem; border-radius: 24px; }
+            .hero-subtitle { font-size: 1rem; }
         }
     </style>
 </head>
@@ -152,71 +192,255 @@
         <div class="hero-wrapper">
             <div class="hero-content">
                 <h1 class="hero-title">Terms of <span class="highlight">Service</span></h1>
-                <p class="hero-subtitle">Last updated: February 12, 2026</p>
+                <div class="hero-subtitle">
+                    <i class="fa-regular fa-clock"></i>
+                    Last updated: April 17, 2026 at 20:08 (BST/GMT+1)
+                </div>
             </div>
         </div>
     </section>
 
     <main class="container">
         <div class="legal-content">
+
             <div class="essential-notice">
-                <h2>1. NO LEGAL ADVICE OR PROFESSIONAL SERVICES</h2>
-                <p>Noise Mate is a documentation tool for personal information purposes only. It is NOT a consumer legal service, professional acoustic measurement service, or licensed law enforcement tool. We do not provide legal advice, and the information, reports, and data generated by the app should not be considered expert testimony or certified legal evidence. You should consult with a qualified legal professional for advice regarding any noise dispute or legal proceeding.</p>
+                <h2>Important Notice: Not Legal Advice</h2>
+                <p>Noise Mate is a personal documentation tool only. It is <strong>not</strong> a consumer legal service, professional acoustic consultancy, or certified law enforcement instrument. Nothing generated by this app constitutes expert testimony, certified audio evidence, or qualified legal opinion. Always consult a qualified solicitor or legal professional before commencing any dispute or legal proceedings.</p>
             </div>
 
+            <h2>1. About Noise Mate and Astri Devs Ltd</h2>
+            <p>Noise Mate (the "Service" or "App") is developed, owned, and maintained by <strong>Astri Devs Ltd</strong> ("we", "us", "our"), a company registered in England and Wales. Our registered support address is <a href="mailto:support@astridevs.co.uk">support@astridevs.co.uk</a>. By using the Service, you enter into a binding agreement with Astri Devs Ltd under these Terms of Service ("Terms").</p>
+            <p>The Service is made available through the Apple App Store and Google Play Store, and supplementary web services at <strong>noisemate.co.uk</strong>.</p>
+
             <h2>2. Acceptance of Terms</h2>
-            <p>By accessing and using Noise Mate, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
-
-            <h2>3. License and Use</h2>
-            <p>Noise Mate grants you a limited, non-exclusive, non-transferable license to use this Service for your personal, non-commercial use. You may not modify, copy, distribute, transmit, or create derivative works from the Service without express written permission.</p>
-
-            <h2>4. User Responsibilities</h2>
-            <p>You agree to:</p>
+            <p>By downloading, installing, registering for, or using Noise Mate in any way, you confirm that:</p>
             <ul>
-                <li>Use the Service only for personal, non-commercial purposes</li>
-                <li>Maintain the confidentiality of your account credentials</li>
-                <li>Not engage in any form of harassment or abuse</li>
-                <li>Use the Service in accordance with these Terms</li>
-                <li>Not attempt to gain unauthorized access to the Service</li>
+                <li>You have read, understood, and agree to be bound by these Terms in full.</li>
+                <li>You are at least 18 years of age.</li>
+                <li>You have the legal capacity to enter into a binding contract in your jurisdiction.</li>
+                <li>You accept our <a href="/privacy">Privacy Policy</a>, which is incorporated by reference into these Terms.</li>
+            </ul>
+            <p>If you do not agree to any part of these Terms, you must immediately stop using the Service and uninstall the App.</p>
+
+            <h2>3. Eligibility and Age Requirements</h2>
+            <p>Noise Mate is intended exclusively for users aged <strong>18 and over</strong>. The app involves recording audio, managing legal evidence, and submitting complaints to authorities, all of which require adult legal capacity. We do not knowingly allow minors to create accounts. If we become aware that a user is under 18, we will immediately suspend and delete their account and all associated data.</p>
+
+            <h2>4. Account Registration and Security</h2>
+            <h3>4.1 Creating an Account</h3>
+            <p>Access to the full Service requires you to create an account using a valid email address and a secure password. You agree to provide accurate, complete, and current information during registration, and to keep it updated.</p>
+            <h3>4.2 Account Security</h3>
+            <ul>
+                <li>You are solely responsible for maintaining the confidentiality of your login credentials.</li>
+                <li>You must immediately notify us at <a href="mailto:support@astridevs.co.uk">support@astridevs.co.uk</a> if you suspect any unauthorised access to your account.</li>
+                <li>We will never ask for your password via email, telephone, or in-app message.</li>
+                <li>You are responsible for all activity that occurs under your account credentials.</li>
+            </ul>
+            <h3>4.3 One Account Per User</h3>
+            <p>You may not create or operate multiple accounts. Each account is personal to you and is non-transferable.</p>
+
+            <h2>5. Subscription Plans and Payments</h2>
+            <h3>5.1 Available Tiers</h3>
+            <p>Noise Mate is available under the following subscription tiers. Features vary by plan:</p>
+            <ul>
+                <li><strong>Free:</strong> Core logging, limited recordings per month, local-only on-device storage.</li>
+                <li><strong>Plus:</strong> Extended recording time, cloud sync, export features, and priority access to new features.</li>
+                <li><strong>Ultimate:</strong> All Plus features, unlimited recordings, evidence share links (online report viewer at noisemate.co.uk/reports), AI analysis, multi-address tracking, and priority support.</li>
+            </ul>
+            <h3>5.2 How Payments Work</h3>
+            <p>All payments are processed securely and exclusively by the <strong>Apple App Store</strong> (iOS) or <strong>Google Play Store</strong> (Android) on your behalf. We use a third-party subscription management platform to verify your entitlement status only. We never receive, store, or process your raw payment card details or billing address. Those remain exclusively between you and the respective app store.</p>
+            <h3>5.3 Billing and Renewal</h3>
+            <ul>
+                <li>Subscriptions are billed in advance on a monthly or annual basis, depending on your selected plan.</li>
+                <li>Subscriptions automatically renew at the end of each billing period unless cancelled at least 24 hours before the renewal date.</li>
+                <li>You can manage and cancel your subscription at any time from your device's App Store or Google Play subscription settings, or from within the Noise Mate app under Account Settings.</li>
+            </ul>
+            <h3>5.4 Refunds</h3>
+            <p>All purchases are subject to the refund policy of the Apple App Store or Google Play Store, not Astri Devs Ltd. We are unable to issue refunds directly. If you believe you are entitled to a refund, please contact the relevant app store directly.</p>
+            <h3>5.5 Free Trials</h3>
+            <p>Where a free trial is offered, it will be clearly described at the point of purchase. Your subscription will automatically begin billing at the end of any free trial period unless you cancel before it ends.</p>
+            <h3>5.6 Price Changes</h3>
+            <p>We reserve the right to change subscription pricing. You will be notified in advance of any price increase and will have the opportunity to cancel before the new pricing takes effect.</p>
+
+            <h2>6. Data Storage Modes</h2>
+            <p>Noise Mate offers two distinct data storage modes. You can switch between them at any time in <strong>Settings &gt; Permissions &amp; Privacy &gt; Data Storage</strong>.</p>
+            <h3>6.1 Cloud Sync (Default)</h3>
+            <p>All noise logs, audio recordings, and metadata are saved on your device and simultaneously synchronised to our secure, encrypted backend infrastructure. This enables multi-device access and off-device backup. Cloud storage uses AES-256 encryption in transit and at rest.</p>
+            <h3>6.2 Local-Only Mode (Privacy Option)</h3>
+            <p>Available to all users who prefer greater privacy. When you enable Local-Only Mode:</p>
+            <ul>
+                <li>All existing cloud-stored noise logs and audio recordings are <strong>permanently and irreversibly deleted</strong> from our servers. This action cannot be undone.</li>
+                <li>All future recordings are stored exclusively in a dedicated folder on your device (<code>NoiseMate/Logs/&lt;your-account&gt;/</code>).</li>
+                <li>Logs will not be visible if you switch phones, reinstall the app, or sign in on another device.</li>
+                <li>Evidence share links (Section 8) are unavailable while in Local-Only Mode.</li>
+                <li>When you switch back to Cloud Sync, all local logs and audio files are re-uploaded automatically.</li>
+            </ul>
+            <p>By switching to Local-Only Mode, you acknowledge and accept full responsibility for safeguarding your data on your device. We are not liable for loss of locally stored data due to device loss, damage, theft, or failure.</p>
+
+            <h2>7. Your Content: Ownership and Licence</h2>
+            <h3>7.1 You Own Your Data</h3>
+            <p>You retain full ownership of all audio recordings, noise logs, notes, photos, and other content you create within the Service ("Your Content"). Nothing in these Terms transfers any ownership of Your Content to Astri Devs Ltd.</p>
+            <h3>7.2 Licence Grant to Us</h3>
+            <p>By using the Service, you grant Astri Devs Ltd a limited, non-exclusive, worldwide, royalty-free licence to store, process, and transmit Your Content solely for the purpose of providing and improving the Service to you. This licence terminates when you delete your account or specific content.</p>
+            <h3>7.3 Accuracy of Your Content</h3>
+            <p>You are solely responsible for the accuracy and integrity of all content you submit. We do not verify, validate, or certify the accuracy of any noise readings, metadata, or notes you record.</p>
+
+            <h2>8. Evidence Share Links and Online Report Viewer</h2>
+            <p>Ultimate-tier subscribers may generate secure, shareable evidence reports accessible at <strong>noisemate.co.uk/reports</strong>. This section governs the legal terms applying to this feature.</p>
+            <h3>8.1 How It Works</h3>
+            <ul>
+                <li>When you share a report, the recipient receives a <strong>Case ID</strong> and a <strong>unique auto-generated password</strong>. Both credentials are required to access the report.</li>
+                <li>The online viewer displays: decibel readings, timestamps, audio playback (if you permit it), photos, location names, incident date range, and your <strong>name and email address</strong> as report attribution.</li>
+                <li>Recipients do not need a Noise Mate account to view the report.</li>
+            </ul>
+            <h3>8.2 Your Legal Responsibilities When Sharing</h3>
+            <p>When you generate and distribute a share link, <strong>you become the data controller</strong> for that sharing action under the UK GDPR and equivalent privacy laws. You accept full legal responsibility for:</p>
+            <ul>
+                <li>Having a lawful basis for sharing your evidence with the specific recipient (e.g., legitimate interest in resolving a noise dispute).</li>
+                <li>Ensuring you are legally entitled to share any audio recordings, including recordings that may capture the voices of third parties such as neighbours. In the UK, recordings made on your own premises for personal dispute purposes are generally permissible, but you must verify applicable laws in your jurisdiction before sharing.</li>
+                <li>Not sharing evidence report links for any purpose other than legitimate noise dispute resolution, legal proceedings, or communication with relevant authorities.</li>
+                <li>Keeping the Case ID and password secure. You must not distribute them to parties who are not intended recipients of the report.</li>
+            </ul>
+            <h3>8.3 We Are the Data Processor</h3>
+            <p>In the context of evidence share links, Astri Devs Ltd acts as a <strong>data processor</strong>, storing and serving your content on your explicit instruction. We do not monitor the content of shared reports, the identity of recipients, or the purpose for which links are used. Astri Devs Ltd bears no liability for how you use or distribute share links.</p>
+            <h3>8.4 Security Controls</h3>
+            <ul>
+                <li><strong>Two-credential access:</strong> Case ID and a unique password are both required. Neither alone is sufficient.</li>
+                <li><strong>Expiry:</strong> You may set an expiry period. After expiry, both credentials are permanently deactivated.</li>
+                <li><strong>Revocation:</strong> You can revoke access instantly at any time from the Share Link Manager in the app.</li>
+                <li><strong>Watermarking:</strong> Downloaded report packs carry a Noise Mate watermark by default to preserve evidential integrity.</li>
+                <li><strong>Tier Downgrade:</strong> If your subscription drops below Ultimate tier, all active share links are automatically paused and become inaccessible to recipients until you re-upgrade.</li>
+            </ul>
+            <h3>8.5 No Guarantee of Evidential Weight</h3>
+            <p>Noise Mate does not guarantee that any report or share link will be accepted as evidence by any court, landlord, authority, or third party. The evidential weight of any report is determined solely by the receiving party and the applicable legal standards in your jurisdiction.</p>
+
+            <h2>9. Acceptable Use Policy</h2>
+            <p>You agree to use Noise Mate only for its intended purpose: documenting, measuring, and reporting legitimate noise disturbances. You will not use the Service to:</p>
+            <ul>
+                <li>Record conversations or audio without the knowledge or lawful consent of participants, where such consent is required by law in your jurisdiction.</li>
+                <li>Harass, intimidate, defame, or make false claims against any individual, business, or organisation.</li>
+                <li>Fabricate, alter, or misrepresent noise readings, timestamps, or any other data in your reports.</li>
+                <li>Attempt to reverse-engineer, decompile, or extract the source code of the App.</li>
+                <li>Sell, transfer, sublicence, or share your account access with any third party.</li>
+                <li>Use the Service for any commercial purpose without written consent from Astri Devs Ltd.</li>
+                <li>Submit reports or share links to authorities based on knowingly false or fabricated evidence.</li>
+                <li>Attempt to interfere with, disrupt, or gain unauthorised access to our servers, infrastructure, or other users' accounts.</li>
+                <li>Use automated scripts, bots, or scraping tools to access or extract data from the Service.</li>
             </ul>
 
-            <h2>5. Trusted Reporting</h2>
-            <p>Noise Mate provides tools for documenting noise incidents to help you communicate with:</p>
+            <h2>10. Prohibited Content</h2>
+            <p>You must not upload, record, store, or share content through Noise Mate that:</p>
             <ul>
-                <li>Landlords and property managers</li>
-                <li>Housing associations</li>
-                <li>Local authority departments</li>
-                <li>Community support organizations</li>
+                <li>Violates any applicable law or regulation.</li>
+                <li>Contains hate speech targeting individuals or groups based on protected characteristics.</li>
+                <li>Is sexually explicit, obscene, or pornographic.</li>
+                <li>Constitutes an invasion of another person's privacy beyond what is lawfully permissible for dispute documentation.</li>
+                <li>Infringes any third party's intellectual property rights.</li>
             </ul>
-            <p>Users are responsible for ensuring their use of the Service is appropriate for their specific situation.</p>
 
-            <h2>6. Disclaimer of Warranties</h2>
-            <p>The Service is provided "AS IS" without warranties of any kind, express or implied. We make no warranties regarding accuracy, reliability, or availability of the Service or its contents.</p>
+            <h2>11. Intellectual Property</h2>
+            <h3>11.1 Our Property</h3>
+            <p>All aspects of the Service including its design, source code, branding, user interface, algorithms, and feature set are the exclusive intellectual property of Astri Devs Ltd and are protected by UK and international intellectual property law. Nothing in these Terms grants you any rights to our intellectual property except the limited use licence described in Section 3.</p>
+            <h3>11.2 Feedback</h3>
+            <p>If you submit ideas, suggestions, or feedback about the Service to us, you grant Astri Devs Ltd an irrevocable, royalty-free, worldwide licence to use, implement, and commercialise that feedback without any obligation or compensation to you.</p>
 
-            <h2>7. Limitation of Liability</h2>
-            <p>In no event shall Noise Mate be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Service, regardless of the cause.</p>
+            <h2>12. Third-Party Services</h2>
+            <p>The Service integrates with or depends on the following categories of third-party services:</p>
+            <ul>
+                <li><strong>App Stores:</strong> Apple App Store and Google Play Store for distribution and payment processing.</li>
+                <li><strong>Cloud Infrastructure:</strong> Supabase for secure database storage and file hosting.</li>
+                <li><strong>Internal Diagnostics:</strong> Anonymised crash reports and usage analytics are sent to our internal team at <a href="mailto:support@astridevs.co.uk">support@astridevs.co.uk</a> for debugging and quality improvement.</li>
+                <li><strong>Operating System Services:</strong> iOS and Android system APIs for microphone access, location services, and notifications.</li>
+            </ul>
+            <p>Your use of third-party services is governed by those services' own terms and privacy policies. Astri Devs Ltd is not responsible for the availability, accuracy, or content of any third-party services.</p>
 
-            <h2>8. Subscription and Payment</h2>
-            <p>Noise Mate offers various subscription tiers. All payments are processed securely. Subscription charges will be billed according to your selected plan. You may cancel your subscription at any time through your account settings.</p>
+            <h2>13. Disclaimer of Warranties</h2>
+            <p>To the fullest extent permitted by applicable law, Noise Mate and all related services are provided <strong>"AS IS"</strong> and <strong>"AS AVAILABLE"</strong> without warranties of any kind, whether express or implied, including but not limited to:</p>
+            <ul>
+                <li>Warranties of merchantability or fitness for a particular purpose.</li>
+                <li>Warranties that the Service will be uninterrupted, error-free, or free from viruses or other harmful components.</li>
+                <li>Warranties that noise readings are scientifically calibrated or will be accepted by any authority or court as expert evidence.</li>
+                <li>Warranties that audio recordings made via the App microphone will be of sufficient quality for legal proceedings.</li>
+            </ul>
 
-            <h2>9. Intellectual Property</h2>
-            <p>All content, features, and functionality of the Service are owned by Noise Mate, its licensors, or other providers of such material and are protected by law.</p>
+            <h2>14. Limitation of Liability</h2>
+            <p>To the maximum extent permitted by applicable law, Astri Devs Ltd, its directors, employees, and agents shall not be liable for:</p>
+            <ul>
+                <li>Any indirect, incidental, special, exemplary, consequential, or punitive damages, however caused.</li>
+                <li>Loss of data, loss of profits, loss of business, or loss of goodwill.</li>
+                <li>Failure of any report or share link to be accepted as evidence by any court, landlord, or authority.</li>
+                <li>Data loss in Local-Only Mode due to device failure, loss, or theft.</li>
+                <li>Interruption to Service availability due to maintenance, updates, or force majeure events.</li>
+                <li>Actions taken by third parties who receive your share links or report exports.</li>
+            </ul>
+            <p>Our total aggregate liability to you for any claim arising out of or in connection with these Terms shall not exceed the total subscription fees you have paid to Astri Devs Ltd in the 12 months preceding the claim.</p>
+            <p><strong>Nothing in these Terms limits or excludes our liability for death or personal injury caused by our negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be excluded by English law.</strong></p>
 
-            <h2>10. User Content</h2>
-            <p>You retain all rights to your noise recordings and data. By using the Service, you grant Noise Mate a license to use, store, and process your content to provide the Service and generate reports.</p>
+            <h2>15. Indemnification</h2>
+            <p>You agree to defend, indemnify, and hold harmless Astri Devs Ltd and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising from or in connection with:</p>
+            <ul>
+                <li>Your breach of these Terms.</li>
+                <li>Your use or misuse of the Service.</li>
+                <li>Your violation of any third party's rights, including privacy, data protection, or intellectual property rights.</li>
+                <li>Any claim arising from a share link or report you distribute to a third party.</li>
+                <li>Recordings you make using the Service that violate applicable laws on recording consent in your jurisdiction.</li>
+            </ul>
 
-            <h2>11. Termination</h2>
-            <p>We reserve the right to terminate your account and access to the Service at any time, with or without cause, with or without notice.</p>
+            <h2>16. Account Suspension and Termination</h2>
+            <h3>16.1 Our Right to Suspend or Terminate</h3>
+            <p>We reserve the right to suspend or permanently terminate your account and your access to the Service at any time, with or without notice, if we reasonably believe you have:</p>
+            <ul>
+                <li>Breached any provision of these Terms.</li>
+                <li>Engaged in activity that may harm other users, third parties, or our reputation.</li>
+                <li>Used the Service in a way that exposes us to legal liability.</li>
+                <li>Failed to pay any subscription fees.</li>
+            </ul>
+            <h3>16.2 Your Right to Terminate</h3>
+            <p>You may terminate your account at any time via <strong>Settings &gt; Account &gt; Delete Account</strong> in the App. Upon account deletion:</p>
+            <ul>
+                <li>All your personal data, noise logs, audio recordings, account details, and cloud-stored files will be permanently and irreversibly deleted from our servers.</li>
+                <li>Active share links will be immediately and permanently deactivated.</li>
+                <li>No refunds will be issued for any remaining subscription period.</li>
+            </ul>
+            <h3>16.3 Effect of Termination</h3>
+            <p>Termination does not affect any rights or obligations arising before the termination date. Sections 7.1, 8.2, 11, 13, 14, 15, 18, and 19 survive termination.</p>
 
-            <h2>12. Changes to Terms</h2>
-            <p>Noise Mate reserves the right to modify these Terms of Service at any time. Continued use of the Service constitutes acceptance of any changes.</p>
+            <h2>17. Data Retention</h2>
+            <p>Following account deletion, all associated data is purged from our servers within 30 days. For inactive accounts (no sign-in for more than <strong>18 months</strong>), we will send a <strong>30-day advance warning email</strong> before purging the account. You can prevent purging by signing back into the App within that 30-day window. Local data stored in Local-Only Mode is not subject to our retention policy; it persists on your device until you uninstall the App or manually delete it.</p>
 
-            <h2>13. Governing Law</h2>
-            <p>These Terms of Service are governed by and construed in accordance with the laws of England and Wales.</p>
+            <h2>18. Dispute Resolution</h2>
+            <h3>18.1 Informal Resolution First</h3>
+            <p>Before initiating any formal legal proceedings, both parties agree to attempt to resolve any dispute informally by contacting us at <a href="mailto:support@astridevs.co.uk">support@astridevs.co.uk</a>. We will make reasonable efforts to resolve the dispute within 30 days.</p>
+            <h3>18.2 Alternative Dispute Resolution</h3>
+            <p>If informal resolution fails, disputes may be submitted to an approved Alternative Dispute Resolution (ADR) scheme as agreed between the parties. UK consumers also have the right to use the Online Dispute Resolution (ODR) platform provided by the European Commission.</p>
+            <h3>18.3 Jurisdiction</h3>
+            <p>Nothing in this section prevents either party from seeking urgent interim relief from a court.</p>
 
-            <h2>14. Contact Information</h2>
-            <p>If you have questions about these Terms of Service, please contact us at:</p>
-            <p>📧 <a href="mailto:support@noisemate.co.uk">support@noisemate.co.uk</a></p>
+            <h2>19. Governing Law</h2>
+            <p>These Terms are governed by and construed in accordance with the laws of <strong>England and Wales</strong>. Any disputes that cannot be resolved through informal means or ADR shall be subject to the exclusive jurisdiction of the courts of England and Wales.</p>
+            <p>If you are a consumer resident in Scotland or Northern Ireland, you retain the right to bring proceedings in the courts of your home country. If you are a consumer in the EU or EEA, you may also benefit from mandatory consumer protection provisions in your country of residence.</p>
+
+            <h2>20. Changes to These Terms</h2>
+            <p>We may update these Terms of Service from time to time to reflect changes in the law, our business, or the features of our Service. When we make material changes, we will:</p>
+            <ul>
+                <li>Post the updated Terms on this page with a revised "Last Updated" date.</li>
+                <li>Send you a notice via a prominent in-app notification before the changes take effect.</li>
+            </ul>
+            <p>Your continued use of the Service after the effective date of the updated Terms constitutes your acceptance of the changes. If you do not agree, you must stop using the Service.</p>
+
+            <h2>21. Severability</h2>
+            <p>If any provision of these Terms is found by a court of competent jurisdiction to be invalid, illegal, or unenforceable, that provision shall be modified to the minimum extent necessary to make it enforceable, and the remaining provisions shall continue in full force and effect.</p>
+
+            <h2>22. Entire Agreement</h2>
+            <p>These Terms, together with our <a href="/privacy">Privacy Policy</a>, constitute the entire agreement between you and Astri Devs Ltd with respect to the Service and supersede all prior agreements, representations, and understandings of any kind, whether oral or written.</p>
+
+            <h2>23. Contact Information</h2>
+            <p>For questions, concerns, or to exercise any rights under these Terms, please contact us:</p>
+            <ul>
+                <li><strong>General Support:</strong> <a href="mailto:support@astridevs.co.uk">support@astridevs.co.uk</a></li>
+                <li><strong>Privacy Enquiries:</strong> <a href="mailto:privacy@noisemate.co.uk">privacy@noisemate.co.uk</a></li>
+                <li><strong>Developer:</strong> Astri Devs Ltd, England and Wales</li>
+                <li><strong>Website:</strong> <a href="https://astridevs.co.uk" target="_blank">astridevs.co.uk</a></li>
+            </ul>
         </div>
     </main>
 
