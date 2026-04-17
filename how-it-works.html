@@ -54,53 +54,69 @@
             z-index: 2;
         }
 
-        .legal-content {
+        /* Card-based Journey Layout */
+        .step-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+        }
+
+        .step-card {
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 40px;
-            padding: 5rem 4rem;
+            padding: 4rem;
             position: relative;
             overflow: hidden;
-        }
-
-        .legal-content::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 6px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-        }
-
-        /* Simple Steps Styling */
-        .step-list {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
-            gap: 6rem;
+            gap: 2rem;
+            box-shadow: none; /* Strict NO SHADOW policy */
         }
 
-        .step-row {
-            display: flex;
-            gap: 4rem;
-            align-items: center;
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 4px;
+            background: var(--card-accent, var(--primary));
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--card-accent, var(--primary));
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .step-card:hover::before {
+            opacity: 1;
         }
 
         .step-icon-box {
-            width: 100px;
-            height: 100px;
-            background: rgba(37, 99, 235, 0.1);
-            border: 1px solid var(--primary);
-            border-radius: 30px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--card-accent, var(--primary));
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
-            color: var(--primary);
+            font-size: 2rem;
+            color: var(--card-accent, var(--primary));
             flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+
+        .step-card:hover .step-icon-box {
+            transform: scale(1.1) rotate(-5deg);
         }
 
         .step-info h2 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 900;
             margin-bottom: 1rem;
             letter-spacing: -1px;
@@ -108,10 +124,10 @@
         }
 
         .step-info p {
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
-            max-width: 800px;
             margin-bottom: 0;
+            line-height: 1.6;
         }
 
         .step-number {
@@ -119,54 +135,97 @@
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: var(--primary);
+            color: var(--card-accent, var(--primary));
             margin-bottom: 0.5rem;
             display: block;
+            opacity: 0.8;
         }
 
-        .cta-box {
-            margin-top: 8rem;
+        /* Flattened CTA Section */
+        .cta-section {
+            margin-top: 10rem;
             text-align: center;
-            padding: 5rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border);
-            border-radius: 40px;
+            padding: 0 2rem;
         }
 
-        .cta-box h3 {
-            font-size: 2rem;
-            font-weight: 800;
+        .cta-section h3 {
+            font-size: 2.5rem;
+            font-weight: 900;
             margin-bottom: 1rem;
             color: var(--text-color);
+            letter-spacing: -1px;
         }
 
-        .cta-box a {
-            display: inline-block;
-            margin-top: 2rem;
-            padding: 1.2rem 3rem;
+        .cta-section p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* App Store Buttons */
+        .store-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .store-btn {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--text-color);
+            color: var(--bg-primary);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            min-width: 220px;
+            text-align: left;
+            border: 1px solid transparent;
+        }
+
+        .store-btn:hover {
+            transform: translateY(-4px);
             background: var(--primary);
             color: white;
-            text-decoration: none;
-            border-radius: 100px;
+        }
+
+        .store-btn i {
+            font-size: 2rem;
+        }
+
+        .store-btn .btn-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .store-btn .btn-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            opacity: 0.8;
+            text-transform: uppercase;
+        }
+
+        .store-btn .btn-platform {
+            font-size: 1.35rem;
             font-weight: 800;
-            font-size: 1.15rem;
-            transition: all 0.3s ease;
         }
 
-        .cta-box a:hover {
-            transform: translateY(-3px);
-            background: var(--secondary);
-        }
-
-        @media (max-width: 900px) {
-            .step-row { flex-direction: column; text-align: center; gap: 2rem; }
-            .step-info p { margin: 0 auto; }
-            .legal-content { padding: 4rem 2rem; }
+        @media (max-width: 1024px) {
+            .step-grid { grid-template-columns: 1fr; gap: 2rem; }
+            .step-card { padding: 3rem; }
         }
 
         @media (max-width: 768px) {
             .hero-title { font-size: 3.5rem; }
             .container { padding: 0 2rem 6rem; }
+            .subpage-hero { padding: 8rem 2rem 3rem; }
+            .cta-section h3 { font-size: 2rem; }
         }
     </style>
 </head>
@@ -184,63 +243,76 @@
     </section>
 
     <main class="container">
-        <div class="legal-content">
-            <div class="step-list">
-                
-                <!-- Step 1 -->
-                <div class="step-row">
-                    <div class="step-icon-box">
-                        <i class="fa-solid fa-microphone-lines"></i>
-                    </div>
-                    <div class="step-info">
-                        <span class="step-number">Step 01</span>
-                        <h2>Open the App</h2>
-                        <p>Launch the Noise Mate meter to see live decibel levels in your room. It works instantly without any setup required.</p>
-                    </div>
+        <div class="step-grid">
+            <!-- Step 1 -->
+            <div class="step-card" style="--card-accent: var(--primary);">
+                <div class="step-icon-box">
+                    <i class="fa-solid fa-microphone-lines"></i>
                 </div>
-
-                <!-- Step 2 -->
-                <div class="step-row">
-                    <div class="step-icon-box" style="color: var(--secondary); border-color: var(--secondary); background: rgba(168, 85, 247, 0.1);">
-                        <i class="fa-solid fa-play"></i>
-                    </div>
-                    <div class="step-info">
-                        <span class="step-number" style="color: var(--secondary);">Step 02</span>
-                        <h2>Record the Noise</h2>
-                        <p>Tap record when the disturbance starts. Noise Mate captures high-quality audio so you have proof of the exact noise you're hearing.</p>
-                    </div>
+                <div class="step-info">
+                    <span class="step-number">Step 01</span>
+                    <h2>Open the App</h2>
+                    <p>Launch the Noise Mate meter to see live decibel levels in your room. It works instantly without any setup required.</p>
                 </div>
-
-                <!-- Step 3 -->
-                <div class="step-row">
-                    <div class="step-icon-box" style="color: var(--accent); border-color: var(--accent); background: rgba(6, 182, 212, 0.1);">
-                        <i class="fa-solid fa-tag"></i>
-                    </div>
-                    <div class="step-info">
-                        <span class="step-number" style="color: var(--accent);">Step 03</span>
-                        <h2>Add Context</h2>
-                        <p>Quickly tag what caused the noise (like music or building work) and add any notes. We automatically save the time and location for you.</p>
-                    </div>
-                </div>
-
-                <!-- Step 4 -->
-                <div class="step-row">
-                    <div class="step-icon-box" style="color: #10B981; border-color: #10B981; background: rgba(16, 185, 129, 0.1);">
-                        <i class="fa-solid fa-file-pdf"></i>
-                    </div>
-                    <div class="step-info">
-                        <span class="step-number" style="color: #10B981;">Step 04</span>
-                        <h2>Send Your Report</h2>
-                        <p>Generate a professional report with one tap. Send it to your landlord or local council as a PDF or a secure private link.</p>
-                    </div>
-                </div>
-
             </div>
 
-            <div class="cta-box">
-                <h3>Ready to start?</h3>
-                <p>Download Noise Mate and begin documenting your evidence today.</p>
-                <a href="index.html">Download for Free </a>
+            <!-- Step 2 -->
+            <div class="step-card" style="--card-accent: var(--secondary);">
+                <div class="step-icon-box">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+                <div class="step-info">
+                    <span class="step-number">Step 02</span>
+                    <h2>Record the Noise</h2>
+                    <p>Tap record when the disturbance starts. Noise Mate captures high-quality audio so you have proof of the exact noise you're hearing.</p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card" style="--card-accent: var(--accent);">
+                <div class="step-icon-box">
+                    <i class="fa-solid fa-tag"></i>
+                </div>
+                <div class="step-info">
+                    <span class="step-number">Step 03</span>
+                    <h2>Add Context</h2>
+                    <p>Quickly tag what caused the noise (like music or building work) and add any notes. We automatically save the time and location for you.</p>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="step-card" style="--card-accent: #10B981;">
+                <div class="step-icon-box">
+                    <i class="fa-solid fa-file-pdf"></i>
+                </div>
+                <div class="step-info">
+                    <span class="step-number">Step 04</span>
+                    <h2>Send Your Report</h2>
+                    <p>Generate a professional report with one tap. Send it to your landlord or local council as a PDF or a secure private link.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flattened CTA Section -->
+        <div class="cta-section">
+            <h3>Ready to start?</h3>
+            <p>Download Noise Mate and begin documenting your evidence today.</p>
+            
+            <div class="store-buttons">
+                <a href="#" class="store-btn">
+                    <i class="fa-brands fa-apple"></i>
+                    <div class="btn-text">
+                        <span class="btn-label">Download on the</span>
+                        <span class="btn-platform">App Store</span>
+                    </div>
+                </a>
+                <a href="#" class="store-btn">
+                    <i class="fa-brands fa-google-play"></i>
+                    <div class="btn-text">
+                        <span class="btn-label">Get it on</span>
+                        <span class="btn-platform">Google Play</span>
+                    </div>
+                </a>
             </div>
         </div>
     </main>
