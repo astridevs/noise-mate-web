@@ -358,3 +358,73 @@ a:not(.btn):not(.btn-primary):not(.btn-secondary):not(.btn-primary-small):not(.r
         padding: 0 1rem !important;
     }
 }
+
+/* ============================================================
+   Global Store Buttons
+   Used in heroes, CTAs, and footers
+   ============================================================ */
+.store-buttons {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.store-buttons.column {
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.store-btn-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    background: #000000; /* High contrast black */
+    color: #FFFFFF !important;
+    padding: 0.65rem 1.25rem;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 180px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 0.5rem;
+}
+
+.store-btn-footer:hover {
+    transform: translateY(-3px);
+    background: #111111;
+    border-color: var(--primary);
+    box-shadow: 0 10px 20px -10px rgba(0,0,0,0.5);
+}
+
+.store-btn-footer i {
+    font-size: 1.6rem;
+    color: #FFFFFF !important;
+}
+
+.store-btn-footer .btn-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.store-btn-footer .btn-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    opacity: 0.7;
+}
+
+.store-btn-footer .btn-platform {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* Mobile specific overrides for store buttons */
+@media (max-width: 768px) {
+    .store-buttons {
+        justify-content: center;
+    }
+    .store-buttons.column {
+        align-items: center;
+    }
+}
