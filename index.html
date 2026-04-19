@@ -173,13 +173,13 @@
         }
 
         .hero-graphic {
+            width: 600px;
+            max-width: 600px;
             display: flex;
             justify-content: flex-start;
             align-items: center;
             position: relative;
             z-index: 2;
-            width: 100%;
-            max-width: 100%;
         }
 
         .mockup-screenshot {
@@ -193,7 +193,6 @@
             animation: float 6s ease-in-out infinite;
         }
 
-
         @keyframes float {
             0% { transform: translateY(-25px); }
             50% { transform: translateY(-50px); }
@@ -201,7 +200,7 @@
         }
 
         .mockup-screenshot:hover {
-            transform: scale(1.05) translateY(-35px) translateX(100px);
+            transform: scale(1.05) translateY(-35px);
             animation-play-state: paused;
         }
 
@@ -359,16 +358,7 @@
             display: none;
         }
 
-        /* Phone Mockup */
-        .hero-graphic {
-            width: 600px;
-            max-width: 600px;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            position: relative;
-            z-index: 2;
-        }
+
 
         .phone-mockup {
             width: 250px;
