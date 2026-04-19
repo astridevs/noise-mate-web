@@ -97,15 +97,15 @@
         .hero-wrapper {
             max-width: 1400px;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: auto auto;
             justify-content: center;
-            gap: 4rem;
+            gap: 6rem;
             align-items: center;
-            padding: 8rem 2rem 4rem;
+            padding: 4rem 2rem 0;
             position: relative;
             z-index: 2;
-            width: 100%;
+            transform: translateX(calc(5vw + 10px)); /* Shifting right another 5px */
         }
 
         .hero::marker {
@@ -117,9 +117,9 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 900px !important;
-            margin: 0 auto !important;
-            text-align: center !important;
+            max-width: 650px !important;
+            margin-left: auto !important;
+            text-align: right !important;
         }
 
         .phone-mockup {
@@ -127,9 +127,13 @@
         }
 
         .hero-title {
-            margin-bottom: 2.5rem;
+            font-size: 6.5rem;
+            font-weight: 950;
+            line-height: 0.95;
+            margin-bottom: 2rem;
             color: var(--text-color);
-            text-align: center !important;
+            letter-spacing: -2px;
+            text-align: right !important;
             position: relative;
         }
 
@@ -160,13 +164,13 @@
             margin-left: auto !important;
         }
 
-        .store-buttons {
+        .hero-buttons {
             display: flex;
             gap: 1.5rem;
             margin-bottom: 3rem;
-            margin-top: 2.5rem;
+            margin-top: 2rem;
             flex-wrap: wrap;
-            justify-content: center !important;
+            justify-content: flex-end !important;
         }
 
         .phone-mockup {
@@ -175,7 +179,7 @@
 
         .hero-graphic {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             position: relative;
             z-index: 2;
@@ -2818,11 +2822,7 @@
             }
 
             .hero {
-                /* Display centered on all systems as requested */
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
+                grid-template-columns: 1fr 1fr;
             }
 
             .features-grid {
@@ -2836,7 +2836,7 @@
 
         @media (max-width: 1024px) {
             .hero {
-                padding: var(--site-padding);
+                padding: 4rem 1.5rem;
                 gap: 2rem;
             }
 
@@ -2911,6 +2911,7 @@
             }
 
             .hero-launch-badge {
+                font-size: clamp(0.7rem, 2vw, 0.85rem);
                 padding: 0.5rem 1rem;
                 margin-bottom: 1rem;
             }

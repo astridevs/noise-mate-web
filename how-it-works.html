@@ -29,12 +29,16 @@
         }
 
         .hero-title {
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1;
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
         }
 
         .hero-subtitle {
+            font-size: 1.35rem;
             color: var(--text-muted);
             font-weight: 500;
             max-width: 700px;
@@ -146,6 +150,7 @@
         }
 
         .step-info p {
+            font-size: 1.15rem;
             color: var(--text-muted);
             margin-bottom: 0;
             line-height: 1.6;
@@ -262,6 +267,10 @@
         }
 
         @media (max-width: 768px) {
+            .hero-title { font-size: 3.5rem; }
+            .container { padding: 0 1.5rem 6rem; }
+            .subpage-hero { padding: 8rem 1.5rem 3rem; }
+            .cta-section h3 { font-size: 2rem; }
             .step-card { flex-direction: column; text-align: center; gap: 1.5rem; padding: 2.5rem 1.5rem; }
             .step-flow::before { display: none; } /* Hide line on mobile for cleaner stack */
         }

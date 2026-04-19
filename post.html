@@ -44,6 +44,7 @@
         }
     
         .hero-title {
+            font-size: clamp(3rem, 6vw, 5.5rem);
             font-weight: 950;
             line-height: 1.05;
             margin-bottom: 2rem;
@@ -187,6 +188,7 @@
         }
     
         .post-body {
+            font-size: 1.3rem;
             line-height: 1.85;
             color: var(--text-color);
             font-weight: 500;
@@ -311,13 +313,14 @@
         @media (max-width: 1100px) {
             .container { grid-template-columns: 1fr; gap: 3rem; }
             .post-sidebar { position: static; }
+            .hero-title { font-size: 3.5rem; }
         }
 
         @media (max-width: 768px) {
             .subpage-hero { padding: 10rem 2rem 5rem; }
             .container { padding: 0 1.5rem 6rem; }
             .gallery-1, .gallery-2, .gallery-3 { height: 320px; }
-            .action-pill { width: calc(100% - 3rem); max-width: 400px; justify-content: space-around; }
+            .action-pill { width: 90%; justify-content: space-around; }
         }
     </style>
 </head>
