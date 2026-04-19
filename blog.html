@@ -59,9 +59,6 @@
         }
 
         .hero-title {
-            font-size: 5.5rem;
-            font-weight: 950;
-            line-height: 0.95;
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
@@ -83,7 +80,6 @@
         }
 
         .hero-subtitle {
-            font-size: 1.4rem;
             color: var(--text-muted);
             margin-bottom: 0;
             line-height: 1.6;
@@ -104,8 +100,8 @@
 
         .blog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 2.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
         }
 
         /* Clean Glassmorphic Blog Card */
@@ -249,7 +245,6 @@
         }
 
         @media (max-width: 1024px) {
-            .hero-title { font-size: 4rem; }
             .blog-grid { grid-template-columns: 1fr; }
         }
     </style>
