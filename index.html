@@ -118,7 +118,7 @@
             flex: 0 1 70%;
             position: relative;
             z-index: 2;
-            text-align: right !important;
+            text-align: left !important;
         }
 
         .phone-mockup {
@@ -132,7 +132,7 @@
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
-            text-align: right !important;
+            text-align: left !important;
             position: relative;
         }
 
@@ -159,7 +159,7 @@
             line-height: 1.6;
             font-weight: 500;
             max-width: 100%;
-            text-align: right !important;
+            text-align: left !important;
         }
 
         .hero-buttons {
@@ -167,7 +167,7 @@
             gap: 1.5rem;
             margin-top: 1rem;
             flex-wrap: wrap;
-            justify-content: flex-end !important;
+            justify-content: flex-start !important;
         }
 
         .phone-mockup {
@@ -2884,27 +2884,27 @@
             }
 
             .hero-wrapper {
-                flex-direction: column-reverse;
+                flex-direction: column;
                 gap: 40px;
                 padding: 0 1.5rem;
             }
 
             .hero-content {
                 flex: 0 0 100% !important;
-                text-align: right !important;
+                text-align: left !important;
             }
 
             .hero-title {
-                text-align: right !important;
+                text-align: left !important;
                 font-size: clamp(2.5rem, 10vw, 4rem) !important;
             }
 
             .hero-subtitle {
-                text-align: right !important;
+                text-align: left !important;
             }
 
             .hero-buttons {
-                justify-content: flex-end !important;
+                justify-content: flex-start !important;
             }
 
             .hero-graphic {
@@ -4106,18 +4106,18 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-wrapper">
-            <div class="hero-graphic">
-                <picture>
-                    <source srcset="assets/mockup/mockup-dark.png" media="(prefers-color-scheme: dark)">
-                    <img src="assets/mockup/mockup-light.png" alt="Noise Mate App Mockup" class="mockup-screenshot">
-                </picture>
-            </div>
             <div class="hero-content">
                 <h1 class="hero-title">Noise<br>Monitoring<br><span class="highlight">Made Easy</span></h1>
                 <p class="hero-subtitle">Document noise incidents effortlessly and generate clear reports in minutes.<br>Simple for tenants, residents, and landlords.<br>Coming soon to iOS and Android.</p>
                 <div class="hero-buttons">
                     <a href="http://localhost:3000/login" class="btn-primary">Join Beta</a>
                 </div>
+            </div>
+            <div class="hero-graphic">
+                <picture>
+                    <source srcset="assets/mockup/mockup-dark.png" media="(prefers-color-scheme: dark)">
+                    <img src="assets/mockup/mockup-light.png" alt="Noise Mate App Mockup" class="mockup-screenshot">
+                </picture>
             </div>
         </div>
     </section>
