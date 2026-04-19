@@ -183,26 +183,32 @@
             z-index: 2;
         }
 
+        .mockup-float-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
         .mockup-screenshot {
             width: 100%;
             height: auto;
             max-width: 100%;
             border-radius: 20px;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             object-fit: contain;
-            transform: scale(1.25) translateY(0);
-            animation: float 6s ease-in-out infinite;
+            transform: scale(1.25);
         }
 
         @keyframes float {
-            0% { transform: scale(1.25) translateY(0); }
-            50% { transform: scale(1.25) translateY(-20px); }
-            100% { transform: scale(1.25) translateY(0); }
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
         }
 
         .mockup-screenshot:hover {
-            transform: scale(1.05) translateY(-35px);
-            animation-play-state: paused;
+            transform: scale(1.5);
         }
 
         .btn-primary {
@@ -4086,10 +4092,12 @@
                 </div>
             </div>
             <div class="hero-graphic">
-                <picture>
-                    <source srcset="assets/mockup/mockup-dark.png" media="(prefers-color-scheme: dark)">
-                    <img src="assets/mockup/mockup-light.png" alt="Noise Mate App Mockup" class="mockup-screenshot">
-                </picture>
+                <div class="mockup-float-wrapper">
+                    <picture>
+                        <source srcset="assets/mockup/mockup-dark.png" media="(prefers-color-scheme: dark)">
+                        <img src="assets/mockup/mockup-light.png" alt="Noise Mate App Mockup" class="mockup-screenshot">
+                    </picture>
+                </div>
             </div>
         </div>
     </section>
