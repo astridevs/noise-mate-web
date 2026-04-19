@@ -805,7 +805,7 @@ class _DashboardPageState extends State<DashboardPage> {
                                 ),
                                 const SizedBox(height: 8),
                                 PillButton(
-                                  label: appState.currentPlan == PlanTier.pro ? 'Export' : 'Pro only',
+                                  label: appState.currentPlan == PlanTier.pro ? 'Export' : 'Ultimate only',
                                   onPressed: appState.currentPlan == PlanTier.pro ? () {} : null,
                                   primary: appState.currentPlan == PlanTier.pro,
                                   compact: true,
@@ -1045,7 +1045,7 @@ class _LogsPageState extends State<LogsPage> {
                 padding: const EdgeInsets.all(32),
                 child: GateScreen(
                   title: 'Logs on web require Plus',
-                  subtitle: 'Switch to Plus or Pro to manage your logs on web. Mobile users can view basic history.',
+                  subtitle: 'Switch to Plus or Ultimate to manage your logs on web. Mobile users can view basic history.',
                   buttonLabel: 'Upgrade to Plus',
                   onPressed: () => context.go('/upgrade'),
                   icon: Icons.lock_outline,
@@ -1519,12 +1519,12 @@ class _LogDetailPageState extends State<LogDetailPage> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'PDF export is available in Pro only.',
+                                        'PDF export is available in Ultimate only.',
                                         style: Theme.of(context).textTheme.bodyMedium,
                                       ),
                                       const SizedBox(height: 12),
                                       PillButton(
-                                        label: 'Upgrade to Pro',
+                                        label: 'Upgrade to Ultimate',
                                         onPressed: () => context.go('/upgrade'),
                                         primary: true,
                                         compact: true,
@@ -1901,7 +1901,7 @@ class UpgradePage extends StatelessWidget {
                       Expanded(
                         child: _PricingCard(
                           tier: PlanTier.pro,
-                          title: 'Pro',
+                          title: 'Ultimate',
                           monthlyPrice: '£7.99',
                           monthlyAlt: 'from €9.99 / \$9.99',
                           yearlyPrice: '£79.90',
