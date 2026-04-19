@@ -95,6 +95,8 @@
         }
 
         .hero-wrapper {
+            width: fit-content;
+            margin: 0 auto;
             display: flex;
             flex-direction: row;
             justify-content: center;
@@ -102,6 +104,7 @@
             align-items: center;
             position: relative;
             z-index: 2;
+            max-width: 100%;
         }
 
         .hero::marker {
@@ -113,7 +116,6 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            width: 600px;
             max-width: 600px;
             text-align: right !important;
         }
@@ -173,10 +175,8 @@
         }
 
         .hero-graphic {
-            width: 600px;
-            max-width: 600px;
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             position: relative;
             z-index: 2;
@@ -4090,7 +4090,7 @@
                     <a href="http://localhost:3000/login" class="btn-primary">Join Waitlist</a>
                 </div>
             </div>
-            <div class="hero-graphic" data-version="1.0.4-centered-refined">
+            <div class="hero-graphic">
                 <picture>
                     <source srcset="assets/mockup/mockup-dark.png" media="(prefers-color-scheme: dark)">
                     <img src="assets/mockup/mockup-light.png" alt="Noise Mate App Mockup" class="mockup-screenshot">
