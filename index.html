@@ -994,31 +994,11 @@
             overflow: hidden;
             position: relative;
             background: transparent;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
         }
 
-        .steps-container::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 100px;
-            background: linear-gradient(90deg, var(--bg-primary) 0%, transparent 100%);
-            z-index: 10;
-            pointer-events: none;
-        }
 
-        .steps-container::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 100px;
-            background: linear-gradient(90deg, transparent 0%, var(--bg-primary) 100%);
-            z-index: 10;
-            pointer-events: none;
-        }
 
         .steps-wrapper {
             display: flex;
@@ -1054,14 +1034,6 @@
             .step {
                 background: rgba(30, 41, 59, 0.5);
                 border-color: rgba(37, 99, 235, 0.2);
-            }
-
-            .steps-container::before {
-                background: linear-gradient(90deg, var(--bg-primary) 0%, transparent 100%);
-            }
-
-            .steps-container::after {
-                background: linear-gradient(90deg, transparent 0%, var(--bg-primary) 100%);
             }
         }
 
