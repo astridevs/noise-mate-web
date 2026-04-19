@@ -90,6 +90,7 @@
             height: 100vh;
             display: flex;
             align-items: center;
+            justify-content: center;
             scroll-snap-align: start;
             scroll-snap-stop: always;
         }
@@ -97,10 +98,10 @@
         .hero-wrapper {
             max-width: 1400px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: auto auto;
+            display: flex;
+            flex-direction: row;
             justify-content: center;
-            gap: clamp(2rem, 8vw, 6rem);
+            gap: 2rem;
             align-items: center;
             padding: 4rem 2rem 0;
             position: relative;
@@ -117,7 +118,6 @@
             position: relative;
             z-index: 2;
             max-width: 650px !important;
-            margin-left: auto !important;
             text-align: right !important;
         }
 
@@ -178,7 +178,7 @@
 
         .hero-graphic {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             position: relative;
             z-index: 2;
@@ -205,7 +205,7 @@
         }
 
         .mockup-screenshot:hover {
-            transform: scale(1.05) translateY(-35px) translateX(100px);
+            transform: scale(1.05) translateY(-35px) translateX(20px);
             animation-play-state: paused;
         }
 
