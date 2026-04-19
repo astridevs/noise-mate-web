@@ -82,27 +82,26 @@
         /* Hero Section */
         .hero {
             width: 100%;
-            margin: 0;
-            padding: 0;
-            background: transparent;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            padding-top: 80px;
         }
 
         .hero-wrapper {
-            width: fit-content;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
             display: flex;
             flex-direction: row;
-            justify-content: center;
-            gap: 2rem;
             align-items: center;
+            justify-content: center;
+            gap: 40px;
+            padding: 0 2rem;
             position: relative;
             z-index: 2;
         }
@@ -114,11 +113,10 @@
 
 
         .hero-content {
+            flex: 0 0 calc(75% - 20px);
             position: relative;
             z-index: 2;
-            width: 600px;
-            max-width: 600px;
-            text-align: right !important;
+            text-align: left !important;
         }
 
         .phone-mockup {
@@ -126,13 +124,13 @@
         }
 
         .hero-title {
-            font-size: 6.5rem;
+            font-size: clamp(3rem, 8vw, 6.5rem);
             font-weight: 950;
             line-height: 0.95;
             margin-bottom: 2rem;
             color: var(--text-color);
             letter-spacing: -2px;
-            text-align: right !important;
+            text-align: left !important;
             position: relative;
         }
 
@@ -155,20 +153,19 @@
         .hero-subtitle {
             font-size: 1.3rem;
             color: var(--text-muted);
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
             line-height: 1.6;
             font-weight: 500;
             max-width: 100%;
-            text-align: right !important;
+            text-align: left !important;
         }
 
         .hero-buttons {
             display: flex;
             gap: 1.5rem;
-            margin-bottom: 3rem;
-            margin-top: 2rem;
+            margin-top: 1rem;
             flex-wrap: wrap;
-            justify-content: flex-end !important;
+            justify-content: flex-start !important;
         }
 
         .phone-mockup {
@@ -176,10 +173,9 @@
         }
 
         .hero-graphic {
-            width: 600px;
-            max-width: 600px;
+            flex: 0 0 calc(25% - 20px);
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             align-items: center;
             position: relative;
             z-index: 2;
@@ -188,8 +184,7 @@
         .mockup-screenshot {
             width: 100%;
             height: auto;
-            max-width: 480px !important;
-            max-height: 75vh !important;
+            max-width: 100%;
             border-radius: 20px;
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             object-fit: contain;
@@ -2881,13 +2876,37 @@
             }
 
             .hero {
-                grid-template-columns: 1fr;
-                padding: 3rem 1.5rem;
-                gap: 2rem;
-                min-height: auto;
+                padding-top: 100px;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .hero-wrapper {
+                flex-direction: column;
+                gap: 40px;
+                padding: 0 1.5rem;
+            }
+
+            .hero-content {
+                flex: 0 0 100% !important;
+                text-align: center !important;
+            }
+
+            .hero-title {
+                text-align: center !important;
+                font-size: clamp(2.5rem, 10vw, 4rem) !important;
+            }
+
+            .hero-subtitle {
+                text-align: center !important;
+            }
+
+            .hero-buttons {
+                justify-content: center !important;
             }
 
             .hero-graphic {
+                flex: 0 0 100% !important;
                 margin-top: 2rem;
             }
 
