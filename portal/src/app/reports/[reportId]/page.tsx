@@ -72,17 +72,25 @@ export default function ReportViewerPage({ params }: { params: Promise<{ reportI
       setReport(complaints);
       setVerified(true);
 
-      // 3. Fetch linked logs
-      if (complaints.noise_log_ids?.length > 0) {
-        const { data: logsData } = await supabase
+      // 3. Fetch evidence logs linked to this report via complaint_id (the primary relationship)
+      const { data: logsData } = await supabase
+        .from('noise_logs')
+        .select('*')
+        .eq('complaint_id', complaints.id)
+        .order('timestamp', { ascending: true });
+      
+      if (logsData && logsData.length > 0) {
+        setLogs(logsData);
+      } else if (complaints.noise_log_ids?.length > 0) {
+        // Fallback: if no logs found by complaint_id, check the legacy array relationship
+        const { data: legacyLogs } = await supabase
           .from('noise_logs')
           .select('*')
           .in('id', complaints.noise_log_ids)
           .order('timestamp', { ascending: true });
         
-        if (logsData) {
-          // In a real scenario, we would get signed URLs for recording_url if they are private
-          setLogs(logsData);
+        if (legacyLogs) {
+          setLogs(legacyLogs);
         }
       }
       

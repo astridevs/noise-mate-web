@@ -436,10 +436,10 @@
     }
     .bento-peak .bento-value { font-size: 4.5rem; }
 
-    .bento-map { padding: 0; border-radius: 28px; overflow: hidden; }
-    .bento-map .panel-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); }
+    .bento-map { padding: 0; border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; }
+    .bento-map .panel-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); flex-shrink: 0; }
     .bento-map .panel-header h2 { font-size: 1rem; font-weight: 800; margin: 0; }
-    .bento-map .map-container { height: 440px; }
+    .bento-map .map-container { flex: 1; min-height: 0; }
 
     .bento-profiling { padding: 0; }
     .bento-profiling .panel-header { padding: 1.5rem 2rem; border-bottom: 1px solid var(--border-color); }
@@ -614,9 +614,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 6px;
     }
-    
+
     .app-db-figure {
       display: flex;
       align-items: baseline;
@@ -626,12 +626,22 @@
       font-size: 4rem;
       font-weight: 900;
       line-height: 1;
+      color: var(--text-color);
     }
     .app-db-unit {
       font-size: 1.15rem;
       font-weight: 800;
+      color: var(--text-color);
     }
 
+    /* Right side of header: play button + badges in a row */
+    .app-header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* App-style play button: plain circle icon, black/white */
     .app-play-button {
       background: none;
       border: none;
@@ -639,31 +649,49 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.2s;
+      transition: transform 0.18s, opacity 0.18s;
       padding: 0;
       color: var(--text-color);
+      width: 56px;
+      height: 56px;
+      flex-shrink: 0;
     }
-    .app-play-button:hover { transform: scale(1.05); }
-    
+    .app-play-button:hover { transform: scale(1.06); opacity: 0.75; }
+    .app-play-button svg { width: 56px; height: 56px; }
+
+    /* Subtitle row: date • duration */
     .app-log-meta {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       color: var(--text-muted);
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.4rem;
     }
 
+    /* Waveform: no box/border, just the raw visualiser on the card bg */
     .app-waveform-box {
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      padding: 1.5rem 1rem;
-      height: 140px;
+      height: 80px;
       overflow: hidden;
+      border-radius: 0;
+      background: transparent;
+      padding: 0;
+      border: none;
     }
     .waveform-surface { height: 100%; cursor: pointer; }
+
+    /* Seek / time row below waveform */
+    .app-time-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
 
     /* ---- Audio uploading state ---- */
     .audio-uploading {
@@ -891,12 +919,6 @@
 
       <!-- Sidebar -->
       <aside class="dashboard-sidebar">
-
-        <!-- Brand eyebrow -->
-        <div class="sb-eyebrow">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span>Evidence Dashboard</span>
-        </div>
 
         <!-- Case name — hero text -->
         <div class="sb-case-name" id="sb-case-name">Loading...</div>
@@ -1309,21 +1331,23 @@
       const noiseColor = getCategoryColor(log.peak_decibel || 0);
 
       const audioUrl = log.audio_url || log.recording_url || null;
-      const duration = log.duration_seconds ? `${log.duration_seconds}s` : null;
+      const duration = log.duration ? `${log.duration}s` : null;
       const nightBadge = log.is_night_disturbance ? `<span style="background:rgba(99,102,241,0.15);color:#818cf8;padding:0.3rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:700;">🌙 Night</span>` : '';
+
+      const avgDb = (log.decibel_level || 0).toFixed(1);
+      const durationLabel = log.duration ? `${log.duration}s` : '';
 
       card.innerHTML = `
         <div class="app-log-header">
-          <div class="app-db-figure" style="color: ${noiseColor};">
+          <div class="app-db-figure">
             <span class="app-db-value">${peakDb}</span>
             <span class="app-db-unit">dB</span>
           </div>
-          <div id="badge-row-${index}" style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;justify-content:flex-end;">
+          <div class="app-header-right" id="badge-row-${index}">
             ${nightBadge}
-            ${duration ? `<span style="background:var(--glass-bg);border:1px solid var(--border-color);padding:0.3rem 0.7rem;border-radius:50px;font-size:0.75rem;font-weight:700;">${duration}</span>` : ''}
             ${audioUrl ? `
-              <button class="app-play-button" id="play-${index}">
-                <svg id="icon-${index}" width="54" height="54" viewBox="0 0 24 24" fill="currentColor">
+              <button class="app-play-button" id="play-${index}" aria-label="Play recording">
+                <svg id="icon-${index}" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
                 </svg>
               </button>
@@ -1333,15 +1357,18 @@
 
         <div class="app-log-meta">
           <span>${ts}</span>
+          ${durationLabel ? `<span>•</span><span>${durationLabel}</span>` : ''}
           <span>•</span>
-          <span>Avg ${(log.average_decibel||0).toFixed(1)} dB</span>
-          <span>•</span>
-          <span id="time-${index}">${audioUrl ? '0:00 / 0:00 recording' : ''}</span>
+          <span>Avg ${avgDb} dB</span>
         </div>
 
         ${audioUrl ? `
           <div class="app-waveform-box">
             <div class="waveform-surface" id="wv-${index}"></div>
+          </div>
+          <div class="app-time-row">
+            <span id="time-${index}">0:00</span>
+            <span id="dur-${index}">0:00</span>
           </div>
         ` : `
           <div class="audio-uploading" id="audio-pending-${index}">
@@ -1351,9 +1378,9 @@
           </div>
         `}
 
-        ${log.location_name ? `<div style="margin-top:1rem;font-size:0.85rem;font-weight:600;opacity:0.6;">📍 ${log.location_name}</div>` : ''}
-        ${log.notes ? `<div class="log-notes" style="margin-top: 1rem;"><strong>Notes:</strong> ${log.notes}</div>` : ''}
-        ${log.impact_notes ? `<div class="log-notes" style="margin-top: 0.5rem; border-left-color: #f43f5e;"><strong>Impact:</strong> ${log.impact_notes}</div>` : ''}
+        ${log.location ? `<div style="margin-top:1.25rem;font-size:0.82rem;font-weight:600;opacity:0.5;">📍 ${log.location}</div>` : ''}
+        ${log.notes ? `<div class="log-notes" style="margin-top:1rem;"><strong>Notes:</strong> ${log.notes}</div>` : ''}
+        ${log.impact_notes ? `<div class="log-notes" style="margin-top:0.5rem;border-left-color:#f43f5e;"><strong>Impact:</strong> ${log.impact_notes}</div>` : ''}
         ${(log.image_urls && log.image_urls.length > 0) ? `
           <div class="log-photos" id="photos-${index}">
             ${log.image_urls.map((url, pi) => `
@@ -1379,26 +1406,40 @@
     function initWaveform(index, url, noiseColor) {
       const ws = WaveSurfer.create({
         container: `#wv-${index}`,
-        waveColor: 'rgba(44, 177, 255, 0.3)',
-        progressColor: '#2CB1FF',
-        cursorColor: noiseColor,
-        cursorWidth: 3,
-        height: 90,
+        waveColor: 'rgba(22, 76, 120, 0.18)',
+        progressColor: '#164c78',
+        cursorColor: 'transparent',
+        barWidth: 2,
+        barRadius: 2,
+        barGap: 1,
+        height: 80,
+        normalize: true,
         url
       });
 
       const btn  = document.getElementById(`play-${index}`);
       const icon = document.getElementById(`icon-${index}`);
-      const time = document.getElementById(`time-${index}`);
+      const timEl = document.getElementById(`time-${index}`);
+      const durEl = document.getElementById(`dur-${index}`);
+
+      const PLAY_PATH  = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>`;
+      const PAUSE_PATH = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>`;
+      const fmt = s => { const m = Math.floor(s/60), sec = Math.floor(s%60); return `${m}:${sec.toString().padStart(2,'0')}`; };
 
       if (btn) btn.onclick = () => ws.playPause();
+      ws.on('play',       () => { if (icon) icon.innerHTML = PAUSE_PATH; });
+      ws.on('pause',      () => { if (icon) icon.innerHTML = PLAY_PATH; });
+      ws.on('finish',     () => { if (icon) icon.innerHTML = PLAY_PATH; });
+      ws.on('ready',      () => { if (durEl) durEl.textContent = fmt(ws.getDuration()||0); });
+      ws.on('timeupdate', cur => { if (timEl) timEl.textContent = fmt(cur); });
 
-      ws.on('play',  () => { if (icon) icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>`; });
-      ws.on('pause', () => { if (icon) icon.innerHTML = `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>`; });
-
-      const fmt = s => { const m = Math.floor(s / 60), sec = Math.floor(s % 60); return `${m}:${sec.toString().padStart(2,'0')}`; };
-      ws.on('timeupdate', cur => { if (time) { const d = ws.getDuration()||0; time.innerHTML = `${fmt(cur)} / ${fmt(d)} <span style="opacity:.6">recording</span>`; } });
-      ws.on('ready',      ()  => { if (time) { const d = ws.getDuration()||0; time.innerHTML = `0:00 / ${fmt(d)} <span style="opacity:.6">recording</span>`; } });
+      ws.on('error', () => {
+        if (timEl) timEl.innerHTML = `<a href="${url}" target="_blank" style="color:var(--primary);text-decoration:underline;">Download audio</a>`;
+        if (durEl) durEl.textContent = '';
+        const surface = document.getElementById(`wv-${index}`);
+        if (surface) surface.style.opacity = '0.3';
+        if (btn) btn.onclick = () => window.open(url, '_blank');
+      });
     }
 
     // ---- Audio upload poller ----
@@ -1432,15 +1473,20 @@
             placeholder.outerHTML = `
               <div class="app-waveform-box">
                 <div class="waveform-surface" id="wv-${index}"></div>
+              </div>
+              <div class="app-time-row">
+                <span id="time-${index}">0:00</span>
+                <span id="dur-${index}">0:00</span>
               </div>`;
 
-            // Also inject the play button into the header badge row
+            // Inject play button into the header badge row
             const badgeRow = document.getElementById(`badge-row-${index}`);
             if (badgeRow) {
               const playBtn = document.createElement('button');
               playBtn.className = 'app-play-button';
               playBtn.id = `play-${index}`;
-              playBtn.innerHTML = `<svg id="icon-${index}" width="54" height="54" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>`;
+              playBtn.setAttribute('aria-label', 'Play recording');
+              playBtn.innerHTML = `<svg id="icon-${index}" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>`;
               badgeRow.appendChild(playBtn);
             }
 
@@ -1488,23 +1534,28 @@
       }
       // -- END MOCK DATA --
 
-      // First attempt: lookup by 6-letter short ID (report_id)
+      // First attempt: lookup by short ID (report_id)
       let { data: report, error: rErr } = await _sb
         .from('complaints')
         .select('*')
         .eq('report_id', reportId)
-        .maybeSingle(); // Better: returns null without error if not found
+        .maybeSingle();
         
-      // Fallback: lookup by original UUID (id) ONLY IF it looks like a UUID
-      if (!report && reportId.length === 36) {
-         const { data: fallbackData, error: fallbackError } = await _sb
-          .from('complaints')
-          .select('*')
-          .eq('id', reportId.toLowerCase())
-          .maybeSingle();
-          
-          report = fallbackData;
-          rErr = rErr || fallbackError;
+      // Fallback: lookup by UUID (id)
+      if (!report) {
+         const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(reportId);
+         if (isUuid) {
+            const { data: fallbackData, error: fallbackError } = await _sb
+              .from('complaints')
+              .select('*')
+              .eq('id', reportId)
+              .maybeSingle();
+              
+              if (fallbackData) {
+                report = fallbackData;
+                rErr = null;
+              }
+         }
       }
 
       if (rErr || !report) return showError('Database miss. Record archived or deleted.', rErr?.message);
@@ -1533,14 +1584,28 @@
       setText('info-recipient', report.recipient_name || 'Not specified');
       setText('info-generated', fmtDate(report.created_at));
 
+      // Fetch evidence logs — primary: by complaint_id (set on each log by the app)
       let logs = [];
-      if (report.noise_log_ids?.length > 0) {
-        const { data } = await _sb.from('noise_logs').select('*').in('id', report.noise_log_ids).order('timestamp', { ascending: true });
-        logs = data || [];
+      const { data: logsByComplaintId } = await _sb
+        .from('noise_logs')
+        .select('*')
+        .eq('complaint_id', report.id)
+        .order('timestamp', { ascending: true });
+      logs = logsByComplaintId || [];
+
+      // Fallback: by noise_log_ids array on the complaint
+      if (logs.length === 0 && report.noise_log_ids?.length > 0) {
+        const { data: logsByIds } = await _sb
+          .from('noise_logs')
+          .select('*')
+          .in('id', report.noise_log_ids)
+          .order('timestamp', { ascending: true });
+        logs = logsByIds || [];
       }
 
       const total = logs.length;
-      const avg = total ? logs.reduce((a, l) => a + (l.average_decibel || 0), 0) / total : 0;
+      // DB column is decibel_level (not average_decibel)
+      const avg = total ? logs.reduce((a, l) => a + (l.decibel_level || 0), 0) / total : 0;
       const peak = total ? Math.max(...logs.map(l => l.peak_decibel || 0)) : 0;
       const nightCount = logs.filter(l => l.is_night_disturbance).length;
 

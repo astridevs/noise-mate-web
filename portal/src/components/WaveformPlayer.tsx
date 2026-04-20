@@ -44,6 +44,11 @@ export default function WaveformPlayer({ url, onDownload, fileName }: WaveformPl
 
     wavesurfer.on('play', () => setIsPlaying(true));
     wavesurfer.on('pause', () => setIsPlaying(false));
+    
+    wavesurfer.on('error', (err) => {
+      console.error('WaveSurfer error:', err);
+      setError('Playback restricted by browser');
+    });
 
     waveSurferRef.current = wavesurfer;
 
