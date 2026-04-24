@@ -4210,7 +4210,7 @@
             <div class="pricing-card">
                 <div class="certification-badge">Verified</div>
                 <h3>Free</h3>
-                <p class="price">$0 / month</p>
+                <p class="price">£0 / month</p>
                 <ul class="features-list">
                     <li><i class="fas fa-check"></i> Unlimited noise recordings</li>
                     <li><i class="fas fa-check"></i> Notes and photos</li>
@@ -4223,8 +4223,8 @@
             <div class="pricing-card featured">
                 <div class="pricing-badge popular">Plus</div>
                 <h3>Plus</h3>
-                <p class="price">$3.99<span class="price-period"> / month</span></p>
-                <p class="price-alt">$39.90 / year</p>
+                <p class="price">£3.99<span class="price-period"> / month</span></p>
+                <p class="price-alt">£39.99 / year</p>
                 <p class="trial-note">Includes web management & audio</p>
                 <ul class="features-list">
                     <li><i class="fas fa-check"></i> Web log viewing</li>
@@ -4238,8 +4238,8 @@
             <div class="pricing-card">
                 <div class="pricing-badge">Ultimate</div>
                 <h3>Ultimate</h3>
-                <p class="price">$7.99<span class="price-period"> / month</span></p>
-                <p class="price-alt">$79.90 / year</p>
+                <p class="price">£7.99<span class="price-period"> / month</span></p>
+                <p class="price-alt">£79.99 / year</p>
                 <p class="trial-note">Includes standardized exports</p>
                 <ul class="features-list">
                     <li><i class="fas fa-check"></i> Everything in Plus</li>
@@ -5370,6 +5370,39 @@
     </script>
     <script src="js/navigation.js"></script>
     <script src="js/common.js"></script>
+    <!-- Dynamic Currency Detection -->
+    <script>
+        async function detectCurrency() {
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                const country = data.country_code;
+                
+                let symbol = '£';
+                if (['US', 'CA', 'AU', 'NZ'].includes(country)) symbol = '$';
+                else if (['FR', 'DE', 'IT', 'ES', 'BE', 'NL', 'IE', 'AT', 'PT'].includes(country)) symbol = '€';
+
+                document.querySelectorAll('.pricing-card').forEach(card => {
+                    const tierElement = card.querySelector('h3');
+                    if (!tierElement) return;
+                    const tier = tierElement.innerText.toLowerCase();
+                    const priceElement = card.querySelector('.price');
+                    const altPriceElement = card.querySelector('.price-alt');
+
+                    if (tier.includes('free')) {
+                        priceElement.innerHTML = `${symbol}0 / month`;
+                    } else if (tier.includes('plus')) {
+                        priceElement.innerHTML = `${symbol}3.99<span class="price-period"> / month</span>`;
+                        if (altPriceElement) altPriceElement.innerText = `${symbol}39.99 / year`;
+                    } else if (tier.includes('ultimate')) {
+                        priceElement.innerHTML = `${symbol}7.99<span class="price-period"> / month</span>`;
+                        if (altPriceElement) altPriceElement.innerText = `${symbol}79.99 / year`;
+                    }
+                });
+            } catch (e) { console.log("Defaulting to GBP"); }
+        }
+        document.addEventListener('DOMContentLoaded', detectCurrency);
+    </script>
 </body>
 
 </html>
