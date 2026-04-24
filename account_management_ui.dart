@@ -288,7 +288,7 @@ class LandingPage extends StatelessWidget {
                       
                       // Subtitle
                       Text(
-                        'Record, manage, and export noise evidence for your council.',
+                        'Record, manage, and export noise evidence for your local authority.',
                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                           fontSize: 24,
                           fontWeight: FontWeight.normal,
@@ -378,7 +378,7 @@ class LandingPage extends StatelessWidget {
                                     const SizedBox(height: 12),
                                     Text('Professional', style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold)),
                                     const SizedBox(height: 8),
-                                    Text('Council-approved privacy & security.', style: Theme.of(context).textTheme.bodyMedium),
+                                    Text('Local Authority-approved privacy & security.', style: Theme.of(context).textTheme.bodyMedium),
                                   ],
                                 ),
                               ),
@@ -680,7 +680,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               Text('Welcome back', style: Theme.of(context).textTheme.headlineSmall),
                               const SizedBox(height: 8),
                               Text(
-                                'You\'re tracking noise in your council area.',
+                                'You\'re tracking noise in your local authority area.',
                                 style: Theme.of(context).textTheme.bodyMedium,
                               ),
                             ],
@@ -1078,7 +1078,7 @@ class _LogsPageState extends State<LogsPage> {
                           Text('Your logs', style: Theme.of(context).textTheme.displayMedium),
                           const SizedBox(height: 8),
                           Text(
-                            'Structured evidence for your council submissions',
+                            'Structured evidence for your local authority submissions',
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ],
@@ -1536,7 +1536,7 @@ class _LogDetailPageState extends State<LogDetailPage> {
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       PillButton(
-                                        label: 'Generate Council PDF',
+                                        label: 'Generate Local Authority PDF',
                                         onPressed: () {},
                                         primary: true,
                                         fullWidth: true,
@@ -1848,7 +1848,7 @@ class UpgradePage extends StatelessWidget {
                   Text('Choose your plan', style: Theme.of(context).textTheme.displayMedium),
                   const SizedBox(height: 8),
                   Text(
-                    'Manage noise evidence like a council pro',
+                    'Manage noise evidence like a local authority pro',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   const SizedBox(height: 48),
@@ -1909,7 +1909,7 @@ class UpgradePage extends StatelessWidget {
                           description: 'Standardized exports',
                           features: [
                             'Everything in Plus',
-                            'Council PDF exports',
+                            'Local Authority PDF exports',
                             'ZIP bundle export',
                             'Unlimited exports',
                             'Advanced templates',

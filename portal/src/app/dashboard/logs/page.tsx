@@ -42,7 +42,7 @@ export default function LogsPage() {
       map.current = new mapboxgl.Map({
         container: mapContainer.current,
         style: 'mapbox://styles/mapbox/light-v11',
-        center: [-0.1276, 51.5074], // London fallback
+        center: [0, 0], // Neutral global fallback
         zoom: 12
       });
 
